@@ -5,7 +5,8 @@ export interface Feature {
   title: string;
   description: string;
   icon: ReactElement;
-  bg: string;
+  bgColor: string;
+  highlight?: boolean;
 }
 
 export const features: Feature[] = [
@@ -14,27 +15,27 @@ export const features: Feature[] = [
     description:
       "Offrez à votre véhicule le confort qu’il mérite, sans compromis sur votre emploi du temps.",
     icon: <GraduationCap className="h-8 w-8 text-blue-600" />,
-    bg: "bg-blue-100",
+    bgColor: "bg-blue-100",
   },
   {
     title: "Flexibilité intégrale",
     description:
       "Notre équipe vient à vous : domicile, bureau ou parking, selon vos disponibilités.",
     icon: <Truck className="h-8 w-8 text-green-600" />,
-    bg: "bg-green-100",
+    bgColor: "bg-green-100",
   },
   {
     title: "Excellence sans compromis",
     description:
       "Produits haut de gamme, méthode rigoureuse, résultat irréprochable.",
     icon: <ShieldCheck className="h-8 w-8 text-yellow-600" />,
-    bg: "bg-yellow-100",
+    bgColor: "bg-yellow-100",
   },
   {
     title: "Confiance & évolution",
     description:
       "Notre croissance rapide reflète votre confiance. Merci pour votre fidélité.",
     icon: <Rocket className="h-8 w-8 text-purple-600" />,
-    bg: "bg-purple-100",
+    bgColor: "bg-purple-100",
   },
 ];
