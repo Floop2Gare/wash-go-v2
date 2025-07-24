@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ArrowRight } from "lucide-react";
 
 interface ExtrasStepProps {
@@ -37,9 +37,13 @@ const options = [
   },
 ];
 
-const ExtrasStep: React.FC<ExtrasStepProps> = ({ onSelect, nextSectionId }) => {
+const ExtrasStep: React.FC<ExtrasStepProps & { resetKey: number }> = ({ onSelect, nextSectionId, resetKey }) => {
   const [selected, setSelected] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setSelected([]);
+  }, [resetKey]);
 
   const handleToggle = (val: string) => {
     const newSelected = selected.includes(val)
@@ -114,7 +118,40 @@ const ExtrasStep: React.FC<ExtrasStepProps> = ({ onSelect, nextSectionId }) => {
         <b>Votre sélection :</b> {selected.length ? selected.join(", ") : <span className="text-gray-400 italic">Aucun extra sélectionné</span>}
       </div>
 
-      <div className="flex justify-center gap-4">
+      {/* Boutons validation mobile */}
+      <div className="grid grid-cols-2 gap-3 mt-6 md:hidden">
+        <button
+          type="button"
+          onClick={handleContinue}
+          disabled={!selected.length || loading}
+          className={`w-full flex-1 rounded-xl py-3 font-bold text-white bg-[#0049ac] shadow-sm text-base flex items-center justify-center transition-all
+            ${!selected.length || loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-800"}`}
+        >
+          Finaliser les extras <ArrowRight className="w-5 h-5 ml-2" />
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            if (loading) return;
+            setLoading(true);
+            onSelect({ step: "Extras", value: [], price: 0, time: 0 });
+            setTimeout(() => {
+              setLoading(false);
+              if (nextSectionId) {
+                const next = document.getElementById(nextSectionId);
+                if (next) next.scrollIntoView({ behavior: "smooth" });
+              }
+            }, 200);
+          }}
+          disabled={loading}
+          className="w-full flex-1 rounded-xl py-3 font-bold text-[#0049ac] bg-gray-100 shadow-sm text-base flex items-center justify-center transition-all hover:bg-gray-200"
+        >
+          Finaliser sans extra
+        </button>
+      </div>
+      {/* Fin boutons mobile */}
+      {/* Boutons validation desktop (inchangé) */}
+      <div className="hidden md:flex justify-center gap-4 mt-6">
         <button
           type="button"
           onClick={handleContinue}
@@ -139,7 +176,7 @@ const ExtrasStep: React.FC<ExtrasStepProps> = ({ onSelect, nextSectionId }) => {
             }, 200);
           }}
           disabled={loading}
-          className="flex items-center gap-2 px-8 py-3 rounded-xl font-bold text-gray-600 bg-gray-100 shadow-sm transition-all hover:bg-gray-200"
+          className="flex items-center gap-2 px-8 py-3 rounded-xl font-bold text-[#0049ac] bg-gray-100 shadow-sm transition-all hover:bg-gray-200"
         >
           Finaliser sans extra
         </button>

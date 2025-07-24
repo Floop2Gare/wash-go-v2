@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { CalendarDays, ImagePlus, Send, Plus } from "lucide-react";
 
 interface ContactStepProps {
@@ -44,10 +44,22 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
   const [form, setForm] = useState(initialForm);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [showSuccessOverlay, setShowSuccessOverlay] = useState(false); // Ajouté
   const [photos, setPhotos] = useState<File[]>([]);
   const [rgpd, setRgpd] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
+
+  // Ajout : états locaux pour garantir la synchro des props
+  const [localSelections, setLocalSelections] = useState(selections);
+  const [localTotalPrice, setLocalTotalPrice] = useState(totalPrice);
+  const [localTotalTime, setLocalTotalTime] = useState(totalTime);
+
+  useEffect(() => {
+    setLocalSelections(selections);
+    setLocalTotalPrice(totalPrice);
+    setLocalTotalTime(totalTime);
+  }, [selections, totalPrice, totalTime]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -101,9 +113,9 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
     setError("");
     setLoading(true);
 
-    // Construction du message structuré
+    // Utilisation des valeurs locales pour garantir la fraîcheur
     const getValue = (stepLabel: string) => {
-      const found = selections.find(sel => sel.step === stepLabel);
+      const found = localSelections.find(sel => sel.step === stepLabel);
       if (!found) return "-";
       if (Array.isArray(found.value)) return found.value.length ? found.value.join(", ") : "-";
       return found.value || "-";
@@ -121,8 +133,8 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
       `Sièges à nettoyer : ${getValue("Pressing sièges")}\n` +
       `Options choisies : ${getValue("Options spéciales")}\n` +
       `Spécificités : ${getValue("Extras")}\n` +
-      `Prix total : ${totalPrice} €\n` +
-      `Temps estimé : ${formatTime(totalTime)}\n\n` +
+      `Prix total : ${localTotalPrice} €\n` +
+      `Temps estimé : ${formatTime(localTotalTime)}\n\n` +
       `📩 Contact client :\n` +
       `Nom : ${form.nom} ${form.prenom}\n` +
       `Téléphone : ${form.telephone}\n` +
@@ -148,6 +160,7 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
       });
       if (response.ok) {
         setSuccess(true);
+        setShowSuccessOverlay(true); // Affiche l'overlay
         setForm(initialForm);
         setPhotos([]);
         setRgpd(false);
@@ -162,11 +175,46 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
     }
   };
 
+  // Fermer l'overlay automatiquement après 3,5s
+  useEffect(() => {
+    if (showSuccessOverlay) {
+      const timer = setTimeout(() => setShowSuccessOverlay(false), 3500);
+      return () => clearTimeout(timer);
+    }
+  }, [showSuccessOverlay]);
+
   // Affichage téléphone masqué (optionnel)
   const displayPhone = form.telephone.replace(/\D/g, "").replace(/(\d{2})(?=\d)/g, "$1 ").trim();
 
   return (
     <section className="py-20 px-4 sm:px-8 bg-gradient-to-b from-gray-50 to-white">
+      {/* Overlay de succès */}
+      {showSuccessOverlay && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur bg-black/30">
+          <div className="bg-white rounded-2xl shadow-2xl px-8 py-10 max-w-md w-full text-center relative animate-fade-in">
+            <button
+              className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl font-bold focus:outline-none"
+              onClick={() => setShowSuccessOverlay(false)}
+              aria-label="Fermer"
+            >
+              ×
+            </button>
+            <svg className="mx-auto mb-4" width="48" height="48" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#e0f7fa"/><path d="M7 13l3 3 7-7" stroke="#009688" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <h2 className="text-2xl font-bold text-[#0049ac] mb-2">Message envoyé !</h2>
+            <p className="text-gray-700 mb-2">Nous vous recontacterons sous peu.</p>
+          </div>
+          <style>{`
+            @keyframes fade-in {
+              from { opacity: 0; transform: scale(0.98); }
+              to { opacity: 1; transform: scale(1); }
+            }
+            .animate-fade-in {
+              animation: fade-in 0.3s ease;
+            }
+          `}</style>
+        </div>
+      )}
+      {/* Fin overlay */}
       <div className="max-w-4xl mx-auto">
         <h2 className="text-4xl font-extrabold text-gray-900 text-center mb-8">
           Finalisez votre <span className="text-[#0049ac]">demande de lavage</span>
