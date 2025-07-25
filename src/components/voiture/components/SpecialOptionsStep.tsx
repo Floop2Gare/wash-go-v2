@@ -3,14 +3,15 @@ import { ArrowRight } from "lucide-react";
 
 interface SpecialOptionsStepProps {
   onSelect: (data: { step: string; value: string[]; price: number; time: number }) => void;
-  nextSectionId?: string; // id de la section suivante pour scroll
+  nextSectionId?: string;
+  selected?: string[]; // ✅ Ajout pour le contrôle externe
 }
 
 const options = [
   {
     value: "Plastiques intérieurs",
     label: "Plastiques intérieurs",
-    price: 15, // modifié de 10 à 15
+    price: 15,
     time: 20,
     img: "/voiture/extras/plastiques.jpg",
   },
@@ -31,36 +32,37 @@ const options = [
   {
     value: "Encadrements de porte",
     label: "Encadrements de porte",
-    price: 15, // modifié de 10 à 15
+    price: 15,
     time: 10,
     img: "/voiture/extras/portes.jpg",
   },
 ];
 
-const SpecialOptionsStep: React.FC<SpecialOptionsStepProps & { resetKey: number }> = ({ onSelect, nextSectionId, resetKey }) => {
-  const [selected, setSelected] = useState<string[]>([]);
+const SpecialOptionsStep: React.FC<SpecialOptionsStepProps> = ({ onSelect, nextSectionId, selected = [] }) => {
+  const [localSelected, setLocalSelected] = useState<string[]>(selected);
   const [loading, setLoading] = useState(false);
 
+  // ✅ Synchronisation avec la prop externe (Voitures.tsx)
   useEffect(() => {
-    setSelected([]);
-  }, [resetKey]);
+    setLocalSelected(selected);
+  }, [selected]);
 
   const handleToggle = (val: string) => {
-    const newSelected = selected.includes(val)
-      ? selected.filter((v) => v !== val)
-      : [...selected, val];
-    setSelected(newSelected);
+    const newSelected = localSelected.includes(val)
+      ? localSelected.filter((v) => v !== val)
+      : [...localSelected, val];
+    setLocalSelected(newSelected);
   };
 
   const handleContinue = () => {
     setLoading(true);
     const totalPrice = options
-      .filter((o) => selected.includes(o.value))
+      .filter((o) => localSelected.includes(o.value))
       .reduce((sum, o) => sum + o.price, 0);
     const totalTime = options
-      .filter((o) => selected.includes(o.value))
+      .filter((o) => localSelected.includes(o.value))
       .reduce((sum, o) => sum + o.time, 0);
-    onSelect({ step: "Options spéciales", value: selected, price: totalPrice, time: totalTime });
+    onSelect({ step: "Options spéciales", value: localSelected, price: totalPrice, time: totalTime });
     setTimeout(() => {
       setLoading(false);
       if (nextSectionId) {
@@ -74,7 +76,7 @@ const SpecialOptionsStep: React.FC<SpecialOptionsStepProps & { resetKey: number 
     <section className="w-full flex flex-col gap-10 font-[Outfit]">
       <div className="grid md:grid-cols-2 gap-6">
         {options.map((opt) => {
-          const isChecked = selected.includes(opt.value);
+          const isChecked = localSelected.includes(opt.value);
           return (
             <button
               key={opt.value}
@@ -112,8 +114,8 @@ const SpecialOptionsStep: React.FC<SpecialOptionsStepProps & { resetKey: number 
 
       <div className="text-sm text-center text-gray-700">
         <b>Votre sélection :</b>{" "}
-        {selected.length
-          ? selected.join(", ")
+        {localSelected.length
+          ? localSelected.join(", ")
           : <span className="text-gray-400 italic">Aucune option sélectionnée</span>}
       </div>
 
@@ -148,8 +150,8 @@ const SpecialOptionsStep: React.FC<SpecialOptionsStepProps & { resetKey: number 
           Valider sans options
         </button>
       </div>
-      {/* Fin boutons mobile */}
-      {/* Boutons validation desktop (inchangé) */}
+
+      {/* Desktop */}
       <div className="hidden md:flex justify-center gap-4 mt-6">
         <button
           type="button"

@@ -9,7 +9,8 @@ interface SeatCleaningStepProps {
     time: number;
   }) => void;
   nextSectionId?: string;
-  vehicleTypeId?: string; // id du type de véhicule
+  vehicleTypeId?: string;
+  selected?: string[]; // ✅ Nouvelle prop
 }
 
 const options = [
@@ -36,38 +37,42 @@ const options = [
   },
 ];
 
-const SeatCleaningStep: React.FC<SeatCleaningStepProps & { resetKey: number }> = ({ onSelect, nextSectionId, vehicleTypeId, resetKey }) => {
-  const [selected, setSelected] = useState<string[]>([]);
+const SeatCleaningStep: React.FC<SeatCleaningStepProps> = ({
+  onSelect,
+  nextSectionId,
+  vehicleTypeId,
+  selected = [], // ✅ Valeur par défaut
+}) => {
+  const [localSelected, setLocalSelected] = useState<string[]>(selected);
   const [loading, setLoading] = useState(false);
 
+  // ✅ Synchronisation avec le parent
   useEffect(() => {
-    setSelected([]);
-  }, [resetKey]);
+    setLocalSelected(selected);
+  }, [selected]);
 
-  // L’option Coffre n’est activée que pour l’id '7places'
   const isCoffreEnabled = vehicleTypeId === "7places";
 
   const handleToggle = (val: string) => {
-    // Si Coffre désactivé, on ignore le clic
     if (val === "Coffre" && !isCoffreEnabled) return;
-    const newSelected = selected.includes(val)
-      ? selected.filter((v) => v !== val)
-      : [...selected, val];
-    setSelected(newSelected);
+    const newSelected = localSelected.includes(val)
+      ? localSelected.filter((v) => v !== val)
+      : [...localSelected, val];
+    setLocalSelected(newSelected);
   };
 
   const handleContinue = () => {
-    if (!selected.length) return;
+    if (!localSelected.length) return;
     setLoading(true);
     const totalPrice = options
-      .filter((o) => selected.includes(o.value))
+      .filter((o) => localSelected.includes(o.value))
       .reduce((sum, o) => sum + o.price, 0);
     const totalTime = options
-      .filter((o) => selected.includes(o.value))
+      .filter((o) => localSelected.includes(o.value))
       .reduce((sum, o) => sum + o.time, 0);
     onSelect({
       step: "Pressing sièges",
-      value: selected,
+      value: localSelected,
       price: totalPrice,
       time: totalTime,
     });
@@ -84,7 +89,7 @@ const SeatCleaningStep: React.FC<SeatCleaningStepProps & { resetKey: number }> =
     <section className="w-full flex flex-col gap-10 font-[Outfit]">
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {options.map((opt) => {
-          const isActive = selected.includes(opt.value);
+          const isActive = localSelected.includes(opt.value);
           const isCoffre = opt.value === "Coffre";
           const disabled = isCoffre && !isCoffreEnabled;
           return (
@@ -122,7 +127,6 @@ const SeatCleaningStep: React.FC<SeatCleaningStepProps & { resetKey: number }> =
                     {isActive && !disabled ? "Sélectionné" : "Choisir"}
                   </span>
                 </div>
-                {/* Message d’indisponibilité pour Coffre */}
                 {disabled && (
                   <div className="mt-2 text-xs text-gray-500 italic">
                     Option disponible uniquement pour les véhicules 6 places et +
@@ -135,17 +139,18 @@ const SeatCleaningStep: React.FC<SeatCleaningStepProps & { resetKey: number }> =
       </div>
 
       <div className="text-center text-sm text-gray-700">
-        <b>Votre sélection :</b> {selected.length ? selected.join(", ") : <span className="text-gray-400 italic">Aucune zone sélectionnée</span>}
+        <b>Votre sélection :</b>{" "}
+        {localSelected.length ? localSelected.join(", ") : <span className="text-gray-400 italic">Aucune zone sélectionnée</span>}
       </div>
 
-      {/* Boutons validation mobile */}
+      {/* Boutons mobiles */}
       <div className="grid grid-cols-2 gap-3 mt-6 md:hidden">
         <button
           type="button"
           onClick={handleContinue}
-          disabled={!selected.length || loading}
+          disabled={!localSelected.length || loading}
           className={`w-full flex-1 rounded-xl py-3 font-bold text-white bg-[#0049ac] shadow-sm text-base flex items-center justify-center transition-all
-            ${!selected.length || loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-800"}`}
+            ${!localSelected.length || loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-800"}`}
         >
           Valider les sièges <ArrowRight className="w-5 h-5 ml-2" />
         </button>
@@ -169,15 +174,15 @@ const SeatCleaningStep: React.FC<SeatCleaningStepProps & { resetKey: number }> =
           Valider sans pressing
         </button>
       </div>
-      {/* Fin boutons mobile */}
-      {/* Boutons validation desktop (inchangé) */}
+
+      {/* Desktop */}
       <div className="hidden md:flex justify-center gap-4 mt-6">
         <button
           type="button"
           onClick={handleContinue}
-          disabled={!selected.length || loading}
+          disabled={!localSelected.length || loading}
           className={`flex items-center gap-2 px-8 py-3 rounded-xl font-bold text-white bg-[#0049ac] shadow-sm transition-all
-            ${!selected.length || loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-800"}`}
+            ${!localSelected.length || loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-800"}`}
         >
           Valider les sièges <ArrowRight className="w-5 h-5" />
         </button>

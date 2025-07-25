@@ -90,7 +90,7 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.nom || !form.prenom || !form.telephone || !form.email || !form.date || !form.adresse) {
+    if (!form.nom || !form.prenom || !form.telephone || !form.email || !form.date) {
       setError("Merci de remplir tous les champs obligatoires.");
       return;
     }
@@ -102,10 +102,10 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
       setError("Merci de saisir un numéro de téléphone valide (10 chiffres).");
       return;
     }
-    if (!isValidAdresse(form.adresse)) {
-      setError("Merci de saisir une adresse complète (numéro, rue, code postal, ville).");
-      return;
-    }
+    // if (!isValidAdresse(form.adresse)) {
+//   setError("Merci de saisir une adresse complète (numéro, rue, code postal, ville).");
+//   return;
+// }
     if (!rgpd) {
       setError("Merci d'accepter l'utilisation de vos données (RGPD).");
       return;

@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 interface AspirationStepProps {
   onSelect: (data: { step: string; value: string; price: number; time: number }) => void;
+  selected?: string; // ✅ nouvelle prop contrôlée
 }
 
 const options = [
@@ -23,8 +24,13 @@ const options = [
   },
 ];
 
-const AspirationStep: React.FC<AspirationStepProps> = ({ onSelect }) => {
-  const [selected, setSelected] = useState<string | null>(null);
+const AspirationStep: React.FC<AspirationStepProps> = ({ onSelect, selected: parentSelected }) => {
+  const [selected, setSelected] = useState<string | null>(parentSelected ?? null);
+
+  // ✅ Mise à jour automatique si le parent change la sélection
+  useEffect(() => {
+    setSelected(parentSelected ?? null);
+  }, [parentSelected]);
 
   const handleClick = (opt: typeof options[0]) => {
     setSelected(opt.value);

@@ -1,4 +1,4 @@
-// ✅ Code fusionné : logique fonctionnelle finale + design stylisé inspiré de l'ancien
+// ✅ Code fusionné avec prise en compte du reset visuel des sous-étapes
 
 import { useRef, useState, useEffect } from "react";
 import Navbar from "../../../components/Navbar/Navbar";
@@ -44,7 +44,6 @@ export default function Voitures() {
       {
         root: null,
         threshold: 0,
-        // On déclenche plus tôt : dès que le haut de la section Aspiration atteint 60% du viewport (donc -40% du haut)
         rootMargin: "-40% 0px 0px 0px"
       }
     );
@@ -76,18 +75,17 @@ export default function Voitures() {
     setShowErrorModal(true);
   };
 
-  // Nouvelle fonction pour avancer automatiquement à l'étape suivante
   const handleStepSelect = (stepIdx: number, setter: (data: any) => void) => (data: any) => {
     setter(data);
     if (stepIdx < steps.length - 1) {
       setTimeout(() => {
         setActiveStep(stepIdx + 1);
         sectionRefs.current[stepIdx + 1]?.scrollIntoView({ behavior: "smooth" });
-      }, 200); // petite pause pour feedback visuel
+      }, 200);
     }
   };
 
-  // Fonction de réinitialisation complète du parcours
+  // ✅ MODIF : Fonction de réinitialisation totale
   const handleReset = () => {
     setAspiration(null);
     setVehicule(null);
@@ -95,8 +93,7 @@ export default function Voitures() {
     setOptions({ value: [], price: 0, time: 0 });
     setExtras({ value: [], price: 0, time: 0 });
     setActiveStep(0);
-    // Scroll en haut de page ou sur le hero
-    if (heroRef.current && typeof heroRef.current.scrollIntoView === 'function') {
+    if (heroRef.current) {
       heroRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
@@ -111,11 +108,8 @@ export default function Voitures() {
           <h1 className="text-5xl font-extrabold mb-6">Nettoyage Professionnel de <span className="text-[#0049ac]">Voitures</span></h1>
           <p className="text-xl mb-8 max-w-3xl mx-auto">Offrez à votre véhicule une expérience de propreté haut de gamme</p>
           <button onClick={() => {
-            // On tente d'abord la ref aspirationRef, sinon sectionRefs[0]
             const target = aspirationRef.current || sectionRefs.current[0];
-            if (target && typeof target.scrollIntoView === 'function') {
-              target.scrollIntoView({ behavior: "smooth" });
-            }
+            if (target) target.scrollIntoView({ behavior: "smooth" });
           }} className="bg-white text-blue-600 px-8 py-4 rounded-full font-semibold hover:bg-blue-50 transition-colors flex items-center gap-2 mx-auto">
             Commencer ma demande sur mesure
             <ChevronDown size={20} />
@@ -159,10 +153,8 @@ export default function Voitures() {
       <div className="max-w-5xl mx-auto px-4 py-12 space-y-24">
         {steps.map((step, i) => {
           const StepComponent = step.component;
-          // Trouver l’id du type de véhicule sélectionné
           let vehicleTypeId = undefined;
           if (i === 2 && vehicule?.value) {
-            // Correspondance label -> id
             const vehicleTypes = [
               { id: "citadine", label: "Citadine" },
               { id: "berline", label: "Berline / Break" },
@@ -174,11 +166,12 @@ export default function Voitures() {
             const found = vehicleTypes.find(v => v.label === vehicule.value);
             vehicleTypeId = found?.id;
           }
+
           const props = i === 0 ? { onSelect: handleStepSelect(i, setAspiration) }
             : i === 1 ? { onSelect: handleStepSelect(i, setVehicule), selected: vehicule?.value }
-            : i === 2 ? { onSelect: handleStepSelect(i, setPressing), vehicleTypeId }
-            : i === 3 ? { onSelect: handleStepSelect(i, setOptions) }
-            : i === 4 ? { onSelect: handleStepSelect(i, setExtras) }
+            : i === 2 ? { onSelect: handleStepSelect(i, setPressing), vehicleTypeId, selected: pressing.value } // ✅ MODIF
+            : i === 3 ? { onSelect: handleStepSelect(i, setOptions), selected: options.value } // ✅ MODIF
+            : i === 4 ? { onSelect: handleStepSelect(i, setExtras), selected: extras.value } // ✅ MODIF
             : { selections, totalPrice, totalTime, onReset: handleReset };
 
           return (

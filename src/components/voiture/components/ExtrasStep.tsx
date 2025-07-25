@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 interface ExtrasStepProps {
   onSelect: (data: { step: string; value: string[]; price: number; time: number }) => void;
   nextSectionId?: string;
+  selected?: string[]; // ✅ Nouveau pour le contrôle externe
 }
 
 const options = [
@@ -37,31 +38,32 @@ const options = [
   },
 ];
 
-const ExtrasStep: React.FC<ExtrasStepProps & { resetKey: number }> = ({ onSelect, nextSectionId, resetKey }) => {
-  const [selected, setSelected] = useState<string[]>([]);
+const ExtrasStep: React.FC<ExtrasStepProps> = ({ onSelect, nextSectionId, selected = [] }) => {
+  const [localSelected, setLocalSelected] = useState<string[]>(selected);
   const [loading, setLoading] = useState(false);
 
+  // ✅ Synchronisation avec la sélection du parent
   useEffect(() => {
-    setSelected([]);
-  }, [resetKey]);
+    setLocalSelected(selected);
+  }, [selected]);
 
   const handleToggle = (val: string) => {
-    const newSelected = selected.includes(val)
-      ? selected.filter((v) => v !== val)
-      : [...selected, val];
-    setSelected(newSelected);
+    const newSelected = localSelected.includes(val)
+      ? localSelected.filter((v) => v !== val)
+      : [...localSelected, val];
+    setLocalSelected(newSelected);
   };
 
   const handleContinue = () => {
-    if (!selected.length) return;
+    if (!localSelected.length) return;
     setLoading(true);
     const totalPrice = options
-      .filter((o) => selected.includes(o.value))
+      .filter((o) => localSelected.includes(o.value))
       .reduce((sum, o) => sum + o.price, 0);
     const totalTime = options
-      .filter((o) => selected.includes(o.value))
+      .filter((o) => localSelected.includes(o.value))
       .reduce((sum, o) => sum + o.time, 0);
-    onSelect({ step: "Extras", value: selected, price: totalPrice, time: totalTime });
+    onSelect({ step: "Extras", value: localSelected, price: totalPrice, time: totalTime });
     setTimeout(() => {
       setLoading(false);
       if (nextSectionId) {
@@ -75,7 +77,7 @@ const ExtrasStep: React.FC<ExtrasStepProps & { resetKey: number }> = ({ onSelect
     <section className="w-full flex flex-col gap-10 font-[Outfit]">
       <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
         {options.map((opt) => {
-          const isActive = selected.includes(opt.value);
+          const isActive = localSelected.includes(opt.value);
           return (
             <div
               key={opt.value}
@@ -115,17 +117,18 @@ const ExtrasStep: React.FC<ExtrasStepProps & { resetKey: number }> = ({ onSelect
       </div>
 
       <div className="text-center text-sm text-gray-700">
-        <b>Votre sélection :</b> {selected.length ? selected.join(", ") : <span className="text-gray-400 italic">Aucun extra sélectionné</span>}
+        <b>Votre sélection :</b>{" "}
+        {localSelected.length ? localSelected.join(", ") : <span className="text-gray-400 italic">Aucun extra sélectionné</span>}
       </div>
 
-      {/* Boutons validation mobile */}
+      {/* Mobile */}
       <div className="grid grid-cols-2 gap-3 mt-6 md:hidden">
         <button
           type="button"
           onClick={handleContinue}
-          disabled={!selected.length || loading}
+          disabled={!localSelected.length || loading}
           className={`w-full flex-1 rounded-xl py-3 font-bold text-white bg-[#0049ac] shadow-sm text-base flex items-center justify-center transition-all
-            ${!selected.length || loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-800"}`}
+            ${!localSelected.length || loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-800"}`}
         >
           Finaliser les extras <ArrowRight className="w-5 h-5 ml-2" />
         </button>
@@ -149,15 +152,15 @@ const ExtrasStep: React.FC<ExtrasStepProps & { resetKey: number }> = ({ onSelect
           Finaliser sans extra
         </button>
       </div>
-      {/* Fin boutons mobile */}
-      {/* Boutons validation desktop (inchangé) */}
+
+      {/* Desktop */}
       <div className="hidden md:flex justify-center gap-4 mt-6">
         <button
           type="button"
           onClick={handleContinue}
-          disabled={!selected.length || loading}
+          disabled={!localSelected.length || loading}
           className={`flex items-center gap-2 px-8 py-3 rounded-xl font-bold text-white bg-[#0049ac] shadow-sm transition-all
-            ${!selected.length || loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-800"}`}
+            ${!localSelected.length || loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-800"}`}
         >
           Finaliser les extras <ArrowRight className="w-5 h-5" />
         </button>
