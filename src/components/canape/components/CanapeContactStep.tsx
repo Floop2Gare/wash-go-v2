@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { CalendarDays, ImagePlus, Send, Plus, Clock } from "lucide-react";
-import TimeSlotSelector, { TimeSlot, generateTimeSlots, formatDuration } from "./TimeSlotSelector";
+import TimeSlotSelector, { TimeSlot, generateTimeSlots, formatDuration } from "../../voiture/components/TimeSlotSelector";
 
-interface ContactStepProps {
+interface CanapeContactStepProps {
   selections: { step: string; value: string | string[] }[];
   totalPrice: number;
   totalTime: number;
@@ -44,7 +44,7 @@ function isValidAdresse(adresse: string) {
   return /\d+\s+.+,?\s*\d{5}\s+.+/i.test(adresse);
 }
 
-const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, totalTime, onReset }) => {
+const CanapeContactStep: React.FC<CanapeContactStepProps> = ({ selections, totalPrice, totalTime, onReset }) => {
   const [form, setForm] = useState(initialForm);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -132,7 +132,10 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
     const getValue = (stepLabel: string) => {
       const found = localSelections.find(sel => sel.step === stepLabel);
       if (!found) return "-";
-      if (Array.isArray(found.value)) return found.value.length ? found.value.join(", ") : "-";
+      if (Array.isArray(found.value)) {
+        if (found.value.length === 0) return "Aucune option";
+        return found.value.join(", ");
+      }
       return found.value || "-";
     };
 
@@ -144,12 +147,10 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
       return `± ${m} min`;
     };
 
-    const message = `🚗 Nouvelle demande Wash&GO\n\n` +
-      `Aspiration : ${getValue("Aspiration")}\n` +
-      `Type de véhicule : ${getValue("Véhicule")}\n` +
-      `Sièges à nettoyer : ${getValue("Pressing sièges")}\n` +
-      `Options choisies : ${getValue("Options spéciales")}\n` +
-      `Spécificités : ${getValue("Extras")}\n` +
+    const message = `🛋️ Nouvelle demande Wash&GO Canapé\n\n` +
+      `Type de tissu : ${getValue("Type de tissu")}\n` +
+      `Nombre de places : ${getValue("Nombre de places")}\n` +
+      `Options supplémentaires : ${getValue("Options supplémentaires")}\n` +
       `Prix total : ${localTotalPrice} €\n` +
       `Temps estimé : ${formatTime(localTotalTime)}\n\n` +
       `📩 Contact client :\n` +
@@ -236,7 +237,7 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
       {/* Fin overlay */}
       <div className="max-w-4xl mx-auto">
         <h2 className="text-4xl font-extrabold text-gray-900 text-center mb-8">
-          Finalisez votre <span className="text-[#0049ac]">demande de lavage</span>
+          Finalisez votre <span className="text-[#0049ac]">demande de nettoyage canapé</span>
         </h2>
 
         <div className="bg-blue-50 border-l-4 border-[#0049ac] rounded-xl p-6 mb-10 shadow-sm">
@@ -367,4 +368,4 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
   );
 };
 
-export default ContactStep;
+export default CanapeContactStep; 

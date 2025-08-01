@@ -74,8 +74,8 @@ const ExtrasStep: React.FC<ExtrasStepProps> = ({ onSelect, nextSectionId, select
   };
 
   return (
-    <section className="w-full flex flex-col gap-10 font-[Outfit]">
-      <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
+    <section className="w-full flex flex-col gap-6 sm:gap-10 font-[Outfit]">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
         {options.map((opt) => {
           const isActive = localSelected.includes(opt.value);
           return (
@@ -92,17 +92,17 @@ const ExtrasStep: React.FC<ExtrasStepProps> = ({ onSelect, nextSectionId, select
               <img
                 src={opt.img}
                 alt={opt.label}
-                className="w-full h-48 object-cover"
+                className="w-full h-40 sm:h-48 object-cover"
               />
-              <div className="p-5">
+              <div className="p-4 sm:p-5">
                 <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-lg font-semibold text-gray-900">{opt.label}</h3>
-                  <span className="text-[#0049ac] font-bold text-base">+{opt.price}€</span>
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900">{opt.label}</h3>
+                  <span className="text-[#0049ac] font-bold text-sm sm:text-base">+{opt.price}€</span>
                 </div>
                 <p className="text-xs text-gray-400 mb-3">Durée : {opt.time} min</p>
                 <div className="mt-4">
                   <span
-                    className={`inline-block px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300
+                    className={`inline-block px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors duration-300
                       ${isActive
                         ? "bg-[#0049ac] text-white"
                         : "bg-gray-100 text-[#0049ac] hover:bg-[#0049ac] hover:text-white"}`}
@@ -116,7 +116,7 @@ const ExtrasStep: React.FC<ExtrasStepProps> = ({ onSelect, nextSectionId, select
         })}
       </div>
 
-      <div className="text-center text-sm text-gray-700">
+      <div className="text-center text-xs sm:text-sm text-gray-700">
         <b>Votre sélection :</b>{" "}
         {localSelected.length ? localSelected.join(", ") : <span className="text-gray-400 italic">Aucun extra sélectionné</span>}
       </div>
@@ -127,10 +127,10 @@ const ExtrasStep: React.FC<ExtrasStepProps> = ({ onSelect, nextSectionId, select
           type="button"
           onClick={handleContinue}
           disabled={!localSelected.length || loading}
-          className={`w-full flex-1 rounded-xl py-3 font-bold text-white bg-[#0049ac] shadow-sm text-base flex items-center justify-center transition-all
+          className={`w-full flex-1 rounded-xl py-3 font-bold text-white bg-[#0049ac] shadow-sm text-sm sm:text-base flex items-center justify-center transition-all
             ${!localSelected.length || loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-800"}`}
         >
-          Finaliser les extras <ArrowRight className="w-5 h-5 ml-2" />
+          Finaliser les extras <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
         </button>
         <button
           type="button"
@@ -147,7 +147,7 @@ const ExtrasStep: React.FC<ExtrasStepProps> = ({ onSelect, nextSectionId, select
             }, 200);
           }}
           disabled={loading}
-          className="w-full flex-1 rounded-xl py-3 font-bold text-[#0049ac] bg-gray-100 shadow-sm text-base flex items-center justify-center transition-all hover:bg-gray-200"
+          className="w-full flex-1 rounded-xl py-3 font-bold text-[#0049ac] bg-gray-100 shadow-sm text-sm sm:text-base flex items-center justify-center transition-all hover:bg-gray-200"
         >
           Finaliser sans extra
         </button>
@@ -159,10 +159,10 @@ const ExtrasStep: React.FC<ExtrasStepProps> = ({ onSelect, nextSectionId, select
           type="button"
           onClick={handleContinue}
           disabled={!localSelected.length || loading}
-          className={`flex items-center gap-2 px-8 py-3 rounded-xl font-bold text-white bg-[#0049ac] shadow-sm transition-all
+          className={`flex items-center gap-2 px-6 sm:px-8 py-3 rounded-xl font-bold text-white bg-[#0049ac] shadow-sm transition-all
             ${!localSelected.length || loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-800"}`}
         >
-          Finaliser les extras <ArrowRight className="w-5 h-5" />
+          Finaliser les extras <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
         <button
           type="button"
@@ -179,7 +179,7 @@ const ExtrasStep: React.FC<ExtrasStepProps> = ({ onSelect, nextSectionId, select
             }, 200);
           }}
           disabled={loading}
-          className="flex items-center gap-2 px-8 py-3 rounded-xl font-bold text-[#0049ac] bg-gray-100 shadow-sm transition-all hover:bg-gray-200"
+          className="flex items-center gap-2 px-6 sm:px-8 py-3 rounded-xl font-bold text-[#0049ac] bg-gray-100 shadow-sm transition-all hover:bg-gray-200"
         >
           Finaliser sans extra
         </button>

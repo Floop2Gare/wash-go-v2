@@ -69,7 +69,7 @@ const CarcleanStep: React.FC<CarcleanStepProps> = ({ selected, onSelect }) => {
   };
 
   return (
-    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 font-[Outfit]">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 font-[Outfit]">
       {categories.map((veh) => {
         const isActive = selected === veh.label;
         return (
@@ -97,23 +97,23 @@ const CarcleanStep: React.FC<CarcleanStepProps> = ({ selected, onSelect }) => {
             <img
               src={veh.img}
               alt={veh.label}
-              className="w-full h-48 object-cover"
+              className="w-full h-40 sm:h-48 object-cover"
             />
 
-            <div className="flex flex-col flex-1 p-5">
+            <div className="flex flex-col flex-1 p-4 sm:p-5">
               <div className="flex justify-between items-center mb-2">
-                <h3 className="text-lg font-semibold text-gray-900">{veh.label}</h3>
-                <span className="text-[#0049ac] font-bold text-base">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900">{veh.label}</h3>
+                <span className="text-[#0049ac] font-bold text-sm sm:text-base">
                   {veh.price > 0 ? `+${veh.price}€` : "Inclus"}
                 </span>
               </div>
 
-              <p className="text-sm text-gray-600 mb-1">{veh.desc}</p>
+              <p className="text-xs sm:text-sm text-gray-600 mb-1">{veh.desc}</p>
               <p className="text-xs text-gray-400">Durée : {veh.time} min</p>
 
-              <div className="mt-auto pt-4">
+              <div className="mt-auto pt-3 sm:pt-4">
                 <button
-                  className={`w-full px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300
+                  className={`w-full px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors duration-300
                     ${isActive
                       ? "bg-[#0049ac] text-white"
                       : "bg-gray-100 text-[#0049ac] hover:bg-[#0049ac] hover:text-white"}
@@ -140,19 +140,19 @@ const CarcleanStep: React.FC<CarcleanStepProps> = ({ selected, onSelect }) => {
         <img
           src={horsGabarit.img}
           alt={horsGabarit.label}
-          className="w-full h-48 object-cover"
+          className="w-full h-40 sm:h-48 object-cover"
         />
-        <div className="flex flex-col flex-1 p-5">
+        <div className="flex flex-col flex-1 p-4 sm:p-5">
           <div className="flex justify-between items-center mb-2">
-            <h3 className="text-lg font-semibold text-gray-900">{horsGabarit.label}</h3>
-            <span className="inline-block px-3 py-1 rounded-full bg-[#0049ac] text-white text-xs font-semibold shadow">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900">{horsGabarit.label}</h3>
+            <span className="inline-block px-2 sm:px-3 py-1 rounded-full bg-[#0049ac] text-white text-xs font-semibold shadow">
               Sur devis
             </span>
           </div>
-          <p className="text-sm text-gray-600 mb-1">{horsGabarit.desc}</p>
-          <div className="mt-auto pt-4">
+          <p className="text-xs sm:text-sm text-gray-600 mb-1">{horsGabarit.desc}</p>
+          <div className="mt-auto pt-3 sm:pt-4">
             <button
-              className={`w-full px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300
+              className={`w-full px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors duration-300
                 ${selected === horsGabarit.label
                   ? "bg-[#0049ac] text-white"
                   : "bg-gray-100 text-[#0049ac] hover:bg-[#0049ac] hover:text-white"}

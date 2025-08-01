@@ -24,12 +24,12 @@ const ChoixSection: React.FC = () => {
   }, [navigate]);
 
   return (
-    <section className="py-16 sm:py-20 bg-gradient-to-b from-white to-gray-100" id="choix-section">
+    <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-white to-gray-100" id="choix-section">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
-        <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-12">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-8 sm:mb-12 px-2">
           Que souhaitez-vous faire ?
         </h2>
-        <div className="grid gap-8 grid-cols-1 sm:grid-cols-2">
+        <div className="grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2 max-w-2xl sm:max-w-none mx-auto">
           {options.map(({ label, path, image }, index) => (
             <motion.div
               key={label}
@@ -38,14 +38,14 @@ const ChoixSection: React.FC = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               onClick={() => handleClick(path)}
-              className="cursor-pointer bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex flex-col items-center"
+              className="cursor-pointer bg-white rounded-2xl p-6 sm:p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex flex-col items-center"
             >
               <img
                 src={image}
                 alt={`Icône ${label}`}
-                className="h-42 sm:h-42 w-auto mb-6 object-contain scale-110"
+                className="h-32 sm:h-36 md:h-42 w-auto mb-4 sm:mb-6 object-contain scale-110"
               />
-              <h3 className="text-xl sm:text-2xl font-semibold text-gray-800">{label}</h3>
+              <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-800">{label}</h3>
             </motion.div>
           ))}
         </div>

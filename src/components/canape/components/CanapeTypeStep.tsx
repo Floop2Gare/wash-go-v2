@@ -1,118 +1,109 @@
 import React from "react";
-import { Check, ChevronRight, Star } from "lucide-react";
 
-interface CanapeFormuleStepProps {
+interface CanapeTypeStepProps {
   selected: string | undefined;
-  onSelect: (formule: string) => void;
+  onSelect: (data: { step: string; value: string; price: number; time: number }) => void;
 }
 
 const formules = [
   {
     id: "2 places",
-    name: "2 places",
-    price: "40€",
-    description: "Traitement complet pour un petit canapé 2 places.",
-    sizeLabel: "Petit format",
-    priceValue: 40,
+    label: "2 places",
+    desc: "Petit canapé 2 places",
+    price: 40,
+    time: 30,
+    img: "/canapé/canape.jpg",
   },
   {
     id: "3 places",
-    name: "3 places",
-    price: "50€",
-    description: "Traitement complet pour un canapé 3 places.",
-    sizeLabel: "Format moyen",
-    priceValue: 50,
+    label: "3 places",
+    desc: "Canapé 3 places",
+    price: 50,
+    time: 45,
+    img: "/canapé/canape.jpg",
   },
   {
     id: "4 places",
-    name: "4 places",
-    price: "60€",
-    description: "Traitement complet pour un grand canapé 4 places.",
-    sizeLabel: "Grand format",
-    priceValue: 60,
+    label: "4 places",
+    desc: "Grand canapé 4 places",
+    price: 60,
+    time: 60,
+    img: "/canapé/canape.jpg",
   },
   {
     id: "5 et +",
-    name: "5 places et +",
-    price: "70€",
-    description: "Traitement complet pour très grand canapé ou d’angle.",
-    sizeLabel: "Très grand format",
-    priceValue: 70,
+    label: "5 places et +",
+    desc: "Très grand canapé ou d'angle",
+    price: 70,
+    time: 75,
+    img: "/canapé/canape.jpg",
   },
 ];
 
-const sharedFeatures = [
-  "Nettoyage vapeur en profondeur",
-  "Désinfection antibactérienne",
-  "Traitement anti-odeurs",
-  "Brossage et soin du tissu",
-];
-
-const CanapeFormuleStep: React.FC<CanapeFormuleStepProps> = ({ selected, onSelect }) => {
+const CanapeTypeStep: React.FC<CanapeTypeStepProps> = ({ selected, onSelect }) => {
   return (
-    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 font-[Outfit]">
       {formules.map((formule) => {
-        const isSelected = selected === formule.id;
-
+        const isActive = selected === formule.label;
         return (
           <div
             key={formule.id}
+            onClick={() => onSelect({
+              step: "Nombre de places",
+              value: formule.label,
+              price: formule.price,
+              time: formule.time,
+            })}
             role="button"
             tabIndex={0}
-            onClick={() => onSelect(formule.id)}
-            onKeyDown={(e) => e.key === "Enter" && onSelect(formule.id)}
-            aria-pressed={isSelected}
-            className={`relative group cursor-pointer rounded-2xl border p-6 transition-all duration-300 focus:outline-none
-              ${
-                isSelected
-                  ? "bg-gradient-to-br from-blue-100 to-blue-50 border-blue-500 shadow-xl scale-[1.02]"
-                  : "bg-white border-gray-200 hover:shadow-md hover:border-blue-300 focus-visible:ring-2 focus-visible:ring-blue-300"
-              }
+            onKeyDown={(e) => e.key === "Enter" && onSelect({
+              step: "Nombre de places",
+              value: formule.label,
+              price: formule.price,
+              time: formule.time,
+            })}
+            aria-pressed={isActive}
+            className={`flex flex-col h-full rounded-2xl overflow-hidden border-2 cursor-pointer transition-transform duration-300 hover:scale-[1.015]
+              ${isActive ? "border-[#0049ac]" : "border-gray-200 hover:border-[#0049ac]/40"}
             `}
           >
-            {isSelected && (
-              <div className="absolute top-4 right-4 bg-blue-600 text-white p-2 rounded-full shadow">
-                <Check size={16} />
-              </div>
-            )}
+            <img
+              src={formule.img}
+              alt={formule.label}
+              className="w-full h-40 sm:h-48 object-cover"
+            />
 
-            {formule.id === "4 places" && (
-              <div className="absolute top-4 right-14 bg-yellow-400 text-white text-xs font-bold uppercase px-3 py-1 rounded-full shadow-md animate-pulse">
-                Populaire
+            <div className="flex flex-col flex-1 p-4 sm:p-5">
+              <div className="flex justify-between items-center mb-2">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900">{formule.label}</h3>
+                <span className="text-[#0049ac] font-bold text-sm sm:text-base">
+                  {formule.price}€
+                </span>
               </div>
-            )}
 
-            <div className="mb-4">
-              <h3 className="text-2xl font-bold text-gray-900 mb-1">{formule.name}</h3>
-              <p className="text-3xl font-extrabold text-blue-600">{formule.price}</p>
-              <p className="text-sm text-gray-600 mt-2">{formule.description}</p>
+              <p className="text-xs sm:text-sm text-gray-600 mb-1">{formule.desc}</p>
+              <p className="text-xs text-gray-400">Durée : {formule.time} min</p>
+
+              {formule.id === "4 places" && (
+                <div className="mt-2">
+                  <span className="inline-block px-2 sm:px-3 py-1 rounded-full bg-yellow-400 text-white text-xs font-semibold shadow">
+                    Populaire
+                  </span>
+                </div>
+              )}
+
+              <div className="mt-auto pt-3 sm:pt-4">
+                <button
+                  className={`w-full px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors duration-300
+                    ${isActive
+                      ? "bg-[#0049ac] text-white"
+                      : "bg-gray-100 text-[#0049ac] hover:bg-[#0049ac] hover:text-white"}
+                  `}
+                >
+                  {isActive ? "Sélectionné" : "Choisir"}
+                </button>
+              </div>
             </div>
-
-            <ul className="space-y-2 my-6">
-              {sharedFeatures.map((feature, idx) => (
-                <li key={idx} className="flex items-center text-sm text-gray-800">
-                  <Star size={16} className="text-blue-500 mr-2" />
-                  {feature}
-                </li>
-              ))}
-            </ul>
-
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onSelect(formule.id);
-              }}
-              className={`w-full flex items-center justify-center gap-2 rounded-lg py-2 font-semibold transition-colors duration-300
-                ${
-                  isSelected
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-100 text-gray-800 hover:bg-gray-200"
-                }
-              `}
-            >
-              {isSelected ? "Sélectionné" : "Choisir"}
-              <ChevronRight size={16} />
-            </button>
           </div>
         );
       })}
@@ -120,4 +111,4 @@ const CanapeFormuleStep: React.FC<CanapeFormuleStepProps> = ({ selected, onSelec
   );
 };
 
-export default CanapeFormuleStep;
+export default CanapeTypeStep;

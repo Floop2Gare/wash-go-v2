@@ -42,14 +42,14 @@ export default function Navbar() {
 
   return (
     <nav className={`fixed top-0 left-0 w-full z-50 ${navbarStyle} transition-all duration-300 ease-in-out`}>
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
         {/* Logo */}
         <button onClick={handleLogoClick} className="focus:outline-none">
-          <img src={logo} alt="Wash&Go" className="h-10 transition duration-300" />
+          <img src={logo} alt="Wash&Go" className="h-8 sm:h-10 transition duration-300" />
         </button>
 
         {/* Desktop navigation */}
-        <div className="hidden md:flex gap-6 text-sm sm:text-lg font-semibold tracking-wide">
+        <div className="hidden md:flex gap-6 text-sm lg:text-lg font-semibold tracking-wide">
           {navLinks.map(({ to, label }) => (
             <Link
               key={to}
@@ -66,17 +66,17 @@ export default function Navbar() {
         {/* Mobile burger icon */}
         <button
           onClick={() => setMenuOpen((prev) => !prev)}
-          className="md:hidden text-inherit focus:outline-none"
+          className="md:hidden text-inherit focus:outline-none p-2"
           aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
         >
-          {menuOpen ? <X size={28} /> : <Menu size={28} />}
+          {menuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
       {/* Mobile navigation */}
       {menuOpen && (
         <div
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 flex flex-col items-center justify-center gap-8 text-white text-xl font-semibold tracking-wide md:hidden transition-all"
+          className="fixed inset-0 bg-black/90 backdrop-blur-sm z-40 flex flex-col items-center justify-center gap-8 text-white text-xl font-semibold tracking-wide md:hidden transition-all"
           role="dialog"
           aria-modal="true"
         >
@@ -88,8 +88,8 @@ export default function Navbar() {
                 navigate(to);
                 setMenuOpen(false);
               }}
-              className={`transition-colors ${
-                location.pathname === to ? "text-blue-400" : "hover:text-blue-300"
+              className={`transition-colors px-6 py-3 rounded-lg ${
+                location.pathname === to ? "text-blue-400 bg-blue-900/20" : "hover:text-blue-300 hover:bg-white/10"
               }`}
             >
               {label}
@@ -99,10 +99,10 @@ export default function Navbar() {
           {/* Close icon top-right */}
           <button
             onClick={() => setMenuOpen(false)}
-            className="absolute top-6 right-6 text-white"
+            className="absolute top-4 right-4 text-white p-2"
             aria-label="Fermer le menu"
           >
-            <X size={28} />
+            <X size={24} />
           </button>
         </div>
       )}

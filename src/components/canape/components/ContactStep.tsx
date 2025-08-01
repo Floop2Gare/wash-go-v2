@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Plus, Send, RotateCw, X } from "lucide-react";
+import { Plus, Send, RotateCw, X, CalendarDays } from "lucide-react";
+import TimeSlotSelector, { TimeSlot, generateTimeSlots, formatDuration } from "../../voiture/components/TimeSlotSelector";
 
 interface ContactStepProps {
   selectedFormule: string;
@@ -19,6 +20,8 @@ type FormData = {
   email: string;
   phone: string;
   city: string;
+  date: string;
+  timeSlot: string;
 };
 
 const schema = yup.object({
@@ -28,7 +31,9 @@ const schema = yup.object({
     .string()
     .matches(/^\d{10}$/, "Numéro invalide (10 chiffres)")
     .required("Le téléphone est requis"),
-  city: yup.string().required("La commune est requise"),
+  city: yup.string(),
+  date: yup.string().required("La date est requise"),
+  timeSlot: yup.string().required("Le créneau horaire est requis"),
 });
 
 const ContactStep: React.FC<ContactStepProps> = ({
@@ -40,13 +45,64 @@ const ContactStep: React.FC<ContactStepProps> = ({
   onDeleteCanape,
   onFullReset,
 }) => {
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
+  const [showTimeSlots, setShowTimeSlots] = useState(false);
+  
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
+    watch,
   } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
+
+  // Calculer la durée estimée pour les canapés (approximative)
+  const getEstimatedDuration = () => {
+    const baseDuration = 60; // 1h de base
+    const optionDuration = selectedOptions.length * 15; // 15 min par option
+    return baseDuration + optionDuration;
+  };
+
+  const estimatedDuration = getEstimatedDuration();
+
+  // Fonction pour vérifier si une date est valide
+  const isValidDate = (dateStr: string): boolean => {
+    if (!dateStr) return false;
+    const date = new Date(dateStr);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    // Date doit être dans le futur et pas un dimanche
+    return date >= today && date.getDay() !== 0;
+  };
+
+  // Gérer le changement de date
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (isValidDate(value)) {
+      setSelectedDate(value);
+      setValue("date", value);
+      setShowTimeSlots(true);
+      setSelectedTimeSlot("");
+      setValue("timeSlot", "");
+    } else {
+      setSelectedDate("");
+      setValue("date", "");
+      setShowTimeSlots(false);
+      setSelectedTimeSlot("");
+      setValue("timeSlot", "");
+    }
+  };
+
+  // Gérer la sélection de créneau
+  const handleTimeSlotSelect = (slot: TimeSlot) => {
+    const slotValue = `${slot.start}-${slot.end}`;
+    setSelectedTimeSlot(slotValue);
+    setValue("timeSlot", slotValue);
+  };
 
   const fullDemandes = [...allDemandes, { formule: selectedFormule, options: selectedOptions }];
 
@@ -85,7 +141,7 @@ const ContactStep: React.FC<ContactStepProps> = ({
               name: { label: "Nom", type: "text" },
               email: { label: "Email", type: "email" },
               phone: { label: "Téléphone", type: "tel", placeholder: "06XXXXXXXX" },
-              city: { label: "Commune", type: "text", placeholder: "Ex : Fuveau, Aix-en-Provence..." },
+              city: { label: "Commune (facultatif)", type: "text", placeholder: "Ex : Fuveau, Aix-en-Provence..." },
             };
 
             return (
@@ -110,6 +166,42 @@ const ContactStep: React.FC<ContactStepProps> = ({
               </div>
             );
           })}
+
+          {/* Sélection de date */}
+          <div>
+            <label htmlFor="date" className="block text-sm font-medium text-gray-700">
+              Date souhaitée *
+            </label>
+            <div className="relative mt-1">
+              <CalendarDays className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                id="date"
+                type="date"
+                value={selectedDate}
+                onChange={handleDateChange}
+                className="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-1 text-sm pl-10"
+                min={new Date().toISOString().split("T")[0]}
+              />
+            </div>
+            {errors.date && (
+              <p className="text-red-500 text-xs mt-1">{errors.date?.message}</p>
+            )}
+          </div>
+
+          {/* Sélection de créneau horaire */}
+          {showTimeSlots && (
+            <div>
+              <TimeSlotSelector
+                date={selectedDate}
+                serviceDuration={estimatedDuration}
+                selectedSlot={selectedTimeSlot}
+                onSlotSelect={handleTimeSlotSelect}
+              />
+              {errors.timeSlot && (
+                <p className="text-red-500 text-xs mt-1">{errors.timeSlot?.message}</p>
+              )}
+            </div>
+          )}
 
           <div className="flex flex-col gap-3 pt-4">
             <button

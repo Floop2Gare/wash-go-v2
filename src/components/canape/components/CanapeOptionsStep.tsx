@@ -1,112 +1,179 @@
-import React from "react";
-import { CheckCircle } from "lucide-react";
-
-interface Option {
-  id: string;
-  label: string;
-  description: string;
-  price: string;
-}
+import React, { useState, useEffect } from "react";
+import { ArrowRight } from "lucide-react";
 
 interface CanapeOptionsStepProps {
-  selectedOptions: string[];
-  onToggleOption: (optionId: string) => void;
-  onContinue: () => void;
-  scrollToRecap: () => void;
+  onSelect: (data: { step: string; value: string[]; price: number; time: number }) => void;
+  nextSectionId?: string;
+  selected?: string[];
 }
 
-const options: Option[] = [
+const options = [
   {
-    id: "antiacariens",
+    value: "Traitement anti-acariens",
     label: "Traitement anti-acariens",
-    description: "Élimine les acariens et allergènes",
-    price: "+10€",
+    price: 10,
+    time: 10,
+    img: "/canapé/canape.jpg",
   },
   {
-    id: "detachant",
+    value: "Détachant renforcé",
     label: "Détachant renforcé",
-    description: "Enlève les taches profondes et incrustées",
-    price: "+10€",
+    price: 10,
+    time: 10,
+    img: "/canapé/canape.jpg",
   },
   {
-    id: "desodorisant",
+    value: "Parfum & désodorisant",
     label: "Parfum & désodorisant",
-    description: "Parfume durablement et neutralise les odeurs",
-    price: "+10€",
-  },
-  {
-    id: "aucune",
-    label: "Aucune option",
-    description: "Aucune option supplémentaire sélectionnée",
-    price: "0€",
+    price: 10,
+    time: 0,
+    img: "/canapé/canape.jpg",
   },
 ];
 
-const CanapeOptionsStep: React.FC<CanapeOptionsStepProps> = ({
-  selectedOptions,
-  onToggleOption,
-  onContinue,
-  scrollToRecap,
-}) => {
-  const handleOptionClick = (id: string) => {
-    if (id === "aucune") {
-      onToggleOption("aucune");
-    } else {
-      // Si une vraie option est sélectionnée, on enlève "aucune"
-      onToggleOption(id);
-    }
+const CanapeOptionsStep: React.FC<CanapeOptionsStepProps> = ({ onSelect, nextSectionId, selected = [] }) => {
+  const [localSelected, setLocalSelected] = useState<string[]>(selected);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLocalSelected(selected);
+  }, [selected]);
+
+  const handleToggle = (val: string) => {
+    const newSelected = localSelected.includes(val)
+      ? localSelected.filter((v) => v !== val)
+      : [...localSelected, val];
+    setLocalSelected(newSelected);
+  };
+
+  const handleContinue = () => {
+    if (!localSelected.length) return;
+    setLoading(true);
+    const totalPrice = options
+      .filter((o) => localSelected.includes(o.value))
+      .reduce((sum, o) => sum + o.price, 0);
+    const totalTime = options
+      .filter((o) => localSelected.includes(o.value))
+      .reduce((sum, o) => sum + o.time, 0);
+    onSelect({ step: "Options supplémentaires", value: localSelected, price: totalPrice, time: totalTime });
+    setTimeout(() => {
+      setLoading(false);
+      if (nextSectionId) {
+        const next = document.getElementById(nextSectionId);
+        if (next) next.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 200);
   };
 
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
-      <div className="max-w-5xl mx-auto text-center">
-        <h2 className="text-3xl font-extrabold text-gray-900 mb-10">
-          Choisissez vos <span className="text-blue-600">options canapés</span>
-        </h2>
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {options.map((option) => {
-            const isSelected = selectedOptions.includes(option.id);
-            const isNoneOption = option.id === "aucune";
-
-            return (
-              <div
-                key={option.id}
-                role="checkbox"
-                tabIndex={0}
-                aria-checked={isSelected}
-                onClick={() => handleOptionClick(option.id)}
-                onKeyDown={(e) => e.key === "Enter" && handleOptionClick(option.id)}
-                className={`relative cursor-pointer border rounded-xl p-6 transition-all duration-300 outline-none
-                  ${isSelected
-                    ? "border-blue-500 bg-blue-50 shadow-md scale-[1.03]"
-                    : "border-gray-200 hover:border-blue-300 hover:shadow focus-visible:ring-2 focus-visible:ring-blue-300"}
-                  ${isNoneOption ? "sm:col-span-2 lg:col-span-3 justify-self-center" : ""}
-                `}
-              >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-800">
-                      {option.label}
-                    </h3>
-                    <p className="text-sm text-gray-600 mt-1">{option.description}</p>
-                  </div>
-                  {isSelected && <CheckCircle className="text-blue-500" size={24} />}
+    <section className="w-full flex flex-col gap-6 sm:gap-10 font-[Outfit]">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+        {options.map((opt) => {
+          const isActive = localSelected.includes(opt.value);
+          return (
+            <div
+              key={opt.value}
+              role="button"
+              tabIndex={0}
+              onClick={() => handleToggle(opt.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleToggle(opt.value)}
+              aria-pressed={isActive}
+              className={`rounded-2xl overflow-hidden border-2 cursor-pointer transition-transform duration-300 hover:scale-[1.015] shadow-md
+                ${isActive ? "border-[#0049ac]" : "border-gray-200 hover:border-[#0049ac]/40"}`}
+            >
+              <img
+                src={opt.img}
+                alt={opt.label}
+                className="w-full h-40 sm:h-48 object-cover"
+              />
+              <div className="p-4 sm:p-5">
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900">{opt.label}</h3>
+                  <span className="text-[#0049ac] font-bold text-sm sm:text-base">+{opt.price}€</span>
                 </div>
-                <p className="mt-4 text-blue-600 font-bold text-right">{option.price}</p>
+                <p className="text-xs text-gray-400 mb-3">Durée : {opt.time} min</p>
+                <div className="mt-4">
+                  <span
+                    className={`inline-block px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors duration-300
+                      ${isActive
+                        ? "bg-[#0049ac] text-white"
+                        : "bg-gray-100 text-[#0049ac] hover:bg-[#0049ac] hover:text-white"}`}
+                  >
+                    {isActive ? "Sélectionné" : "Choisir"}
+                  </span>
+                </div>
               </div>
-            );
-          })}
-        </div>
+            </div>
+          );
+        })}
+      </div>
 
+      <div className="text-center text-xs sm:text-sm text-gray-700">
+        <b>Votre sélection :</b>{" "}
+        {localSelected.length ? localSelected.join(", ") : <span className="text-gray-400 italic">Aucune option sélectionnée</span>}
+      </div>
+
+      {/* Mobile */}
+      <div className="grid grid-cols-2 gap-3 mt-6 md:hidden">
         <button
-          onClick={() => {
-            onContinue();
-            scrollToRecap();
-          }}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-full shadow-md transition duration-200"
+          type="button"
+          onClick={handleContinue}
+          disabled={!localSelected.length || loading}
+          className={`w-full flex-1 rounded-xl py-3 font-bold text-white bg-[#0049ac] shadow-sm text-sm sm:text-base flex items-center justify-center transition-all
+            ${!localSelected.length || loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-800"}`}
         >
-          Continuer
+          Valider avec options <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            if (loading) return;
+            setLoading(true);
+            onSelect({ step: "Options supplémentaires", value: [], price: 0, time: 0 });
+            setTimeout(() => {
+              setLoading(false);
+              if (nextSectionId) {
+                const next = document.getElementById(nextSectionId);
+                if (next) next.scrollIntoView({ behavior: "smooth" });
+              }
+            }, 200);
+          }}
+          disabled={loading}
+          className="w-full flex-1 rounded-xl py-3 font-bold text-[#0049ac] bg-gray-100 shadow-sm text-sm sm:text-base flex items-center justify-center transition-all hover:bg-gray-200"
+        >
+          Passer sans option
+        </button>
+      </div>
+
+      {/* Desktop */}
+      <div className="hidden md:flex justify-center gap-4 mt-6">
+        <button
+          type="button"
+          onClick={handleContinue}
+          disabled={!localSelected.length || loading}
+          className={`flex items-center gap-2 px-6 sm:px-8 py-3 rounded-xl font-bold text-white bg-[#0049ac] shadow-sm transition-all
+            ${!localSelected.length || loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-800"}`}
+        >
+          Valider avec options <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            if (loading) return;
+            setLoading(true);
+            onSelect({ step: "Options supplémentaires", value: [], price: 0, time: 0 });
+            setTimeout(() => {
+              setLoading(false);
+              if (nextSectionId) {
+                const next = document.getElementById(nextSectionId);
+                if (next) next.scrollIntoView({ behavior: "smooth" });
+              }
+            }, 200);
+          }}
+          disabled={loading}
+          className="flex items-center gap-2 px-6 sm:px-8 py-3 rounded-xl font-bold text-[#0049ac] bg-gray-100 shadow-sm transition-all hover:bg-gray-200"
+        >
+          Passer sans option
         </button>
       </div>
     </section>
