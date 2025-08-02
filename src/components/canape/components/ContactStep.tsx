@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Plus, Send, RotateCw, X, CalendarDays } from "lucide-react";
+import { Plus, Send, RotateCw, X, CalendarDays, AlertCircle, CheckCircle } from "lucide-react";
 import TimeSlotSelector, { TimeSlot, generateTimeSlots, formatDuration } from "../../voiture/components/TimeSlotSelector";
 
 interface ContactStepProps {
@@ -25,15 +25,15 @@ type FormData = {
 };
 
 const schema = yup.object({
-  name: yup.string().required("Le nom est requis"),
-  email: yup.string().email("Email invalide").required("L'email est requis"),
+  name: yup.string().required("Veuillez saisir votre nom complet"),
+  email: yup.string().email("Adresse e-mail invalide").required("Adresse e-mail obligatoire"),
   phone: yup
     .string()
-    .matches(/^\d{10}$/, "Numéro invalide (10 chiffres)")
-    .required("Le téléphone est requis"),
+    .matches(/^\d{10}$/, "Numéro de téléphone invalide (10 chiffres requis)")
+    .required("Numéro de téléphone obligatoire"),
   city: yup.string(),
-  date: yup.string().required("La date est requise"),
-  timeSlot: yup.string().required("Le créneau horaire est requis"),
+  date: yup.string().required("Veuillez sélectionner une date"),
+  timeSlot: yup.string().required("Veuillez sélectionner un créneau horaire"),
 });
 
 const ContactStep: React.FC<ContactStepProps> = ({
@@ -127,6 +127,29 @@ const ContactStep: React.FC<ContactStepProps> = ({
 
   const totalGlobal = demandesWithTotal.reduce((sum, d) => sum + d.total, 0);
 
+  // Fonction pour afficher les erreurs avec style amélioré
+  const renderFieldError = (fieldName: keyof FormData) => {
+    const error = errors[fieldName];
+    if (!error) return null;
+    
+    return (
+      <div className="flex items-start gap-2 mt-2 p-2 bg-red-50 border border-red-200 rounded-md">
+        <AlertCircle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+        <p className="text-red-600 text-sm font-medium">{error.message}</p>
+      </div>
+    );
+  };
+
+  // Fonction pour obtenir les classes CSS des champs
+  const getFieldClasses = (fieldName: keyof FormData) => {
+    const hasError = errors[fieldName];
+    return `mt-1 w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 text-sm transition-colors ${
+      hasError
+        ? "border-red-400 focus:ring-red-300 bg-red-50"
+        : "border-gray-300 focus:ring-blue-400 focus:border-blue-400"
+    }`;
+  };
+
   return (
     <section className="py-12 px-4 sm:px-6 lg:px-8 bg-white">
       <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -138,15 +161,15 @@ const ContactStep: React.FC<ContactStepProps> = ({
 
           {["name", "email", "phone", "city"].map((field) => {
             const fieldMap: Record<string, { label: string; type: string; placeholder?: string }> = {
-              name: { label: "Nom", type: "text" },
-              email: { label: "Email", type: "email" },
-              phone: { label: "Téléphone", type: "tel", placeholder: "06XXXXXXXX" },
+              name: { label: "Nom *", type: "text", placeholder: "Votre nom complet" },
+              email: { label: "Email *", type: "email", placeholder: "votre@email.com" },
+              phone: { label: "Téléphone *", type: "tel", placeholder: "06XXXXXXXX" },
               city: { label: "Commune (facultatif)", type: "text", placeholder: "Ex : Fuveau, Aix-en-Provence..." },
             };
 
             return (
               <div key={field}>
-                <label htmlFor={field} className="block text-sm font-medium text-gray-700">
+                <label htmlFor={field} className="block text-sm font-medium text-gray-700 mb-1">
                   {fieldMap[field].label}
                 </label>
                 <input
@@ -154,22 +177,16 @@ const ContactStep: React.FC<ContactStepProps> = ({
                   type={fieldMap[field].type}
                   placeholder={fieldMap[field].placeholder}
                   {...register(field as keyof FormData)}
-                  className={`mt-1 w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-1 text-sm ${
-                    errors[field as keyof FormData]
-                      ? "border-red-400 focus:ring-red-300"
-                      : "border-gray-300 focus:ring-blue-400"
-                  }`}
+                  className={getFieldClasses(field as keyof FormData)}
                 />
-                {errors[field as keyof FormData] && (
-                  <p className="text-red-500 text-xs mt-1">{errors[field as keyof FormData]?.message}</p>
-                )}
+                {renderFieldError(field as keyof FormData)}
               </div>
             );
           })}
 
           {/* Sélection de date */}
           <div>
-            <label htmlFor="date" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">
               Date souhaitée *
             </label>
             <div className="relative mt-1">
@@ -179,13 +196,15 @@ const ContactStep: React.FC<ContactStepProps> = ({
                 type="date"
                 value={selectedDate}
                 onChange={handleDateChange}
-                className="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-1 text-sm pl-10"
+                className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 text-sm pl-10 transition-colors ${
+                  errors.date
+                    ? "border-red-400 focus:ring-red-300 bg-red-50"
+                    : "border-gray-300 focus:ring-blue-400 focus:border-blue-400"
+                }`}
                 min={new Date().toISOString().split("T")[0]}
               />
             </div>
-            {errors.date && (
-              <p className="text-red-500 text-xs mt-1">{errors.date?.message}</p>
-            )}
+            {renderFieldError("date")}
           </div>
 
           {/* Sélection de créneau horaire */}
@@ -197,9 +216,7 @@ const ContactStep: React.FC<ContactStepProps> = ({
                 selectedSlot={selectedTimeSlot}
                 onSlotSelect={handleTimeSlotSelect}
               />
-              {errors.timeSlot && (
-                <p className="text-red-500 text-xs mt-1">{errors.timeSlot?.message}</p>
-              )}
+              {renderFieldError("timeSlot")}
             </div>
           )}
 

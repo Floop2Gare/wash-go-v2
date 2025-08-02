@@ -12,7 +12,7 @@ const formules = [
     desc: "Petit canapé 2 places",
     price: 40,
     time: 30,
-    img: "/canapé/canape.jpg",
+    img: "/canapé/2places.jpg",
   },
   {
     id: "3 places",
@@ -20,7 +20,7 @@ const formules = [
     desc: "Canapé 3 places",
     price: 50,
     time: 45,
-    img: "/canapé/canape.jpg",
+    img: "/canapé/3places.jpg",
   },
   {
     id: "4 places",
@@ -28,7 +28,7 @@ const formules = [
     desc: "Grand canapé 4 places",
     price: 60,
     time: 60,
-    img: "/canapé/canape.jpg",
+    img: "/canapé/4places.jpg",
   },
   {
     id: "5 et +",
@@ -36,7 +36,7 @@ const formules = [
     desc: "Très grand canapé ou d'angle",
     price: 70,
     time: 75,
-    img: "/canapé/canape.jpg",
+    img: "/canapé/5places.jpg",
   },
 ];
 

@@ -12,7 +12,7 @@ const options = [
     desc: "Idéal pour les tissus classiques. Le service inclut l'ensemble des traitements standards pour un résultat optimal et durable.",
     price: 0,
     time: 0,
-    img: "/canapé/canape.jpg",
+    img: "/canapé/tissu.jpg",
   },
   {
     value: "Cuir",
@@ -20,7 +20,7 @@ const options = [
     desc: "Une attention particulière est portée à l'hydratation du cuir, en complément des soins habituels. Convient parfaitement aux salons haut de gamme.",
     price: 0,
     time: 0,
-    img: "/canapé/canape.jpg",
+    img: "/canapé/cuir.jpg",
   },
   {
     value: "Alcantara",
@@ -28,7 +28,7 @@ const options = [
     desc: "Matière délicate nécessitant un traitement ajusté. Le nettoyage est adapté selon la texture et la sensibilité du revêtement.",
     price: 0,
     time: 0,
-    img: "/canapé/canape.jpg",
+    img: "/canapé/alcantara.jpg",
   },
 ];
 

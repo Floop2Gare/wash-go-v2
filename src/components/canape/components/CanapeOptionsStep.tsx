@@ -13,21 +13,21 @@ const options = [
     label: "Traitement anti-acariens",
     price: 10,
     time: 10,
-    img: "/canapé/canape.jpg",
+    img: "/canapé/antibac.jpg",
   },
   {
     value: "Détachant renforcé",
     label: "Détachant renforcé",
     price: 10,
     time: 10,
-    img: "/canapé/canape.jpg",
+    img: "/canapé/detachant.jpg",
   },
   {
     value: "Parfum & désodorisant",
     label: "Parfum & désodorisant",
     price: 10,
     time: 0,
-    img: "/canapé/canape.jpg",
+    img: "/canapé/deo.jpg",
   },
 ];
 

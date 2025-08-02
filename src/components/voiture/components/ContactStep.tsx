@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { CalendarDays, ImagePlus, Send, Plus, Clock } from "lucide-react";
+import { CalendarDays, ImagePlus, Send, Plus, Clock, AlertCircle } from "lucide-react";
 import TimeSlotSelector, { TimeSlot, generateTimeSlots, formatDuration } from "./TimeSlotSelector";
 
 interface ContactStepProps {
@@ -47,6 +47,7 @@ function isValidAdresse(adresse: string) {
 const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, totalTime, onReset }) => {
   const [form, setForm] = useState(initialForm);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [success, setSuccess] = useState(false);
   const [showSuccessOverlay, setShowSuccessOverlay] = useState(false);
   const [photos, setPhotos] = useState<File[]>([]);
@@ -76,10 +77,69 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
     }
   }, [form.date, localTotalTime]);
 
+  // Fonction pour valider un champ spécifique
+  const validateField = (fieldName: string, value: string): string => {
+    switch (fieldName) {
+      case 'nom':
+        return !value.trim() ? "Veuillez saisir votre nom" : "";
+      case 'prenom':
+        return !value.trim() ? "Veuillez saisir votre prénom" : "";
+      case 'telephone':
+        if (!value.trim()) return "Numéro de téléphone obligatoire";
+        if (!isValidPhone(value)) return "Numéro de téléphone invalide (10 chiffres requis)";
+        return "";
+      case 'email':
+        if (!value.trim()) return "Adresse e-mail obligatoire";
+        if (!isValidEmail(value)) return "Adresse e-mail invalide";
+        return "";
+      case 'date':
+        return !value ? "Veuillez sélectionner une date" : "";
+      case 'timeSlot':
+        return !value ? "Veuillez sélectionner un créneau horaire" : "";
+      case 'rgpd':
+        return !rgpd ? "Veuillez accepter l'utilisation de vos données (RGPD)" : "";
+      default:
+        return "";
+    }
+  };
+
+  // Fonction pour afficher les erreurs de champ avec style amélioré
+  const renderFieldError = (fieldName: string) => {
+    const error = fieldErrors[fieldName];
+    if (!error) return null;
+    
+    return (
+      <div className="flex items-start gap-2 mt-2 p-2 bg-red-50 border border-red-200 rounded-md">
+        <AlertCircle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+        <p className="text-red-600 text-sm font-medium">{error}</p>
+      </div>
+    );
+  };
+
+  // Fonction pour obtenir les classes CSS des champs
+  const getFieldClasses = (fieldName: string) => {
+    const hasError = fieldErrors[fieldName];
+    return `w-full border rounded-xl px-4 py-3 text-sm focus:ring-2 focus:outline-none transition-colors ${
+      hasError
+        ? "border-red-400 focus:ring-red-300 bg-red-50"
+        : "border-gray-300 focus:ring-[#0049ac] focus:border-[#0049ac]"
+    }`;
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
     const checked = (e.target as HTMLInputElement).checked;
     setForm({ ...form, [name]: type === "checkbox" ? checked : value });
+    
+    // Valider le champ en temps réel
+    const fieldError = validateField(name, value);
+    setFieldErrors(prev => ({
+      ...prev,
+      [name]: fieldError
+    }));
+    
+    // Effacer l'erreur générale si il y en avait une
+    if (error) setError("");
   };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,31 +160,74 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const files = Array.from(e.target.files).slice(0, 3);
+    
+    // Validation des types de fichiers
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    const validFiles = files.filter(file => {
+      if (!validTypes.includes(file.type)) {
+        setError(`Le fichier ${file.name} n'est pas un format d'image valide. Utilisez JPG, PNG ou WebP.`);
+        return false;
+      }
+      if (file.size > 5 * 1024 * 1024) { // 5MB max
+        setError(`Le fichier ${file.name} est trop volumineux. Taille maximum : 5MB.`);
+        return false;
+      }
+      return true;
+    });
+    
+    if (validFiles.length !== files.length) {
+      // Si des fichiers invalides, on ne met à jour que les valides
+      setPhotos(validFiles);
+      return;
+    }
+    
     setPhotos(files);
+    setError(""); // Clear any previous errors
   };
 
   const handlePhotoZoneClick = () => {
     fileInputRef.current?.click();
   };
 
+  const removePhoto = (index: number) => {
+    setPhotos(photos.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.nom || !form.prenom || !form.telephone || !form.email || !form.date || !form.timeSlot) {
-      setError("Merci de remplir tous les champs obligatoires.");
-      return;
-    }
-    if (!isValidEmail(form.email)) {
-      setError("Merci de saisir un email valide avec un nom de domaine réel.");
-      return;
-    }
-    if (!isValidPhone(form.telephone)) {
-      setError("Merci de saisir un numéro de téléphone valide (10 chiffres).");
-      return;
-    }
+    
+    // Valider tous les champs
+    const newFieldErrors: Record<string, string> = {};
+    let hasErrors = false;
+    
+    // Validation des champs obligatoires
+    const requiredFields = ['nom', 'prenom', 'telephone', 'email', 'date', 'timeSlot'];
+    requiredFields.forEach(field => {
+      const error = validateField(field, form[field as keyof typeof form] as string);
+      if (error) {
+        newFieldErrors[field] = error;
+        hasErrors = true;
+      }
+    });
+    
+    // Validation RGPD
     if (!rgpd) {
-      setError("Merci d'accepter l'utilisation de vos données (RGPD).");
+      newFieldErrors.rgpd = "Veuillez accepter l'utilisation de vos données (RGPD)";
+      hasErrors = true;
+    }
+    
+    setFieldErrors(newFieldErrors);
+    
+    if (hasErrors) {
+      // Scroll vers le premier champ en erreur
+      const firstErrorField = Object.keys(newFieldErrors)[0];
+      const errorElement = document.querySelector(`[name="${firstErrorField}"]`);
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
       return;
     }
+    
     setError("");
     setLoading(true);
 
@@ -167,8 +270,10 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
     formData.append('name', `${form.nom} ${form.prenom}`);
     formData.append('email', form.email);
     formData.append('message', message);
+    
+    // Ajout des photos avec le bon format pour Web3Forms
     photos.forEach((file, idx) => {
-      formData.append('photos[]', file);
+      formData.append(`attachment_${idx + 1}`, file);
     });
 
     try {
@@ -194,10 +299,10 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
     }
   };
 
-  // Fermer l'overlay automatiquement après 3,5s
+  // Fermer l'overlay automatiquement après 5s
   useEffect(() => {
     if (showSuccessOverlay) {
-      const timer = setTimeout(() => setShowSuccessOverlay(false), 3500);
+      const timer = setTimeout(() => setShowSuccessOverlay(false), 5000);
       return () => clearTimeout(timer);
     }
   }, [showSuccessOverlay]);
@@ -212,7 +317,7 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
         <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur bg-black/30">
           <div className="bg-white rounded-2xl shadow-2xl px-8 py-10 max-w-md w-full text-center relative animate-fade-in">
             <button
-              className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl font-bold focus:outline-none"
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-3xl font-bold focus:outline-none transition-colors duration-200 hover:scale-110"
               onClick={() => setShowSuccessOverlay(false)}
               aria-label="Fermer"
             >
@@ -220,7 +325,15 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
             </button>
             <svg className="mx-auto mb-4" width="48" height="48" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#e0f7fa"/><path d="M7 13l3 3 7-7" stroke="#009688" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
             <h2 className="text-2xl font-bold text-[#0049ac] mb-2">Message envoyé !</h2>
-            <p className="text-gray-700 mb-2">Nous vous recontacterons sous peu.</p>
+            <p className="text-gray-700 mb-6">Nous vous recontacterons sous peu.</p>
+            
+            {/* Bouton Fermer en bas */}
+            <button
+              onClick={() => setShowSuccessOverlay(false)}
+              className="bg-[#0049ac] text-white font-semibold px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            >
+              Fermer
+            </button>
           </div>
           <style>{`
             @keyframes fade-in {
@@ -257,10 +370,12 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
 
         <form onSubmit={handleSubmit} className="bg-white shadow-xl rounded-2xl p-8 space-y-6">
           <div className="grid sm:grid-cols-2 gap-6">
-            <input className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#0049ac] focus:outline-none" name="nom" placeholder="Nom *" value={form.nom} onChange={handleChange} />
-            <input className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#0049ac] focus:outline-none" name="prenom" placeholder="Prénom *" value={form.prenom} onChange={handleChange} />
+            <input className={getFieldClasses("nom")} name="nom" placeholder="Nom *" value={form.nom} onChange={handleChange} />
+            {renderFieldError("nom")}
+            <input className={getFieldClasses("prenom")} name="prenom" placeholder="Prénom *" value={form.prenom} onChange={handleChange} />
+            {renderFieldError("prenom")}
             <input
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#0049ac] focus:outline-none"
+              className={getFieldClasses("telephone")}
               name="telephone"
               placeholder="Téléphone *"
               value={displayPhone}
@@ -269,8 +384,10 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
               inputMode="numeric"
               pattern="[0-9 ]*"
             />
-            <input className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#0049ac] focus:outline-none" type="email" name="email" placeholder="Email *" value={form.email} onChange={handleChange} />
-            <input className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#0049ac] focus:outline-none sm:col-span-2" name="adresse" placeholder="Adresse / Ville (facultatif)" value={form.adresse} onChange={handleChange} />
+            {renderFieldError("telephone")}
+            <input className={getFieldClasses("email")} type="email" name="email" placeholder="Email *" value={form.email} onChange={handleChange} />
+            {renderFieldError("email")}
+            <input className={getFieldClasses("adresse")} name="adresse" placeholder="Adresse / Ville (facultatif)" value={form.adresse} onChange={handleChange} />
             
             {/* Sélection de date */}
             <div className="relative sm:col-span-2">
@@ -280,10 +397,15 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
                 name="date"
                 value={form.date}
                 onChange={handleDateChange}
-                className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#0049ac] focus:outline-none pl-10"
+                className={`w-full border rounded-xl px-4 py-3 text-sm focus:ring-2 focus:outline-none pl-10 transition-colors ${
+                  fieldErrors.date
+                    ? "border-red-400 focus:ring-red-300 bg-red-50"
+                    : "border-gray-300 focus:ring-[#0049ac] focus:border-[#0049ac]"
+                }`}
                 min={new Date().toISOString().split("T")[0]}
               />
             </div>
+            {renderFieldError("date")}
 
             {/* Sélection de créneau horaire */}
             {showTimeSlots && (
@@ -296,31 +418,64 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
                 />
               </div>
             )}
+            {renderFieldError("timeSlot")}
           </div>
 
           <div>
-            <label className="block text-sm font-semibold mb-2">Photos (max 3)</label>
+            <label className="block text-sm font-semibold mb-2">
+              Photos de votre véhicule (max 3) - Facultatif
+            </label>
             <div
               className="border-2 border-dashed border-gray-300 rounded-xl p-6 flex flex-col items-center justify-center gap-2 bg-gray-50 hover:bg-gray-100 transition cursor-pointer"
               onClick={handlePhotoZoneClick}
               style={{ minHeight: 120 }}
             >
               <ImagePlus className="w-8 h-8 text-[#0049ac] mb-2" />
-              <span className="text-xs text-gray-500 mb-1">Cliquez ici pour ajouter jusqu'à 3 photos</span>
+              <span className="text-xs text-gray-500 mb-1 text-center">
+                {photos.length === 0 
+                  ? "Cliquez ici pour ajouter jusqu'à 3 photos de votre véhicule"
+                  : `${photos.length}/3 photos sélectionnées`
+                }
+              </span>
+              <span className="text-xs text-gray-400 text-center">
+                Formats acceptés : JPG, PNG, WebP (max 5MB par fichier)
+              </span>
               <input
                 ref={fileInputRef}
                 type="file"
-                accept="image/*"
+                accept="image/jpeg,image/jpg,image/png,image/webp"
                 multiple
                 onChange={handlePhotoChange}
                 className="w-full hidden"
               />
             </div>
             {photos.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-3">
-                {photos.map((file, idx) => (
-                  <img key={idx} src={URL.createObjectURL(file)} alt={`photo-${idx}`} className="w-20 h-20 object-cover rounded shadow border" />
-                ))}
+              <div className="mt-4">
+                <div className="flex flex-wrap gap-3">
+                  {photos.map((file, idx) => (
+                    <div key={idx} className="relative group">
+                      <img 
+                        src={URL.createObjectURL(file)} 
+                        alt={`Photo ${idx + 1}`} 
+                        className="w-24 h-24 object-cover rounded-lg shadow border"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removePhoto(idx)}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 transition opacity-0 group-hover:opacity-100"
+                        title="Supprimer cette photo"
+                      >
+                        ×
+                      </button>
+                      <div className="text-xs text-gray-500 mt-1 text-center">
+                        {file.name.length > 15 ? file.name.substring(0, 12) + '...' : file.name}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-xs text-gray-500 mt-2">
+                  Les photos vous aideront à mieux évaluer l'état de votre véhicule
+                </p>
               </div>
             )}
           </div>
@@ -329,8 +484,10 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
             <input type="checkbox" checked={rgpd} onChange={() => setRgpd(v => !v)} className="accent-[#0049ac] w-5 h-5" required />
             <span>J'accepte l'utilisation de mes données (RGPD)</span>
           </div>
+          {renderFieldError("rgpd")}
 
-          <textarea className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#0049ac] focus:outline-none" rows={3} name="message" placeholder="Message" value={form.message} onChange={handleChange} />
+          <textarea className={getFieldClasses("message")} rows={3} name="message" placeholder="Message" value={form.message} onChange={handleChange} />
+          {renderFieldError("message")}
 
           {error && <div className="text-red-600 text-sm font-semibold">{error}</div>}
           {success && <div className="text-green-600 text-sm font-semibold">Votre demande a bien été envoyée !</div>}
@@ -346,6 +503,7 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
                 setError("");
                 setSuccess(false);
                 setShowTimeSlots(false);
+                setFieldErrors({}); // Clear field errors on reset
                 if (typeof onReset === 'function') onReset();
               }}
               className="flex items-center gap-2 bg-gray-100 text-gray-800 font-semibold rounded-lg px-4 py-2 shadow-sm hover:bg-gray-200 transition"
