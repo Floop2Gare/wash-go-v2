@@ -303,38 +303,26 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
       `🔐 Code parrainage : Washgo`;
 
     try {
-      // Séparer les fichiers par taille
-      const web3formsFiles: File[] = [];
-      const fileIOFiles: { file: File; name: string }[] = [];
-      const web3formsMaxSize = 5 * 1024 * 1024; // 5MB pour Web3Forms
+      // Upload de TOUS les fichiers vers File.io
+      const photoLinks: string[] = [];
       
-      for (const file of photos) {
-        if (file.size <= web3formsMaxSize) {
-          web3formsFiles.push(file);
-        } else {
-          fileIOFiles.push({ file, name: file.name });
-        }
-      }
-      
-      // Upload des gros fichiers vers File.io
-      const fileIOLinks: string[] = [];
-      if (fileIOFiles.length > 0) {
-        for (const { file, name } of fileIOFiles) {
+      if (photos.length > 0) {
+        for (const file of photos) {
           try {
             const link = await uploadToFileIO(file);
-            fileIOLinks.push(`${name}: ${link}`);
+            photoLinks.push(link);
           } catch (error) {
-            setError(`Impossible d'uploader ${name}. Veuillez réduire la taille du fichier.`);
+            setError(`Impossible d'uploader ${file.name}. Veuillez réessayer.`);
             setLoading(false);
             return;
           }
         }
       }
       
-      // Ajouter les liens File.io au message
+      // Ajouter les liens des photos au message
       let finalMessage = message;
-      if (fileIOLinks.length > 0) {
-        finalMessage += `\n\n📎 Photos volumineuses (liens de téléchargement) :\n${fileIOLinks.join('\n')}`;
+      if (photoLinks.length > 0) {
+        finalMessage += `\n\n📎 Photos envoyées :\n\n${photoLinks.join('\n\n')}\n\n⚠️ Note : Ces liens sont valables 24h et ne peuvent être téléchargés qu'une seule fois.`;
       }
 
       const formData = new FormData();
@@ -342,11 +330,6 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
       formData.append('name', `${form.nom} ${form.prenom}`);
       formData.append('email', form.email);
       formData.append('message', finalMessage);
-      
-      // Ajouter les fichiers compatibles avec Web3Forms
-      web3formsFiles.forEach((file, idx) => {
-        formData.append(`attachment_${idx + 1}`, file);
-      });
 
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
