@@ -90,30 +90,30 @@ const CarcleanStep: React.FC<CarcleanStepProps> = ({ selected, onSelect }) => {
               time: veh.time,
             })}
             aria-pressed={isActive}
-            className={`flex flex-col h-full rounded-2xl overflow-hidden border-2 cursor-pointer transition-transform duration-300 hover:scale-[1.015]
+            className={`flex flex-col h-full rounded-2xl overflow-hidden border-2 cursor-pointer transition-transform duration-300 hover:scale-[1.015] shadow-sm hover:shadow-md
               ${isActive ? "border-[#0049ac]" : "border-gray-200 hover:border-[#0049ac]/40"}
             `}
           >
             <img
               src={veh.img}
               alt={veh.label}
-              className="w-full h-40 sm:h-48 object-cover"
+              className="w-full h-48 sm:h-52 lg:h-56 object-cover"
             />
 
-            <div className="flex flex-col flex-1 p-4 sm:p-5">
-              <div className="flex justify-between items-center mb-2">
-                <h3 className="text-base sm:text-lg font-semibold text-gray-900">{veh.label}</h3>
-                <span className="text-[#0049ac] font-bold text-sm sm:text-base">
+            <div className="flex flex-col flex-1 p-4 sm:p-5 lg:p-6">
+              <div className="flex justify-between items-center mb-3">
+                <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-gray-900">{veh.label}</h3>
+                <span className="text-[#0049ac] font-bold text-sm sm:text-base lg:text-lg">
                   {veh.price > 0 ? `+${veh.price}€` : "Inclus"}
                 </span>
               </div>
 
-              <p className="text-xs sm:text-sm text-gray-600 mb-1">{veh.desc}</p>
-              <p className="text-xs text-gray-400">Durée : {veh.time} min</p>
+              <p className="text-xs sm:text-sm lg:text-base text-gray-600 mb-2 leading-relaxed">{veh.desc}</p>
+              <p className="text-xs sm:text-sm text-gray-400">Durée : {veh.time} min</p>
 
-              <div className="mt-auto pt-3 sm:pt-4">
+              <div className="mt-auto pt-4 sm:pt-5">
                 <button
-                  className={`w-full px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors duration-300
+                  className={`w-full px-4 sm:px-5 py-3 sm:py-4 rounded-lg text-sm sm:text-base lg:text-lg font-medium transition-colors duration-300 min-h-[48px] sm:min-h-[52px]
                     ${isActive
                       ? "bg-[#0049ac] text-white"
                       : "bg-gray-100 text-[#0049ac] hover:bg-[#0049ac] hover:text-white"}
@@ -133,26 +133,26 @@ const CarcleanStep: React.FC<CarcleanStepProps> = ({ selected, onSelect }) => {
         role="button"
         tabIndex={0}
         aria-pressed={selected === horsGabarit.label}
-        className={`flex flex-col h-full rounded-2xl overflow-hidden border-2 cursor-pointer transition-transform duration-300 hover:scale-[1.015] shadow-sm
+        className={`flex flex-col h-full rounded-2xl overflow-hidden border-2 cursor-pointer transition-transform duration-300 hover:scale-[1.015] shadow-sm hover:shadow-md
           ${selected === horsGabarit.label ? "border-[#0049ac]" : "border-gray-200 hover:border-[#0049ac]/40"}
         `}
       >
         <img
           src={horsGabarit.img}
           alt={horsGabarit.label}
-          className="w-full h-40 sm:h-48 object-cover"
+          className="w-full h-48 sm:h-52 lg:h-56 object-cover"
         />
-        <div className="flex flex-col flex-1 p-4 sm:p-5">
-          <div className="flex justify-between items-center mb-2">
-            <h3 className="text-base sm:text-lg font-semibold text-gray-900">{horsGabarit.label}</h3>
-            <span className="inline-block px-2 sm:px-3 py-1 rounded-full bg-[#0049ac] text-white text-xs font-semibold shadow">
+        <div className="flex flex-col flex-1 p-4 sm:p-5 lg:p-6">
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-gray-900">{horsGabarit.label}</h3>
+            <span className="inline-block px-3 sm:px-4 py-1 sm:py-2 rounded-full bg-[#0049ac] text-white text-xs sm:text-sm font-semibold shadow">
               Sur devis
             </span>
           </div>
-          <p className="text-xs sm:text-sm text-gray-600 mb-1">{horsGabarit.desc}</p>
-          <div className="mt-auto pt-3 sm:pt-4">
+          <p className="text-xs sm:text-sm lg:text-base text-gray-600 mb-2 leading-relaxed">{horsGabarit.desc}</p>
+          <div className="mt-auto pt-4 sm:pt-5">
             <button
-              className={`w-full px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors duration-300
+              className={`w-full px-4 sm:px-5 py-3 sm:py-4 rounded-lg text-sm sm:text-base lg:text-lg font-medium transition-colors duration-300 min-h-[48px] sm:min-h-[52px]
                 ${selected === horsGabarit.label
                   ? "bg-[#0049ac] text-white"
                   : "bg-gray-100 text-[#0049ac] hover:bg-[#0049ac] hover:text-white"}

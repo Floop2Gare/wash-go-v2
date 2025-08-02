@@ -107,11 +107,11 @@ const TimeSlotSelector: React.FC<TimeSlotSelectorProps> = ({
   if (availableSlots.length === 0) {
     return (
       <div className={`${className}`}>
-        <label className="block text-sm font-semibold mb-3 flex items-center gap-2">
-          <Clock className="w-4 h-4" />
+        <label className="block text-sm sm:text-base font-semibold mb-4 flex items-center gap-2">
+          <Clock className="w-5 h-5" />
           Créneaux disponibles pour {formatDuration(serviceDuration)}
         </label>
-        <p className="text-gray-500 text-sm">
+        <p className="text-gray-500 text-sm sm:text-base leading-relaxed">
           Aucun créneau disponible pour cette durée ({formatDuration(serviceDuration)}) sur cette date.
         </p>
       </div>
@@ -120,24 +120,24 @@ const TimeSlotSelector: React.FC<TimeSlotSelectorProps> = ({
 
   return (
     <div className={`${className}`}>
-      <label className="block text-sm font-semibold mb-3 flex items-center gap-2">
-        <Clock className="w-4 h-4" />
+      <label className="block text-sm sm:text-base font-semibold mb-4 flex items-center gap-2">
+        <Clock className="w-5 h-5" />
         Créneaux disponibles pour {formatDuration(serviceDuration)}
       </label>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
         {availableSlots.map((slot, index) => (
           <button
             key={index}
             type="button"
             onClick={() => onSlotSelect(slot)}
-            className={`p-3 rounded-lg border text-sm font-medium transition ${
+            className={`p-4 sm:p-5 rounded-lg border text-sm sm:text-base font-medium transition min-h-[64px] sm:min-h-[72px] ${
               selectedSlot === `${slot.start}-${slot.end}`
-                ? "bg-[#0049ac] text-white border-[#0049ac]"
-                : "bg-white text-gray-700 border-gray-300 hover:border-[#0049ac] hover:bg-blue-50"
+                ? "bg-[#0049ac] text-white border-[#0049ac] shadow-md"
+                : "bg-white text-gray-700 border-gray-300 hover:border-[#0049ac] hover:bg-blue-50 hover:shadow-sm"
             }`}
           >
-            <div className="font-semibold">{slot.start}</div>
-            <div className="text-xs opacity-75">{slot.end}</div>
+            <div className="font-semibold text-base sm:text-lg">{slot.start}</div>
+            <div className="text-xs sm:text-sm opacity-75 mt-1">{slot.end}</div>
           </button>
         ))}
       </div>

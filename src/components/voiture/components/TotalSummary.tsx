@@ -66,29 +66,29 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur">
           <div className="bg-white rounded-2xl shadow-2xl px-6 py-8 max-w-xs w-full text-center relative animate-slide-up">
             <button
-              className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl font-bold focus:outline-none"
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl font-bold focus:outline-none p-2 rounded-lg hover:bg-gray-100 transition-colors"
               onClick={() => setMobileOpen(false)}
               aria-label="Fermer"
             >
               <X className="w-6 h-6" />
             </button>
-            <h4 className="text-[#0049ac] font-semibold text-lg mb-3">Résumé</h4>
-            <div className="space-y-2 text-xs text-gray-700 mb-4">
-              <div className="flex items-center gap-2 justify-center">
-                <Euro size={16} className="text-[#0049ac]" />
+            <h4 className="text-[#0049ac] font-semibold text-lg sm:text-xl mb-4">Résumé</h4>
+            <div className="space-y-3 text-sm sm:text-base text-gray-700 mb-6">
+              <div className="flex items-center gap-3 justify-center">
+                <Euro size={18} className="text-[#0049ac]" />
                 <span>
                   Prix : <span className="font-bold text-[#0049ac]">{price} €</span>
                 </span>
               </div>
-              <div className="flex items-center gap-2 justify-center">
-                <Clock size={16} className="text-[#0049ac]" />
+              <div className="flex items-center gap-3 justify-center">
+                <Clock size={18} className="text-[#0049ac]" />
                 <span>
                   Durée :{" "}
                   <span className="font-bold text-[#0049ac]">{formattedTime}</span>
                 </span>
               </div>
               <div
-                className="mt-2 text-sm text-gray-500 hover:text-blue-600 cursor-pointer transition select-none"
+                className="mt-4 text-sm sm:text-base text-gray-500 hover:text-blue-600 cursor-pointer transition select-none p-3 rounded-lg hover:bg-gray-50"
                 onClick={() => {
                   if (typeof onReset === "function") onReset();
                 }}

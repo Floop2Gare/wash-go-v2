@@ -377,13 +377,13 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
   const displayPhone = form.telephone.replace(/\D/g, "").replace(/(\d{2})(?=\d)/g, "$1 ").trim();
 
   return (
-    <section className="py-20 px-4 sm:px-8 bg-gradient-to-b from-gray-50 to-white">
+    <section className="py-16 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
       {/* Overlay de succès */}
       {showSuccessOverlay && (
         <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur bg-black/30">
-          <div className="bg-white rounded-2xl shadow-2xl px-8 py-10 max-w-md w-full text-center relative animate-fade-in">
+          <div className="bg-white rounded-2xl shadow-2xl px-6 sm:px-8 py-8 sm:py-10 max-w-sm sm:max-w-md w-full text-center relative animate-fade-in">
             <button
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-3xl font-bold focus:outline-none transition-colors duration-200 hover:scale-110"
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-3xl font-bold focus:outline-none transition-colors duration-200 hover:scale-110 p-2 rounded-lg hover:bg-gray-100"
               onClick={() => setShowSuccessOverlay(false)}
               aria-label="Fermer"
             >
@@ -396,7 +396,7 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
             {/* Bouton Fermer en bas */}
             <button
               onClick={() => setShowSuccessOverlay(false)}
-              className="bg-[#0049ac] text-white font-semibold px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              className="bg-[#0049ac] text-white font-semibold px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300 min-h-[48px]"
             >
               Fermer
             </button>
@@ -414,13 +414,13 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
       )}
       {/* Fin overlay */}
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-4xl font-extrabold text-gray-900 text-center mb-8">
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 text-center mb-8 sm:mb-10">
           Finalisez votre <span className="text-[#0049ac]">demande de lavage</span>
         </h2>
 
-        <div className="bg-blue-50 border-l-4 border-[#0049ac] rounded-xl p-6 mb-10 shadow-sm">
-          <h3 className="font-semibold text-[#0049ac] mb-4 text-lg">Récapitulatif de votre sélection</h3>
-          <ul className="text-gray-700 space-y-2 text-sm">
+        <div className="bg-blue-50 border-l-4 border-[#0049ac] rounded-xl p-6 sm:p-8 mb-8 sm:mb-10 shadow-sm">
+          <h3 className="font-semibold text-[#0049ac] mb-4 text-lg sm:text-xl">Récapitulatif de votre sélection</h3>
+          <ul className="text-gray-700 space-y-2 text-sm sm:text-base">
             {selections.map((sel, idx) => (
               <li key={idx}>
                 <span className="font-medium">{sel.step} :</span>{" "}
@@ -428,14 +428,14 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
               </li>
             ))}
           </ul>
-          <div className="mt-4 text-sm">
+          <div className="mt-4 text-sm sm:text-base">
             <p><strong>Prix total :</strong> <span className="text-[#0049ac] font-bold">{totalPrice} €</span></p>
             <p><strong>Durée estimée :</strong> <span className="text-[#0049ac] font-bold">{formatDuration(totalTime)}</span></p>
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-white shadow-xl rounded-2xl p-8 space-y-6">
-          <div className="grid sm:grid-cols-2 gap-6">
+        <form onSubmit={handleSubmit} className="bg-white shadow-xl rounded-2xl p-6 sm:p-8 lg:p-10 space-y-6 sm:space-y-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
             <input className={getFieldClasses("nom")} name="nom" placeholder="Nom *" value={form.nom} onChange={handleChange} />
             {renderFieldError("nom")}
             <input className={getFieldClasses("prenom")} name="prenom" placeholder="Prénom *" value={form.prenom} onChange={handleChange} />
@@ -457,13 +457,13 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
             
             {/* Sélection de date */}
             <div className="relative sm:col-span-2">
-              <CalendarDays className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <CalendarDays className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="date"
                 name="date"
                 value={form.date}
                 onChange={handleDateChange}
-                className={`w-full border rounded-xl px-4 py-3 text-sm focus:ring-2 focus:outline-none pl-10 transition-colors ${
+                className={`w-full border rounded-xl px-4 py-4 text-sm sm:text-base focus:ring-2 focus:outline-none pl-12 transition-colors ${
                   fieldErrors.date && isSubmitted
                     ? "border-red-400 focus:ring-red-300 bg-red-50"
                     : "border-gray-300 focus:ring-[#0049ac] focus:border-[#0049ac]"
@@ -488,22 +488,22 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
           </div>
 
           <div>
-            <label className="block text-sm font-semibold mb-2">
+            <label className="block text-sm sm:text-base font-semibold mb-3 sm:mb-4">
               Photos de votre véhicule (max 5) - Facultatif
             </label>
             <div
-              className="border-2 border-dashed border-gray-300 rounded-xl p-6 flex flex-col items-center justify-center gap-2 bg-gray-50 hover:bg-gray-100 transition cursor-pointer"
+              className="border-2 border-dashed border-gray-300 rounded-xl p-6 sm:p-8 flex flex-col items-center justify-center gap-3 bg-gray-50 hover:bg-gray-100 transition cursor-pointer"
               onClick={handlePhotoZoneClick}
-              style={{ minHeight: 120 }}
+              style={{ minHeight: 140 }}
             >
-              <ImagePlus className="w-8 h-8 text-[#0049ac] mb-2" />
-              <span className="text-xs text-gray-500 mb-1 text-center">
+              <ImagePlus className="w-8 h-8 sm:w-10 sm:h-10 text-[#0049ac] mb-2" />
+              <span className="text-sm sm:text-base text-gray-500 mb-1 text-center">
                 {photos.length === 0 
-                  ? "Cliquez ici pour ajouter jusqu'à 3 photos de votre véhicule"
-                  : `${photos.length}/3 photos sélectionnées`
+                  ? "Cliquez ici pour ajouter jusqu'à 5 photos de votre véhicule"
+                  : `${photos.length}/5 photos sélectionnées`
                 }
               </span>
-              <span className="text-xs text-gray-400 text-center">
+              <span className="text-xs sm:text-sm text-gray-400 text-center">
                 Formats acceptés : JPG, PNG, WebP (max 10MB par fichier, 30MB total)
               </span>
               <input
@@ -516,24 +516,24 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
               />
             </div>
             {photos.length > 0 && (
-              <div className="mt-4">
-                <div className="flex flex-wrap gap-3">
+              <div className="mt-6">
+                <div className="flex flex-wrap gap-4">
                   {photos.map((file, idx) => (
                     <div key={idx} className="relative group">
                       <img 
                         src={URL.createObjectURL(file)} 
                         alt={`Photo ${idx + 1}`} 
-                        className="w-24 h-24 object-cover rounded-lg shadow border"
+                        className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-lg shadow border"
                       />
                       <button
                         type="button"
                         onClick={() => removePhoto(idx)}
-                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 transition opacity-0 group-hover:opacity-100"
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center text-xs hover:bg-red-600 transition opacity-0 group-hover:opacity-100"
                         title="Supprimer cette photo"
                       >
                         ×
                       </button>
-                      <div className="text-xs text-gray-500 mt-1 text-center">
+                      <div className="text-xs text-gray-500 mt-2 text-center">
                         {file.name.length > 15 ? file.name.substring(0, 12) + '...' : file.name}
                       </div>
                       <div className="text-xs text-gray-400 text-center">
@@ -542,26 +542,26 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
                     </div>
                   ))}
                 </div>
-                <p className="text-xs text-gray-500 mt-2">
+                <p className="text-xs sm:text-sm text-gray-500 mt-3">
                   Les photos vous aideront à mieux évaluer l'état de votre véhicule
                 </p>
               </div>
             )}
           </div>
 
-          <div className="flex items-center gap-2 text-sm text-gray-700">
-            <input type="checkbox" checked={rgpd} onChange={() => setRgpd(v => !v)} className="accent-[#0049ac] w-5 h-5" required />
+          <div className="flex items-center gap-3 text-sm sm:text-base text-gray-700">
+            <input type="checkbox" checked={rgpd} onChange={() => setRgpd(v => !v)} className="accent-[#0049ac] w-5 h-5 sm:w-6 sm:h-6" required />
             <span>J'accepte l'utilisation de mes données (RGPD)</span>
           </div>
           {renderFieldError("rgpd")}
 
-          <textarea className={getFieldClasses("message")} rows={3} name="message" placeholder="Message" value={form.message} onChange={handleChange} />
+          <textarea className={getFieldClasses("message")} rows={4} name="message" placeholder="Message" value={form.message} onChange={handleChange} />
           {renderFieldError("message")}
 
-          {error && <div className="text-red-600 text-sm font-semibold">{error}</div>}
-          {success && <div className="text-green-600 text-sm font-semibold">Votre demande a bien été envoyée !</div>}
+          {error && <div className="text-red-600 text-sm sm:text-base font-semibold">{error}</div>}
+          {success && <div className="text-green-600 text-sm sm:text-base font-semibold">Votre demande a bien été envoyée !</div>}
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6 sm:pt-8">
             {/* Bouton Réinitialiser à gauche */}
             <button
               type="button"
@@ -576,7 +576,7 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
                 setIsSubmitted(false); // Reset submitted state
                 if (typeof onReset === 'function') onReset();
               }}
-              className="flex items-center gap-2 bg-gray-100 text-gray-800 font-semibold rounded-lg px-4 py-2 shadow-sm hover:bg-gray-200 transition"
+              className="flex items-center justify-center gap-2 bg-gray-100 text-gray-800 font-semibold rounded-lg px-6 py-4 shadow-sm hover:bg-gray-200 transition min-h-[48px] sm:min-h-[52px]"
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5"><path fillRule="evenodd" d="M4.293 6.293a1 1 0 011.414 0L8 8.586V7a1 1 0 112 0v4a1 1 0 01-1 1H5a1 1 0 110-2h1.586l-2.293-2.293a1 1 0 010-1.414zM10 18a8 8 0 100-16 8 8 0 000 16zm0-2a6 6 0 110-12 6 6 0 010 12z" clipRule="evenodd" /></svg>
               Réinitialiser le formulaire
@@ -584,9 +584,9 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
             <button
               type="submit"
               disabled={loading}
-              className="bg-[#0049ac] text-white font-bold rounded-2xl px-6 py-3 flex items-center justify-center gap-2 shadow hover:bg-blue-800 transition disabled:opacity-60 disabled:cursor-not-allowed"
+              className="bg-[#0049ac] text-white font-bold rounded-2xl px-8 py-4 flex items-center justify-center gap-3 shadow hover:bg-blue-800 transition disabled:opacity-60 disabled:cursor-not-allowed min-h-[48px] sm:min-h-[52px] text-base sm:text-lg"
             >
-              <Send className="w-5 h-5" /> Envoyer ma demande
+              <Send className="w-5 h-5 sm:w-6 sm:h-6" /> Envoyer ma demande
             </button>
           </div>
         </form>

@@ -66,7 +66,7 @@ const VerticalProgressBar: React.FC<VerticalProgressBarProps> = ({ selections, t
       <div className="md:hidden">
         <button
           onClick={() => setMobileOpen(true)}
-          className="fixed bottom-5 left-5 z-50 bg-[#0049ac] text-white px-5 py-3 rounded-full shadow-lg font-semibold"
+          className="fixed bottom-6 left-6 z-50 bg-[#0049ac] text-white px-6 py-4 rounded-full shadow-lg font-semibold text-sm sm:text-base min-h-[56px] hover:bg-blue-700 transition-colors"
         >
           Voir les étapes
         </button>
@@ -74,12 +74,17 @@ const VerticalProgressBar: React.FC<VerticalProgressBarProps> = ({ selections, t
         {mobileOpen && (
           <div className="fixed inset-0 bg-black/40 z-50 flex items-end" onClick={() => setMobileOpen(false)}>
             <div
-              className="bg-white w-full max-w-md rounded-t-3xl px-6 py-6 shadow-xl animate-slide-up"
+              className="bg-white w-full max-w-md rounded-t-3xl px-6 py-8 shadow-xl animate-slide-up"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex justify-between items-center mb-4">
-                <h4 className="font-bold text-[#0049ac] text-lg">Résumé</h4>
-                <button onClick={() => setMobileOpen(false)}><X className="text-[#0049ac]" /></button>
+              <div className="flex justify-between items-center mb-6">
+                <h4 className="font-bold text-[#0049ac] text-lg sm:text-xl">Résumé</h4>
+                <button 
+                  onClick={() => setMobileOpen(false)}
+                  className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                >
+                  <X className="text-[#0049ac] w-6 h-6" />
+                </button>
               </div>
               <Panel />
             </div>
