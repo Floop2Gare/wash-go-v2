@@ -163,13 +163,22 @@ const CanapeContactStep: React.FC<CanapeContactStepProps> = ({ selections, total
     
     // Validation des types de fichiers
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    const maxFileSize = 10 * 1024 * 1024; // 10MB par fichier
+    const maxTotalSize = 30 * 1024 * 1024; // 30MB total
+    
+    let totalSize = 0;
     const validFiles = files.filter(file => {
       if (!validTypes.includes(file.type)) {
         setError(`Le fichier ${file.name} n'est pas un format d'image valide. Utilisez JPG, PNG ou WebP.`);
         return false;
       }
-      if (file.size > 5 * 1024 * 1024) { // 5MB max
-        setError(`Le fichier ${file.name} est trop volumineux. Taille maximum : 5MB.`);
+      if (file.size > maxFileSize) {
+        setError(`Le fichier ${file.name} est trop volumineux. Taille maximum : 10MB.`);
+        return false;
+      }
+      totalSize += file.size;
+      if (totalSize > maxTotalSize) {
+        setError(`Le poids total des fichiers ne doit pas dépasser 30MB.`);
         return false;
       }
       return true;
@@ -191,6 +200,29 @@ const CanapeContactStep: React.FC<CanapeContactStepProps> = ({ selections, total
 
   const removePhoto = (index: number) => {
     setPhotos(photos.filter((_, i) => i !== index));
+  };
+
+  // Fonction pour uploader un fichier vers File.io
+  const uploadToFileIO = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    try {
+      const response = await fetch('https://file.io', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        return result.link;
+      } else {
+        throw new Error('Échec de l\'upload vers File.io');
+      }
+    } catch (error) {
+      console.error('Erreur upload File.io:', error);
+      throw new Error('Impossible d\'uploader le fichier vers le service temporaire');
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -266,22 +298,57 @@ const CanapeContactStep: React.FC<CanapeContactStepProps> = ({ selections, total
       `Message perso : ${form.message || "-"}\n\n` +
       `🔐 Code parrainage : Washgo`;
 
-    const formData = new FormData();
-    formData.append('access_key', 'b1c483a3-32a0-4ab0-8382-f7b50840048f');
-    formData.append('name', `${form.nom} ${form.prenom}`);
-    formData.append('email', form.email);
-    formData.append('message', message);
-    
-    // Ajout des photos avec le bon format pour Web3Forms
-    photos.forEach((file, idx) => {
-      formData.append(`attachment_${idx + 1}`, file);
-    });
-
     try {
+      // Séparer les fichiers par taille
+      const web3formsFiles: File[] = [];
+      const fileIOFiles: { file: File; name: string }[] = [];
+      const web3formsMaxSize = 5 * 1024 * 1024; // 5MB pour Web3Forms
+      
+      for (const file of photos) {
+        if (file.size <= web3formsMaxSize) {
+          web3formsFiles.push(file);
+        } else {
+          fileIOFiles.push({ file, name: file.name });
+        }
+      }
+      
+      // Upload des gros fichiers vers File.io
+      const fileIOLinks: string[] = [];
+      if (fileIOFiles.length > 0) {
+        for (const { file, name } of fileIOFiles) {
+          try {
+            const link = await uploadToFileIO(file);
+            fileIOLinks.push(`${name}: ${link}`);
+          } catch (error) {
+            setError(`Impossible d'uploader ${name}. Veuillez réduire la taille du fichier.`);
+            setLoading(false);
+            return;
+          }
+        }
+      }
+      
+      // Ajouter les liens File.io au message
+      let finalMessage = message;
+      if (fileIOLinks.length > 0) {
+        finalMessage += `\n\n📎 Photos volumineuses (liens de téléchargement) :\n${fileIOLinks.join('\n')}`;
+      }
+
+      const formData = new FormData();
+      formData.append('access_key', 'b1c483a3-32a0-4ab0-8382-f7b50840048f');
+      formData.append('name', `${form.nom} ${form.prenom}`);
+      formData.append('email', form.email);
+      formData.append('message', finalMessage);
+      
+      // Ajouter les fichiers compatibles avec Web3Forms
+      web3formsFiles.forEach((file, idx) => {
+        formData.append(`attachment_${idx + 1}`, file);
+      });
+
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         body: formData,
       });
+      
       if (response.ok) {
         setSuccess(true);
         setShowSuccessOverlay(true);
@@ -291,10 +358,10 @@ const CanapeContactStep: React.FC<CanapeContactStepProps> = ({ selections, total
         setShowTimeSlots(false);
         if (typeof onReset === 'function') onReset();
       } else {
-        setError("Erreur, merci de réessayer.");
+        setError("Erreur lors de l'envoi, merci de réessayer.");
       }
     } catch (err) {
-      setError("Erreur, merci de réessayer.");
+      setError("Erreur lors de l'envoi, merci de réessayer.");
     } finally {
       setLoading(false);
     }
@@ -435,7 +502,7 @@ const CanapeContactStep: React.FC<CanapeContactStepProps> = ({ selections, total
                 }
               </span>
               <span className="text-xs text-gray-400 text-center">
-                Formats acceptés : JPG, PNG, WebP (max 5MB par fichier)
+                Formats acceptés : JPG, PNG, WebP (max 10MB par fichier, 30MB total)
               </span>
               <input
                 ref={fileInputRef}
@@ -466,6 +533,9 @@ const CanapeContactStep: React.FC<CanapeContactStepProps> = ({ selections, total
                       </button>
                       <div className="text-xs text-gray-500 mt-1 text-center">
                         {file.name.length > 15 ? file.name.substring(0, 12) + '...' : file.name}
+                      </div>
+                      <div className="text-xs text-gray-400 text-center">
+                        {(file.size / (1024 * 1024)).toFixed(1)} MB
                       </div>
                     </div>
                   ))}
