@@ -161,7 +161,7 @@ const CanapeContactStep: React.FC<CanapeContactStepProps> = ({ selections, total
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
-    const files = Array.from(e.target.files).slice(0, 3);
+    const files = Array.from(e.target.files).slice(0, 5); // Max 5 photos
     
     // Validation des types de fichiers
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
@@ -204,27 +204,38 @@ const CanapeContactStep: React.FC<CanapeContactStepProps> = ({ selections, total
     setPhotos(photos.filter((_, i) => i !== index));
   };
 
-  // Fonction pour uploader un fichier vers File.io
-  const uploadToFileIO = async (file: File): Promise<string> => {
-    const formData = new FormData();
-    formData.append('file', file);
-    
-    try {
-      const response = await fetch('https://file.io', {
-        method: 'POST',
-        body: formData,
-      });
-      
-      if (response.ok) {
-        const result = await response.json();
-        return result.link;
-      } else {
-        throw new Error('Échec de l\'upload vers File.io');
-      }
-    } catch (error) {
-      console.error('Erreur upload File.io:', error);
-      throw new Error('Impossible d\'uploader le fichier vers le service temporaire');
-    }
+  // Fonction pour uploader un fichier vers ImgBB
+  const uploadToImgBB = async (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = async () => {
+        try {
+          const base64 = reader.result as string;
+          const base64Data = base64.split(',')[1]; // Enlever le préfixe data:image/...;base64,
+          
+          const formData = new FormData();
+          formData.append('image', base64Data);
+          formData.append('expiration', '86400'); // 1 jour
+          
+          const response = await fetch('https://api.imgbb.com/1/upload?key=913a76666159bc972f4ff90aa5d88589', {
+            method: 'POST',
+            body: formData,
+          });
+          
+          if (response.ok) {
+            const result = await response.json();
+            resolve(result.data.url);
+          } else {
+            throw new Error('Échec de l\'upload vers ImgBB');
+          }
+        } catch (error) {
+          console.error('Erreur upload ImgBB:', error);
+          reject(new Error('Impossible d\'uploader le fichier vers ImgBB'));
+        }
+      };
+      reader.onerror = () => reject(new Error('Erreur de lecture du fichier'));
+      reader.readAsDataURL(file);
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -304,13 +315,13 @@ const CanapeContactStep: React.FC<CanapeContactStepProps> = ({ selections, total
       `🔐 Code parrainage : Washgo`;
 
     try {
-      // Upload de TOUS les fichiers vers File.io
+      // Upload de TOUS les fichiers vers ImgBB
       const photoLinks: string[] = [];
       
       if (photos.length > 0) {
         for (const file of photos) {
           try {
-            const link = await uploadToFileIO(file);
+            const link = await uploadToImgBB(file);
             photoLinks.push(link);
           } catch (error) {
             setError(`Impossible d'uploader ${file.name}. Veuillez réessayer.`);
@@ -475,7 +486,7 @@ const CanapeContactStep: React.FC<CanapeContactStepProps> = ({ selections, total
 
           <div>
             <label className="block text-sm font-semibold mb-2">
-              Photos de votre canapé (max 3) - Facultatif
+              Photos de votre canapé (max 5) - Facultatif
             </label>
             <div
               className="border-2 border-dashed border-gray-300 rounded-xl p-6 flex flex-col items-center justify-center gap-2 bg-gray-50 hover:bg-gray-100 transition cursor-pointer"

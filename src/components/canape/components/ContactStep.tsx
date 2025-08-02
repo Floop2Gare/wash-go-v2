@@ -52,6 +52,7 @@ const ContactStep: React.FC<ContactStepProps> = ({
   const [showTimeSlots, setShowTimeSlots] = useState(false);
   const [photos, setPhotos] = useState<File[]>([]);
   const [uploadError, setUploadError] = useState("");
+  const [showSuccessOverlay, setShowSuccessOverlay] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   const {
@@ -116,8 +117,9 @@ const ContactStep: React.FC<ContactStepProps> = ({
     const files = Array.from(e.target.files);
     
     // Validation des types de fichiers
-    const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
     const maxFileSize = 10 * 1024 * 1024; // 10MB par fichier
+    const maxTotalSize = 30 * 1024 * 1024; // 30MB total
     const maxFiles = 5;
     
     // Vérifier le nombre de fichiers
@@ -126,24 +128,31 @@ const ContactStep: React.FC<ContactStepProps> = ({
       return;
     }
     
-    // Vérifier chaque fichier
+    let totalSize = 0;
     const validFiles = files.filter(file => {
       if (!validTypes.includes(file.type)) {
-        setUploadError(`Le fichier ${file.name} n'est pas un format d'image valide. Utilisez JPG ou PNG.`);
+        setUploadError(`Le fichier ${file.name} n'est pas un format d'image valide. Utilisez JPG, PNG ou WebP.`);
         return false;
       }
       if (file.size > maxFileSize) {
         setUploadError(`Le fichier ${file.name} est trop volumineux. Taille maximum : 10MB.`);
         return false;
       }
+      totalSize += file.size;
+      if (totalSize > maxTotalSize) {
+        setUploadError(`Le poids total des fichiers ne doit pas dépasser 30MB.`);
+        return false;
+      }
       return true;
     });
     
     if (validFiles.length !== files.length) {
+      // Si des fichiers invalides, on ne met à jour que les valides
+      setPhotos(validFiles);
       return;
     }
     
-    setPhotos(validFiles);
+    setPhotos(files);
     setUploadError(""); // Clear any previous errors
   };
 
@@ -208,6 +217,9 @@ const ContactStep: React.FC<ContactStepProps> = ({
       // Appeler la fonction onSubmit du parent
       onSubmit(finalData);
       
+      // Afficher l'overlay de succès
+      setShowSuccessOverlay(true);
+      
     } catch (error) {
       setUploadError("Erreur lors de l'upload des photos. Veuillez réessayer.");
     }
@@ -260,8 +272,52 @@ const ContactStep: React.FC<ContactStepProps> = ({
     }`;
   };
 
+  // Fermer l'overlay automatiquement après 5s
+  useEffect(() => {
+    if (showSuccessOverlay) {
+      const timer = setTimeout(() => setShowSuccessOverlay(false), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [showSuccessOverlay]);
+
   return (
     <section className="py-12 px-4 sm:px-6 lg:px-8 bg-white">
+      {/* Overlay de succès */}
+      {showSuccessOverlay && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur bg-black/30">
+          <div className="bg-white rounded-2xl shadow-2xl px-8 py-10 max-w-md w-full text-center relative animate-fade-in">
+            <button
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-3xl font-bold focus:outline-none transition-colors duration-200 hover:scale-110"
+              onClick={() => setShowSuccessOverlay(false)}
+              aria-label="Fermer"
+            >
+              ×
+            </button>
+            <svg className="mx-auto mb-4" width="48" height="48" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#e0f7fa"/><path d="M7 13l3 3 7-7" stroke="#009688" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <h2 className="text-2xl font-bold text-[#0049ac] mb-2">Message envoyé !</h2>
+            <p className="text-gray-700 mb-6">Nous vous recontacterons sous peu.</p>
+            
+            {/* Bouton Fermer en bas */}
+            <button
+              onClick={() => setShowSuccessOverlay(false)}
+              className="bg-[#0049ac] text-white font-semibold px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            >
+              Fermer
+            </button>
+          </div>
+          <style>{`
+            @keyframes fade-in {
+              from { opacity: 0; transform: scale(0.98); }
+              to { opacity: 1; transform: scale(1); }
+            }
+            .animate-fade-in {
+              animation: fade-in 0.3s ease;
+            }
+          `}</style>
+        </div>
+      )}
+      {/* Fin overlay */}
+      
       <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
         <form
           onSubmit={handleSubmit(handleFormSubmit)}
