@@ -48,6 +48,7 @@ const CanapeContactStep: React.FC<CanapeContactStepProps> = ({ selections, total
   const [form, setForm] = useState(initialForm);
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [success, setSuccess] = useState(false);
   const [showSuccessOverlay, setShowSuccessOverlay] = useState(false);
   const [photos, setPhotos] = useState<File[]>([]);
@@ -106,7 +107,8 @@ const CanapeContactStep: React.FC<CanapeContactStepProps> = ({ selections, total
   // Fonction pour afficher les erreurs de champ avec style amélioré
   const renderFieldError = (fieldName: string) => {
     const error = fieldErrors[fieldName];
-    if (!error) return null;
+    // N'afficher les erreurs que si le formulaire a été soumis
+    if (!error || !isSubmitted) return null;
     
     return (
       <div className="flex items-start gap-2 mt-2 p-2 bg-red-50 border border-red-200 rounded-md">
@@ -118,7 +120,7 @@ const CanapeContactStep: React.FC<CanapeContactStepProps> = ({ selections, total
 
   // Fonction pour obtenir les classes CSS des champs
   const getFieldClasses = (fieldName: string) => {
-    const hasError = fieldErrors[fieldName];
+    const hasError = fieldErrors[fieldName] && isSubmitted; // Erreur seulement si soumis
     return `w-full border rounded-xl px-4 py-3 text-sm focus:ring-2 focus:outline-none transition-colors ${
       hasError
         ? "border-red-400 focus:ring-red-300 bg-red-50"
@@ -131,7 +133,7 @@ const CanapeContactStep: React.FC<CanapeContactStepProps> = ({ selections, total
     const checked = (e.target as HTMLInputElement).checked;
     setForm({ ...form, [name]: type === "checkbox" ? checked : value });
     
-    // Valider le champ en temps réel
+    // Valider le champ en temps réel mais ne pas afficher l'erreur
     const fieldError = validateField(name, value);
     setFieldErrors(prev => ({
       ...prev,
@@ -227,6 +229,9 @@ const CanapeContactStep: React.FC<CanapeContactStepProps> = ({ selections, total
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Marquer le formulaire comme soumis
+    setIsSubmitted(true);
     
     // Valider tous les champs
     const newFieldErrors: Record<string, string> = {};
@@ -571,6 +576,7 @@ const CanapeContactStep: React.FC<CanapeContactStepProps> = ({ selections, total
                 setSuccess(false);
                 setShowTimeSlots(false);
                 setFieldErrors({}); // Clear field errors on reset
+                setIsSubmitted(false); // Reset submitted state
                 if (typeof onReset === 'function') onReset();
               }}
               className="flex items-center gap-2 bg-gray-100 text-gray-800 font-semibold rounded-lg px-4 py-2 shadow-sm hover:bg-gray-200 transition"

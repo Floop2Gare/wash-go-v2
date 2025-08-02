@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Plus, Send, RotateCw, X, CalendarDays, AlertCircle, CheckCircle } from "lucide-react";
+import { Plus, Send, RotateCw, X, CalendarDays, AlertCircle, CheckCircle, ImagePlus } from "lucide-react";
 import TimeSlotSelector, { TimeSlot, generateTimeSlots, formatDuration } from "../../voiture/components/TimeSlotSelector";
 
 interface ContactStepProps {
@@ -22,6 +22,7 @@ type FormData = {
   city: string;
   date: string;
   timeSlot: string;
+  message?: string; // Added for photos
 };
 
 const schema = yup.object({
@@ -34,6 +35,7 @@ const schema = yup.object({
   city: yup.string(),
   date: yup.string().required("Veuillez sélectionner une date"),
   timeSlot: yup.string().required("Veuillez sélectionner un créneau horaire"),
+  message: yup.string().optional(), // Added for photos
 });
 
 const ContactStep: React.FC<ContactStepProps> = ({
@@ -48,15 +50,19 @@ const ContactStep: React.FC<ContactStepProps> = ({
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
   const [showTimeSlots, setShowTimeSlots] = useState(false);
+  const [photos, setPhotos] = useState<File[]>([]);
+  const [uploadError, setUploadError] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitted },
     setValue,
     watch,
   } = useForm<FormData>({
     resolver: yupResolver(schema),
+    mode: 'onSubmit', // Les erreurs ne s'affichent qu'après soumission
   });
 
   // Calculer la durée estimée pour les canapés (approximative)
@@ -104,6 +110,109 @@ const ContactStep: React.FC<ContactStepProps> = ({
     setValue("timeSlot", slotValue);
   };
 
+  // Fonction pour gérer la sélection de photos
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const files = Array.from(e.target.files);
+    
+    // Validation des types de fichiers
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    const maxFileSize = 10 * 1024 * 1024; // 10MB par fichier
+    const maxFiles = 5;
+    
+    // Vérifier le nombre de fichiers
+    if (files.length > maxFiles) {
+      setUploadError(`Vous ne pouvez sélectionner que ${maxFiles} photos maximum.`);
+      return;
+    }
+    
+    // Vérifier chaque fichier
+    const validFiles = files.filter(file => {
+      if (!validTypes.includes(file.type)) {
+        setUploadError(`Le fichier ${file.name} n'est pas un format d'image valide. Utilisez JPG ou PNG.`);
+        return false;
+      }
+      if (file.size > maxFileSize) {
+        setUploadError(`Le fichier ${file.name} est trop volumineux. Taille maximum : 10MB.`);
+        return false;
+      }
+      return true;
+    });
+    
+    if (validFiles.length !== files.length) {
+      return;
+    }
+    
+    setPhotos(validFiles);
+    setUploadError(""); // Clear any previous errors
+  };
+
+  // Fonction pour supprimer une photo
+  const removePhoto = (index: number) => {
+    setPhotos(photos.filter((_, i) => i !== index));
+  };
+
+  // Fonction pour uploader un fichier vers File.io
+  const uploadToFileIO = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    try {
+      const response = await fetch('https://file.io', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        return result.link;
+      } else {
+        throw new Error('Échec de l\'upload vers File.io');
+      }
+    } catch (error) {
+      console.error('Erreur upload File.io:', error);
+      throw new Error('Impossible d\'uploader le fichier vers le service temporaire');
+    }
+  };
+
+  // Fonction pour gérer la soumission avec upload de photos
+  const handleFormSubmit = async (data: FormData) => {
+    try {
+      // Upload des photos vers File.io
+      const photoLinks: string[] = [];
+      
+      if (photos.length > 0) {
+        for (const file of photos) {
+          try {
+            const link = await uploadToFileIO(file);
+            photoLinks.push(link);
+          } catch (error) {
+            setUploadError(`Impossible d'uploader ${file.name}. Veuillez réessayer.`);
+            return;
+          }
+        }
+      }
+      
+      // Ajouter les liens des photos au message
+      let finalMessage = data.message || "";
+      if (photoLinks.length > 0) {
+        finalMessage += `\n\n📎 Photos envoyées :\n\n${photoLinks.join('\n\n')}\n\n⚠️ Note : Ces liens sont valables 24h et ne peuvent être téléchargés qu'une seule fois.`;
+      }
+      
+      // Créer l'objet final avec le message enrichi
+      const finalData = {
+        ...data,
+        message: finalMessage
+      };
+      
+      // Appeler la fonction onSubmit du parent
+      onSubmit(finalData);
+      
+    } catch (error) {
+      setUploadError("Erreur lors de l'upload des photos. Veuillez réessayer.");
+    }
+  };
+
   const fullDemandes = [...allDemandes, { formule: selectedFormule, options: selectedOptions }];
 
   const formulePrices: Record<string, number> = {
@@ -130,7 +239,8 @@ const ContactStep: React.FC<ContactStepProps> = ({
   // Fonction pour afficher les erreurs avec style amélioré
   const renderFieldError = (fieldName: keyof FormData) => {
     const error = errors[fieldName];
-    if (!error) return null;
+    // N'afficher les erreurs que si le formulaire a été soumis
+    if (!error || !isSubmitted) return null;
     
     return (
       <div className="flex items-start gap-2 mt-2 p-2 bg-red-50 border border-red-200 rounded-md">
@@ -142,7 +252,7 @@ const ContactStep: React.FC<ContactStepProps> = ({
 
   // Fonction pour obtenir les classes CSS des champs
   const getFieldClasses = (fieldName: keyof FormData) => {
-    const hasError = errors[fieldName];
+    const hasError = errors[fieldName] && isSubmitted; // Erreur seulement si soumis
     return `mt-1 w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 text-sm transition-colors ${
       hasError
         ? "border-red-400 focus:ring-red-300 bg-red-50"
@@ -154,7 +264,7 @@ const ContactStep: React.FC<ContactStepProps> = ({
     <section className="py-12 px-4 sm:px-6 lg:px-8 bg-white">
       <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
         <form
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(handleFormSubmit)}
           className="space-y-5 bg-white shadow rounded-xl p-6 border border-gray-100"
         >
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Finaliser ma demande</h2>
@@ -197,7 +307,7 @@ const ContactStep: React.FC<ContactStepProps> = ({
                 value={selectedDate}
                 onChange={handleDateChange}
                 className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 text-sm pl-10 transition-colors ${
-                  errors.date
+                  errors.date && isSubmitted
                     ? "border-red-400 focus:ring-red-300 bg-red-50"
                     : "border-gray-300 focus:ring-blue-400 focus:border-blue-400"
                 }`}
@@ -219,6 +329,72 @@ const ContactStep: React.FC<ContactStepProps> = ({
               {renderFieldError("timeSlot")}
             </div>
           )}
+
+          {/* Upload de photos */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Photos (max 5) - Facultatif
+            </label>
+            <div
+              className="border-2 border-dashed border-gray-300 rounded-md p-4 flex flex-col items-center justify-center gap-2 bg-gray-50 hover:bg-gray-100 transition cursor-pointer"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <ImagePlus className="w-6 h-6 text-gray-400" />
+              <span className="text-sm text-gray-500 text-center">
+                {photos.length === 0 
+                  ? "Cliquez ici pour ajouter jusqu'à 5 photos"
+                  : `${photos.length}/5 photos sélectionnées`
+                }
+              </span>
+              <span className="text-xs text-gray-400 text-center">
+                Formats acceptés : JPG, PNG (max 10MB par fichier)
+              </span>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/jpeg,image/jpg,image/png"
+                multiple
+                onChange={handlePhotoChange}
+                className="hidden"
+              />
+            </div>
+            
+            {/* Aperçu des photos */}
+            {photos.length > 0 && (
+              <div className="mt-3">
+                <div className="flex flex-wrap gap-2">
+                  {photos.map((file, idx) => (
+                    <div key={idx} className="relative group">
+                      <img 
+                        src={URL.createObjectURL(file)} 
+                        alt={`Photo ${idx + 1}`} 
+                        className="w-16 h-16 object-cover rounded border"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removePhoto(idx)}
+                        className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600 transition opacity-0 group-hover:opacity-100"
+                        title="Supprimer cette photo"
+                      >
+                        ×
+                      </button>
+                      <div className="text-xs text-gray-500 mt-1 text-center">
+                        {(file.size / (1024 * 1024)).toFixed(1)} MB
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {/* Message d'erreur upload */}
+            {uploadError && (
+              <div className="flex items-start gap-2 mt-2 p-2 bg-red-50 border border-red-200 rounded-md">
+                <AlertCircle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                <p className="text-red-600 text-sm font-medium">{uploadError}</p>
+              </div>
+            )}
+          </div>
 
           <div className="flex flex-col gap-3 pt-4">
             <button
