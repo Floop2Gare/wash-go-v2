@@ -46,7 +46,7 @@ export function truncateMessage(message: string, maxLength: number = 150): strin
 // Fonction principale pour récupérer les posts Facebook
 export async function fetchFacebookPosts(): Promise<FacebookPost[]> {
   try {
-    const response = await fetch('http://localhost:3001/api/facebook-posts');
+    const response = await fetch('https://node-js-api-graph.onrender.com/api/facebook/posts');
     
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
@@ -67,7 +67,7 @@ export async function fetchFacebookPosts(): Promise<FacebookPost[]> {
     }
     
     const data = await response.json();
-    return data;
+    return data.data; // L'API externe retourne { data: [...] }
   } catch (error) {
     console.error('Erreur lors de la récupération des publications Facebook:', error);
     
@@ -75,6 +75,6 @@ export async function fetchFacebookPosts(): Promise<FacebookPost[]> {
       throw new Error(error.message);
     }
     
-    throw new Error('Erreur de connexion au serveur backend');
+    throw new Error('Erreur de connexion à l\'API externe');
   }
 } 
