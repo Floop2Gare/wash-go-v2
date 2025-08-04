@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Facebook, ExternalLink } from 'lucide-react';
 import { fetchFacebookPosts } from "../../../services/fetchFacebookPosts";
 
-const FACEBOOK_URL = "https://www.facebook.com/WashAndGo";
+const FACEBOOK_URL = "https://www.facebook.com/profile.php?id=61571447229404";
 
 interface FacebookPost {
   id: string;

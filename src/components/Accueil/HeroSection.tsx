@@ -37,18 +37,20 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onCTAClick }) => {
             Un nettoyage professionnel, rapide et efficace à Fuveau et ses alentours.
           </p>
 
-          <motion.button
-            onClick={onCTAClick}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="relative inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 font-semibold tracking-wide text-white rounded-full bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 shadow-lg group transition-all duration-300 hover:from-blue-600 hover:to-blue-800 text-sm sm:text-base"
-          >
-            <span className="absolute inset-0 w-full h-full bg-gradient-to-br from-white/10 via-transparent to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-md" />
-            <span className="relative z-10 flex items-center space-x-2">
-              <span>Découvrez nos Prestations</span>
-              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-1" />
-            </span>
-          </motion.button>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <motion.button
+              onClick={onCTAClick}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="relative inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 font-semibold tracking-wide text-white rounded-full bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 shadow-lg group transition-all duration-300 hover:from-blue-600 hover:to-blue-800 text-sm sm:text-base"
+            >
+              <span className="absolute inset-0 w-full h-full bg-gradient-to-br from-white/10 via-transparent to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-md" />
+              <span className="relative z-10 flex items-center space-x-2">
+                <span>Découvrez nos Prestations</span>
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-1" />
+              </span>
+            </motion.button>
+          </div>
         </motion.div>
       </div>
     </section>

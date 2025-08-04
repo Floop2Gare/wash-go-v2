@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import Navbar from "../../../components/Navbar/Navbar";
+import Footer from "../../../components/Accueil/Footer";
 import VerticalProgressBar from "../components/VerticalProgressBar";
 import FabricTypeStep from "../components/FabricTypeStep";
 import CanapeTypeStep from "../components/CanapeTypeStep";
@@ -55,7 +56,8 @@ export default function Canapes() {
   const handleNext = (stepIdx) => {
     if (stepIdx === 1 && !fabricType) return error("Veuillez compléter le type de tissu.");
     if (stepIdx === 2 && (!fabricType || !places)) return error("Complétez le type de tissu et le nombre de places.");
-    if (stepIdx === 3 && options.value.length === 0) return error("Sélectionnez au moins une option ou passez sans option.");
+    if (stepIdx === 3 && options.value.length === 0)
+      return error("Sélectionnez au moins une option supplémentaire.");
     setActiveStep(stepIdx);
     sectionRefs.current[stepIdx]?.scrollIntoView({ behavior: "smooth" });
   };
@@ -168,6 +170,8 @@ export default function Canapes() {
           );
         })}
       </div>
+
+      <Footer />
     </>
   );
 }

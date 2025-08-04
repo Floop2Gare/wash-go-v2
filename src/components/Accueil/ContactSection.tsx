@@ -39,7 +39,7 @@ const ContactSection = () => {
             className="bg-white border shadow-xl rounded-2xl p-8 space-y-6"
           >
             <div>
-              <h3 className="text-lg font-semibold text-[#0049ac]">Zone d’intervention</h3>
+              <h3 className="text-lg font-semibold text-[#0049ac]">Zone d'intervention</h3>
               <p className="text-gray-700">
                 Fuveau et ses alentours
               </p>
@@ -99,7 +99,7 @@ const ContactSection = () => {
             </div>
           </motion.div>
 
-          {/* Carte à droite */}
+          {/* Carte Google Maps à droite */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -107,12 +107,15 @@ const ContactSection = () => {
             transition={{ duration: 0.6 }}
             className="rounded-2xl overflow-hidden shadow-xl border bg-white"
           >
-            <div className="w-full h-[400px] flex items-center justify-center text-gray-500 text-center p-6 text-sm">
-              <p>
-                Ici apparaîtra une carte interactive avec toutes les villes<br />
-                réellement couvertes (zone d’intervention personnalisée)
-              </p>
-            </div>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d46338.30571121762!2d5.512469848209386!3d43.45758855864135!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12c990845409b1db%3A0x40819a5fd970310!2s13710%20Fuveau!5e0!3m2!1sfr!2sfr!4v1754316697481!5m2!1sfr!2sfr"
+              width="100%"
+              height="400"
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="w-full h-[400px] border-0"
+            ></iframe>
           </motion.div>
         </div>
       </div>

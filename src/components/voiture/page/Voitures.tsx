@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect } from "react";
 import Navbar from "../../../components/Navbar/Navbar";
+import Footer from "../../../components/Accueil/Footer";
 import VerticalProgressBar from "../components/VerticalProgressBar/VerticalProgressBar";
 import AspirationStep from "../components/AspirationStep";
 import VehicleTypeStep from "../components/VehicleTypeStep";
@@ -185,6 +186,8 @@ export default function Voitures() {
           );
         })}
       </div>
+
+      <Footer />
     </>
   );
 }

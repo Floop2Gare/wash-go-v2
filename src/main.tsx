@@ -3,9 +3,8 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import './index.css';
-import 'leaflet/dist/leaflet.css';
 
-// Point d’entrée principal de l’application
+// Point d'entrée principal de l'application
 const container = document.getElementById('root');
 
 if (!container) {

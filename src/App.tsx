@@ -39,7 +39,9 @@ const App: React.FC = () => {
             <>
               <Navbar />
               <main className="min-h-screen bg-white">
-                <HeroSection onCTAClick={() => scrollTo("choix-section")} />
+                <HeroSection 
+                  onCTAClick={() => scrollTo("choix-section")} 
+                />
                 <FeaturesSection onNextClick={() => scrollTo("social-section")} />
 
                 <section id="social-section">
@@ -55,6 +57,7 @@ const App: React.FC = () => {
                 </section>
 
                 <TestimonialsSection />
+                
                 <Footer />
               </main>
             </>
