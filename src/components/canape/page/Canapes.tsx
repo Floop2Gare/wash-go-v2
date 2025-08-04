@@ -89,42 +89,42 @@ export default function Canapes() {
     <>
       <Navbar />
 
-      <div ref={heroRef} className="relative h-screen w-full bg-cover bg-center bg-no-repeat flex items-center justify-center px-4 sm:px-6 lg:px-8 text-white text-center" style={{ backgroundImage: "url('/canapé/canape.jpg')" }}>
+      <div ref={heroRef} className="relative h-screen w-full bg-cover bg-center bg-no-repeat flex items-center justify-center px-4 sm:px-6 text-white text-center" style={{ backgroundImage: "url('/canapé/canape.jpg')" }}>
         <div className="absolute inset-0 bg-black/60 z-0" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 sm:mb-6 leading-tight px-2">Nettoyage Professionnel de <span className="text-[#0049ac]">Canapés</span></h1>
-          <p className="text-lg sm:text-xl md:text-2xl mb-6 sm:mb-8 max-w-2xl sm:max-w-3xl mx-auto px-2 leading-relaxed">Offrez à vos canapés une expérience de propreté haut de gamme</p>
+        <div className="max-w-7xl mx-auto px-4 relative z-10">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 sm:mb-6 leading-tight">Nettoyage Professionnel de <span className="text-[#0049ac]">Canapés</span></h1>
+          <p className="text-lg sm:text-xl mb-6 sm:mb-8 max-w-2xl sm:max-w-3xl mx-auto px-2">Offrez à vos canapés une expérience de propreté haut de gamme</p>
           <button onClick={() => {
             const target = fabricTypeRef.current || sectionRefs.current[0];
             if (target) target.scrollIntoView({ behavior: "smooth" });
-          }} className="bg-white text-blue-600 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 rounded-full font-semibold hover:bg-blue-50 transition-colors flex items-center gap-2 mx-auto text-sm sm:text-base lg:text-lg min-h-[56px] sm:min-h-[60px]">
+          }} className="bg-white text-blue-600 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold hover:bg-blue-50 transition-colors flex items-center gap-2 mx-auto text-sm sm:text-base">
             Commencer ma demande sur mesure
-            <ChevronDown size={18} className="sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
+            <ChevronDown size={18} className="sm:w-5 sm:h-5" />
           </button>
         </div>
       </div>
 
       {/* Section Introduction du service canapé */}
-      <div className="py-12 sm:py-16 lg:py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 lg:mb-6">Notre service de nettoyage canapé</h2>
-            <p className="text-base sm:text-lg lg:text-xl text-gray-600 px-2 leading-relaxed">Un traitement complet et professionnel pour tous types de tissus</p>
+      <div className="py-12 sm:py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Notre service de nettoyage canapé</h2>
+            <p className="text-base sm:text-lg text-gray-600 px-2">Un traitement complet et professionnel pour tous types de tissus</p>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {[
               { icon: Droplets, title: "Nettoyage vapeur", desc: "Élimination des saletés incrustées en profondeur" },
               { icon: Zap, title: "Désinfection", desc: "Protection antibactérienne complète" },
               { icon: Heart, title: "Anti-odeurs", desc: "Traitement neutralisant les mauvaises odeurs" },
               { icon: Brush, title: "Soin du tissu", desc: "Brossage et protection du matériau" },
             ].map(({ icon: Icon, title, desc }, i) => (
-              <div key={i} className="bg-white rounded-xl p-6 sm:p-8 lg:p-10 text-center shadow-sm hover:shadow-md transition-shadow">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4 sm:mb-6">
-                  <Icon className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-[#0049ac]" />
+              <div key={i} className="bg-white rounded-xl p-4 sm:p-6 text-center shadow-sm hover:shadow-md transition-shadow">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                  <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#0049ac]" />
                 </div>
-                <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-gray-900 mb-2 sm:mb-3">{title}</h3>
-                <p className="text-xs sm:text-sm lg:text-base text-gray-600 leading-relaxed">{desc}</p>
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">{title}</h3>
+                <p className="text-xs sm:text-sm text-gray-600">{desc}</p>
               </div>
             ))}
           </div>
@@ -137,18 +137,18 @@ export default function Canapes() {
       </div>
 
       {showErrorModal && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 sm:p-6">
-          <div className="bg-white rounded-lg shadow-lg p-6 sm:p-8 max-w-sm sm:max-w-md text-center">
-            <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-blue-600 mb-4 sm:mb-6">Attention</h2>
-            <p className="text-sm sm:text-base lg:text-lg text-gray-700 mb-6 sm:mb-8 leading-relaxed">{formError}</p>
-            <button onClick={() => setShowErrorModal(false)} className="bg-blue-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg hover:bg-blue-700 text-sm sm:text-base lg:text-lg min-h-[48px] sm:min-h-[52px] transition-colors">
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 max-w-sm sm:max-w-md text-center">
+            <h2 className="text-lg sm:text-xl font-bold text-blue-600 mb-3 sm:mb-4">Attention</h2>
+            <p className="text-sm sm:text-base text-gray-700 mb-4 sm:mb-6">{formError}</p>
+            <button onClick={() => setShowErrorModal(false)} className="bg-blue-600 text-white px-4 sm:px-6 py-2 rounded-md hover:bg-blue-700 text-sm sm:text-base">
               Fermer
             </button>
           </div>
         </div>
       )}
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 space-y-16 sm:space-y-20 lg:space-y-24">
+      <div className="max-w-5xl mx-auto px-4 py-8 sm:py-12 space-y-16 sm:space-y-24">
         {steps.map((step, i) => {
           const StepComponent = step.component;
 
@@ -158,10 +158,10 @@ export default function Canapes() {
             : { selections, totalPrice, totalTime, onReset: handleReset };
 
           return (
-            <section key={i} ref={i === 0 ? fabricTypeRef : (el) => (sectionRefs.current[i] = el)} className="section scroll-mt-20 sm:scroll-mt-24 lg:scroll-mt-28 bg-white rounded-2xl shadow-lg p-6 sm:p-8 lg:p-10">
-              <div className="flex items-center gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8 lg:mb-10">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 rounded-full bg-[#0049ac] text-white flex items-center justify-center font-bold text-sm sm:text-base lg:text-lg">{i + 1}</div>
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold">{step.label}</h2>
+            <section key={i} ref={i === 0 ? fabricTypeRef : (el) => (sectionRefs.current[i] = el)} className="section scroll-mt-20 sm:scroll-mt-24 bg-white rounded-2xl shadow-lg p-4 sm:p-6 md:p-8">
+              <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#0049ac] text-white flex items-center justify-center font-bold text-sm sm:text-base">{i + 1}</div>
+                <h2 className="text-2xl sm:text-3xl font-bold">{step.label}</h2>
               </div>
               <StepComponent {...props} />
             </section>
