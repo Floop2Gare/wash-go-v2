@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import { CalendarDays, ImagePlus, Send, Plus, Clock, AlertCircle } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { CalendarDays, Send, AlertCircle } from "lucide-react";
 import TimeSlotSelector, { TimeSlot, generateTimeSlots, formatDuration } from "../../voiture/components/TimeSlotSelector";
 
 interface CanapeContactStepProps {
@@ -51,9 +51,7 @@ const CanapeContactStep: React.FC<CanapeContactStepProps> = ({ selections, total
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [success, setSuccess] = useState(false);
   const [showSuccessOverlay, setShowSuccessOverlay] = useState(false);
-  const [photos, setPhotos] = useState<File[]>([]);
   const [rgpd, setRgpd] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
   const [showTimeSlots, setShowTimeSlots] = useState(false);
 
@@ -159,118 +157,7 @@ const CanapeContactStep: React.FC<CanapeContactStepProps> = ({ selections, total
     setForm({ ...form, timeSlot: `${slot.start}-${slot.end}` });
   };
 
-  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-    const files = Array.from(e.target.files).slice(0, 3); // Max 3 photos
-    
-    // Validation des types de fichiers
-    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-    const maxFileSize = 10 * 1024 * 1024; // 10MB par fichier
-    const maxTotalSize = 30 * 1024 * 1024; // 30MB total
-    
-    let totalSize = 0;
-    const validFiles = files.filter(file => {
-      if (!validTypes.includes(file.type)) {
-        setError(`Le fichier ${file.name} n'est pas un format d'image valide. Utilisez JPG, PNG ou WebP.`);
-        return false;
-      }
-      if (file.size > maxFileSize) {
-        setError(`Le fichier ${file.name} est trop volumineux. Taille maximum : 10MB.`);
-        return false;
-      }
-      totalSize += file.size;
-      if (totalSize > maxTotalSize) {
-        setError(`Le poids total des fichiers ne doit pas dépasser 30MB.`);
-        return false;
-      }
-      return true;
-    });
-    
-    if (validFiles.length !== files.length) {
-      // Si des fichiers invalides, on ne met à jour que les valides
-      setPhotos(validFiles);
-      return;
-    }
-    
-    setPhotos(files);
-    setError(""); // Clear any previous errors
-  };
 
-  const handlePhotoZoneClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const removePhoto = (index: number) => {
-    setPhotos(photos.filter((_, i) => i !== index));
-  };
-
-  // Fonction de fallback avec Cloudinary (gratuit, plus fiable)
-  const uploadToCloudinary = async (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = async () => {
-        try {
-          const base64 = reader.result as string;
-          
-          const formData = new FormData();
-          formData.append('file', base64);
-          formData.append('upload_preset', 'ml_default'); // Preset public Cloudinary
-          
-          const response = await fetch('https://api.cloudinary.com/v1_1/demo/image/upload', {
-            method: 'POST',
-            body: formData,
-          });
-          
-          if (response.ok) {
-            const result = await response.json();
-            resolve(result.secure_url);
-          } else {
-            throw new Error('Échec de l\'upload vers Cloudinary');
-          }
-        } catch (error) {
-          console.error('Erreur upload Cloudinary:', error);
-          reject(new Error('Impossible d\'uploader le fichier vers Cloudinary'));
-        }
-      };
-      reader.onerror = () => reject(new Error('Erreur de lecture du fichier'));
-      reader.readAsDataURL(file);
-    });
-  };
-
-  const uploadToImgBB = async (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = async () => {
-        try {
-          const base64 = reader.result as string;
-          const base64Data = base64.split(',')[1]; // Enlever le préfixe data:image/...;base64,
-          
-          const formData = new FormData();
-          formData.append('image', base64Data);
-          formData.append('expiration', '86400'); // 1 jour
-          
-          const response = await fetch('https://api.imgbb.com/1/upload?key=913a666159bc972f4ff90aa5d88589', {
-            method: 'POST',
-            body: formData,
-          });
-          
-          if (response.ok) {
-            const result = await response.json();
-            resolve(result.data.url);
-          } else {
-            const errorText = await response.text();
-            console.error('Réponse ImgBB:', response.status, errorText);
-            reject(new Error('Échec de l\'upload vers ImgBB'));
-          }
-        } catch (error) {
-          console.error('Erreur upload ImgBB:', error);
-          reject(new Error('Impossible d\'uploader le fichier vers ImgBB'));
-        }
-      };
-      reader.onerror = () => reject(new Error('Erreur de lecture du fichier'));
-      reader.readAsDataURL(file);
-    });
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -349,42 +236,12 @@ const CanapeContactStep: React.FC<CanapeContactStepProps> = ({ selections, total
       `🔐 Code parrainage : Washgo`;
 
     try {
-      // Upload de TOUS les fichiers avec fallback
-      const photoLinks: string[] = [];
-      
-      if (photos.length > 0) {
-        for (const file of photos) {
-          try {
-            // Essayer ImgBB d'abord
-            const link = await uploadToImgBB(file);
-            photoLinks.push(link);
-          } catch (error) {
-            console.error('Erreur upload ImgBB, essai Cloudinary:', error);
-            try {
-              // Fallback vers Cloudinary
-              const link = await uploadToCloudinary(file);
-              photoLinks.push(link);
-            } catch (cloudinaryError) {
-              console.error('Erreur upload Cloudinary:', cloudinaryError);
-              // Continuer sans cette photo plutôt que d'échouer complètement
-              setError(`Photo ${file.name} non envoyée (erreur technique). Le formulaire sera envoyé sans cette image.`);
-              // On continue avec les autres photos
-            }
-          }
-        }
-      }
-      
-      // Ajouter les liens des photos au message (format compact)
-      let finalMessage = message;
-      if (photoLinks.length > 0) {
-        finalMessage += `\n\n📎 Photos (${photoLinks.length}) : ${photoLinks.join(' | ')}`;
-      }
 
       const formData = new FormData();
       formData.append('access_key', 'b1c483a3-32a0-4ab0-8382-f7b50840048f');
       formData.append('name', `${form.nom} ${form.prenom}`);
       formData.append('email', form.email);
-      formData.append('message', finalMessage);
+      formData.append('message', message);
 
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
@@ -395,7 +252,6 @@ const CanapeContactStep: React.FC<CanapeContactStepProps> = ({ selections, total
         setSuccess(true);
         setShowSuccessOverlay(true);
         setForm(initialForm);
-        setPhotos([]);
         setRgpd(false);
         setShowTimeSlots(false);
         if (typeof onReset === 'function') onReset();
@@ -527,67 +383,7 @@ const CanapeContactStep: React.FC<CanapeContactStepProps> = ({ selections, total
             {renderFieldError("timeSlot")}
           </div>
 
-          <div>
-            <label className="block text-sm font-semibold mb-2">
-              Photos de votre canapé (max 5) - Facultatif
-            </label>
-            <div
-              className="border-2 border-dashed border-gray-300 rounded-xl p-6 flex flex-col items-center justify-center gap-2 bg-gray-50 hover:bg-gray-100 transition cursor-pointer"
-              onClick={handlePhotoZoneClick}
-              style={{ minHeight: 120 }}
-            >
-              <ImagePlus className="w-8 h-8 text-[#0049ac] mb-2" />
-              <span className="text-xs text-gray-500 mb-1 text-center">
-                {photos.length === 0 
-                  ? "Cliquez ici pour ajouter jusqu'à 3 photos de votre canapé"
-                  : `${photos.length}/3 photos sélectionnées`
-                }
-              </span>
-              <span className="text-xs text-gray-400 text-center">
-                Formats acceptés : JPG, PNG, WebP (max 10MB par fichier, 30MB total)
-              </span>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/jpeg,image/jpg,image/png,image/webp"
-                multiple
-                onChange={handlePhotoChange}
-                className="w-full hidden"
-              />
-            </div>
-            {photos.length > 0 && (
-              <div className="mt-4">
-                <div className="flex flex-wrap gap-3">
-                  {photos.map((file, idx) => (
-                    <div key={idx} className="relative group">
-                      <img 
-                        src={URL.createObjectURL(file)} 
-                        alt={`Photo ${idx + 1}`} 
-                        className="w-24 h-24 object-cover rounded-lg shadow border"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removePhoto(idx)}
-                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 transition opacity-0 group-hover:opacity-100"
-                        title="Supprimer cette photo"
-                      >
-                        ×
-                      </button>
-                      <div className="text-xs text-gray-500 mt-1 text-center">
-                        {file.name.length > 15 ? file.name.substring(0, 12) + '...' : file.name}
-                      </div>
-                      <div className="text-xs text-gray-400 text-center">
-                        {(file.size / (1024 * 1024)).toFixed(1)} MB
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <p className="text-xs text-gray-500 mt-2">
-                  Les photos vous aideront à mieux évaluer l'état de votre canapé
-                </p>
-              </div>
-            )}
-          </div>
+          
 
           <div className="flex items-center gap-2 text-sm text-gray-700">
             <input type="checkbox" checked={rgpd} onChange={() => setRgpd(v => !v)} className="accent-[#0049ac] w-5 h-5" required />
@@ -605,17 +401,16 @@ const CanapeContactStep: React.FC<CanapeContactStepProps> = ({ selections, total
             {/* Bouton Réinitialiser à gauche */}
             <button
               type="button"
-              onClick={() => {
-                setForm(initialForm);
-                setPhotos([]);
-                setRgpd(false);
-                setError("");
-                setSuccess(false);
-                setShowTimeSlots(false);
-                setFieldErrors({}); // Clear field errors on reset
-                setIsSubmitted(false); // Reset submitted state
-                if (typeof onReset === 'function') onReset();
-              }}
+                             onClick={() => {
+                 setForm(initialForm);
+                 setRgpd(false);
+                 setError("");
+                 setSuccess(false);
+                 setShowTimeSlots(false);
+                 setFieldErrors({}); // Clear field errors on reset
+                 setIsSubmitted(false); // Reset submitted state
+                 if (typeof onReset === 'function') onReset();
+               }}
               className="flex items-center gap-2 bg-gray-100 text-gray-800 font-semibold rounded-lg px-4 py-2 shadow-sm hover:bg-gray-200 transition"
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5"><path fillRule="evenodd" d="M4.293 6.293a1 1 0 011.414 0L8 8.586V7a1 1 0 112 0v4a1 1 0 01-1 1H5a1 1 0 110-2h1.586l-2.293-2.293a1 1 0 010-1.414zM10 18a8 8 0 100-16 8 8 0 000 16zm0-2a6 6 0 110-12 6 6 0 010 12z" clipRule="evenodd" /></svg>
