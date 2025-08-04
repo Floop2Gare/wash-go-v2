@@ -61,7 +61,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onCTAClick, onContactClick })
               >
                 <span className="relative z-10 flex items-center space-x-2">
                   <MapPin className="w-4 h-4 sm:w-5 sm:h-5" />
-                  <span>Nous contacter et notre zone d'intervention</span>
+                  <span>Zone d’intervention & Contact</span>
                 </span>
               </motion.button>
             )}

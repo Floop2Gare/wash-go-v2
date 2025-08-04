@@ -107,11 +107,11 @@ const TimeSlotSelector: React.FC<TimeSlotSelectorProps> = ({
   if (availableSlots.length === 0) {
     return (
       <div className={`${className}`}>
-        <label className="block text-sm font-semibold mb-3 flex items-center gap-2">
-          <Clock className="w-4 h-4" />
+        <label className="block text-xs sm:text-sm font-semibold mb-2 sm:mb-3 flex items-center gap-2">
+          <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
           Créneaux disponibles pour {formatDuration(serviceDuration)}
         </label>
-        <p className="text-gray-500 text-sm">
+        <p className="text-gray-500 text-xs sm:text-sm">
           Aucun créneau disponible pour cette durée ({formatDuration(serviceDuration)}) sur cette date.
         </p>
       </div>
@@ -120,17 +120,17 @@ const TimeSlotSelector: React.FC<TimeSlotSelectorProps> = ({
 
   return (
     <div className={`${className}`}>
-      <label className="block text-sm font-semibold mb-3 flex items-center gap-2">
-        <Clock className="w-4 h-4" />
+      <label className="block text-xs sm:text-sm font-semibold mb-2 sm:mb-3 flex items-center gap-2">
+        <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
         Créneaux disponibles pour {formatDuration(serviceDuration)}
       </label>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-3">
         {availableSlots.map((slot, index) => (
           <button
             key={index}
             type="button"
             onClick={() => onSlotSelect(slot)}
-            className={`p-3 rounded-lg border text-sm font-medium transition ${
+            className={`p-2 sm:p-3 rounded-lg border text-xs sm:text-sm font-medium transition ${
               selectedSlot === `${slot.start}-${slot.end}`
                 ? "bg-[#0049ac] text-white border-[#0049ac]"
                 : "bg-white text-gray-700 border-gray-300 hover:border-[#0049ac] hover:bg-blue-50"
