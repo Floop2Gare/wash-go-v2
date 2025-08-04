@@ -43,75 +43,68 @@ export function truncateMessage(message: string, maxLength: number = 150): strin
   return truncated + '...';
 }
 
-// Données de test en cas d'échec de l'API
-const mockPosts: FacebookPost[] = [
+// Fallback minimal en cas d'échec total de l'API
+const fallbackPosts: FacebookPost[] = [
   {
-    id: '1',
-    message: 'Nouveau service de nettoyage de canapés disponible ! 🛋️✨\n\nProfitez de notre expertise pour redonner vie à vos canapés. Service disponible sur toute la région.\n\n📞 Contactez-nous pour un devis gratuit !',
-    full_picture: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop',
+    id: 'fallback',
+    message: 'Impossible de charger les publications Facebook pour le moment. Veuillez nous visiter directement sur Facebook pour voir nos dernières actualités.',
     permalink_url: 'https://www.facebook.com/profile.php?id=61571447229404',
-    created_time: '2024-01-15T10:30:00Z'
-  },
-  {
-    id: '2',
-    message: '🚗 Nettoyage intérieur de voiture professionnel !\n\nNous utilisons des produits de qualité pour un résultat impeccable. Votre véhicule mérite le meilleur !\n\n💯 Satisfaction garantie',
-    full_picture: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=400&h=300&fit=crop',
-    permalink_url: 'https://www.facebook.com/profile.php?id=61571447229404',
-    created_time: '2024-01-10T14:20:00Z'
-  },
-  {
-    id: '3',
-    message: '🎉 Promotion spéciale ce mois-ci !\n\n-20% sur le nettoyage complet intérieur/extérieur\n\nOffre valable jusqu\'à la fin du mois. Réservez vite !',
-    full_picture: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop',
-    permalink_url: 'https://www.facebook.com/profile.php?id=61571447229404',
-    created_time: '2024-01-05T09:15:00Z'
+    created_time: new Date().toISOString()
   }
 ];
 
 // Fonction principale pour récupérer les posts Facebook
 export async function fetchFacebookPosts(): Promise<FacebookPost[]> {
   try {
-    // Headers pour éviter les problèmes CORS
-    const headers: HeadersInit = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    };
-
-    const response = await fetch('https://backendtrue-5an1-git-main-floop2gares-projects.vercel.app/api/facebook-posts', {
+    console.log('Récupération des vraies publications Facebook...');
+    
+    const response = await fetch('https://backendtrue-5an1.vercel.app/api/facebook-posts', {
       method: 'GET',
-      headers,
-      mode: 'cors', // Explicitement activer CORS
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
     });
     
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      console.error('Erreur API Facebook:', response.status, errorData);
-      
-      // Gestion des erreurs spécifiques
-      if (response.status === 401) {
-        console.warn('Token Facebook expiré ou invalide - Utilisation des données de test');
-        return mockPosts;
-      } else if (response.status === 403) {
-        console.warn('Permissions insuffisantes - Utilisation des données de test');
-        return mockPosts;
-      } else if (response.status === 404) {
-        console.warn('Aucune publication trouvée - Utilisation des données de test');
-        return mockPosts;
-      } else if (response.status === 500) {
-        console.warn('Erreur serveur backend - Utilisation des données de test');
-        return mockPosts;
-      }
-      
-      console.warn(`Erreur ${response.status} - Utilisation des données de test`);
-      return mockPosts;
+      console.error(`Erreur API: ${response.status} - ${response.statusText}`);
+      throw new Error(`Erreur ${response.status}: ${response.statusText}`);
     }
     
     const data = await response.json();
-    return data.data; // L'API externe retourne { data: [...] }
+    console.log('Publications Facebook récupérées avec succès:', data);
+    
+    // Vérifier la structure des données et extraire les posts
+    let posts: FacebookPost[] = [];
+    
+    if (data && data.posts && Array.isArray(data.posts)) {
+      posts = data.posts;
+    } else if (data && Array.isArray(data)) {
+      posts = data;
+    } else if (data && data.data && Array.isArray(data.data)) {
+      posts = data.data;
+    } else {
+      console.warn('Structure de données inattendue:', data);
+      throw new Error('Format de données non reconnu');
+    }
+    
+    // Filtrer et formater les posts
+    const validPosts = posts
+      .filter(post => post && post.message && post.id)
+      .map(post => ({
+        id: post.id,
+        message: post.message,
+        full_picture: post.full_picture || undefined,
+        permalink_url: post.permalink_url || 'https://www.facebook.com/profile.php?id=61571447229404',
+        created_time: post.created_time || new Date().toISOString()
+      }));
+    
+    console.log(`${validPosts.length} publications valides trouvées`);
+    return validPosts;
+    
   } catch (error) {
     console.error('Erreur lors de la récupération des publications Facebook:', error);
-    console.warn('Utilisation des données de test en raison d\'une erreur de connexion');
-    return mockPosts;
+    console.warn('Utilisation du fallback minimal');
+    return fallbackPosts;
   }
 } 
