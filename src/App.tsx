@@ -13,6 +13,7 @@ import SocialMediaSection from "./components/Accueil/SocialSection/SocialMediaSe
 import PricingSection from "./components/Accueil/ChoixSection";
 import ContactSection from "./components/Accueil/ContactSection";
 import TestimonialsSection from "./components/Accueil/TestimonialsSection";
+import FacebookPosts from "./components/FacebookPosts";
 
 // — Pages
 import Voitures from "./components/voiture/page/Voitures";
@@ -41,6 +42,7 @@ const App: React.FC = () => {
               <main className="min-h-screen bg-white">
                 <HeroSection 
                   onCTAClick={() => scrollTo("choix-section")} 
+                  onContactClick={() => scrollTo("contact-section")}
                 />
                 <FeaturesSection onNextClick={() => scrollTo("social-section")} />
 
@@ -50,6 +52,10 @@ const App: React.FC = () => {
 
                 <section id="choix-section">
                   <PricingSection onContactClick={() => scrollTo("contact-section")} />
+                </section>
+
+                <section id="facebook-posts-section">
+                  <FacebookPosts />
                 </section>
 
                 <section id="contact-section">

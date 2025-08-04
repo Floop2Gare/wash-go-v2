@@ -1,4 +1,4 @@
-import { Facebook, Instagram } from "lucide-react";
+import { Facebook, Instagram, MapPin, CheckCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import React from "react";
 
@@ -9,6 +9,15 @@ const TikTokIcon = () => (
 );
 
 const ContactSection = () => {
+  const villes = [
+    "Aubagne", "Auriol", "Roquevaire", "La Destrousse", "Peypin",
+    "La Bouilladisse", "Belcodène", "Cadolive", "Saint-Savournin", "Mimet",
+    "Gréasque", "Gardanne", "Fuveau", "Meyreuil", "Rousset",
+    "Trets", "Peynier", "Châteauneuf-le-Rouge", "Pourcieux", "Pourrières",
+    "Saint-Zacharie", "Saint-Maximin-la-Sainte-Baume", "Gémenos", "Carnoux-en-Provence", "Allauch",
+    "Plan-de-Cuques", "Château-Gombert", "Bouc-Bel-Air", "Simiane-Collongue", "Cabriès"
+  ];
+
   return (
     <section id="contact" className="bg-white py-24">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -29,7 +38,7 @@ const ContactSection = () => {
         </motion.div>
 
         {/* Contenu principal */}
-        <div className="grid md:grid-cols-2 gap-10 items-start">
+        <div className="grid md:grid-cols-2 gap-10 items-start mb-20">
           {/* Infos dans un bloc cadré à gauche */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -39,9 +48,9 @@ const ContactSection = () => {
             className="bg-white border shadow-xl rounded-2xl p-8 space-y-6"
           >
             <div>
-              <h3 className="text-lg font-semibold text-[#0049ac]">Zone d'intervention</h3>
+              <h3 className="text-lg font-semibold text-[#0049ac]">Service mobile</h3>
               <p className="text-gray-700">
-                Fuveau et ses alentours
+                Nous nous déplaçons chez vous avec tout le matériel nécessaire
               </p>
             </div>
 
@@ -118,6 +127,63 @@ const ContactSection = () => {
             ></iframe>
           </motion.div>
         </div>
+
+        {/* Section des villes d'intervention - Design amélioré */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="max-w-6xl mx-auto"
+        >
+          {/* En-tête de la section */}
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-[#0049ac] to-blue-600 rounded-full flex items-center justify-center">
+                <MapPin className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-3xl font-bold text-gray-900">
+                Notre zone d'intervention
+              </h3>
+            </div>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Nous intervenons à domicile dans un large périmètre autour d'Aubagne et des Bouches-du-Rhône
+            </p>
+          </div>
+
+          {/* Grille des villes */}
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-3xl p-8 shadow-lg border border-blue-100">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              {villes.map((ville, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.3, delay: index * 0.02 }}
+                  className="bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105 border border-gray-100"
+                >
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    <span className="text-gray-700 text-sm font-medium leading-relaxed">
+                      {ville}
+                    </span>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Note finale */}
+            <div className="text-center mt-8 pt-6 border-t border-blue-200">
+              <p className="text-sm text-gray-600">
+                Et bien d'autres communes des Bouches-du-Rhône et du Var Sur Devis !
+              </p>
+              <p className="text-xs text-gray-500 mt-2">
+                Service mobile disponible dans votre secteur
+              </p>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

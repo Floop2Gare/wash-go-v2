@@ -1,12 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, MapPin } from 'lucide-react';
 
 interface HeroSectionProps {
   onCTAClick: () => void;
+  onContactClick?: () => void;
 }
 
-const HeroSection: React.FC<HeroSectionProps> = ({ onCTAClick }) => {
+const HeroSection: React.FC<HeroSectionProps> = ({ onCTAClick, onContactClick }) => {
   return (
     <section
       className="relative h-screen w-full bg-cover bg-center bg-no-repeat flex items-center justify-center px-4 sm:px-6 text-white text-center"
@@ -50,6 +51,20 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onCTAClick }) => {
                 <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-1" />
               </span>
             </motion.button>
+
+            {onContactClick && (
+              <motion.button
+                onClick={onContactClick}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="relative inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 font-semibold tracking-wide text-white rounded-full bg-transparent border-2 border-white shadow-lg group transition-all duration-300 hover:bg-white hover:text-gray-900 text-sm sm:text-base"
+              >
+                <span className="relative z-10 flex items-center space-x-2">
+                  <MapPin className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span>Nous contacter et notre zone d'intervention</span>
+                </span>
+              </motion.button>
+            )}
           </div>
         </motion.div>
       </div>

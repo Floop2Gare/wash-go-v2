@@ -1,23 +1,15 @@
 // src/main.tsx
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import App from './App';
-import './index.css';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App.tsx'
+import './index.css'
+import './styles/facebook-posts.css'
 
-// Point d'entrée principal de l'application
-const container = document.getElementById('root');
-
-if (!container) {
-  throw new Error(
-    "Élément #root introuvable dans le DOM. Vérifiez votre fichier index.html."
-  );
-}
-
-createRoot(container).render(
-  <StrictMode>
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
     <App />
-  </StrictMode>
-);
+  </React.StrictMode>,
+)
 
 // (optionnel) Log mode dev
 if (import.meta.env.DEV) {
