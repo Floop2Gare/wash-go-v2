@@ -26,6 +26,11 @@
 - **Service de secours** : Cloudinary (gratuit, plus fiable)
 - **Logique** : Si ImgBB échoue → Cloudinary → Continue sans photo
 
+### **5. Logique d'erreur ImgBB** ✅ CORRIGÉ
+- **Problème** : La fonction `uploadToImgBB` ne faisait pas de `reject()` en cas d'échec
+- **Solution** : Ajout de `reject()` et meilleur logging des erreurs
+- **Amélioration** : Affichage du status HTTP et du message d'erreur dans la console
+
 ---
 
 ## 🧪 **Tests à effectuer**

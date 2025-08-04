@@ -258,13 +258,13 @@ const CanapeContactStep: React.FC<CanapeContactStepProps> = ({ selections, total
             const result = await response.json();
             resolve(result.data.url);
           } else {
-            throw new Error('Échec de l\'upload vers ImgBB');
+            const errorText = await response.text();
+            console.error('Réponse ImgBB:', response.status, errorText);
+            reject(new Error('Échec de l\'upload vers ImgBB'));
           }
         } catch (error) {
           console.error('Erreur upload ImgBB:', error);
-          // Continuer sans cette photo plutôt que d'échouer complètement
-          setError(`Photo ${file.name} non envoyée (erreur technique). Le formulaire sera envoyé sans cette image.`);
-          // On continue avec les autres photos
+          reject(new Error('Impossible d\'uploader le fichier vers ImgBB'));
         }
       };
       reader.onerror = () => reject(new Error('Erreur de lecture du fichier'));
