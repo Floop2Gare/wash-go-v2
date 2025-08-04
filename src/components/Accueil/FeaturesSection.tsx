@@ -15,7 +15,7 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({ onNextClick }) => {
     >
       <div className="max-w-7xl mx-auto text-center">
         <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">
-          Pourquoi choisir <span className="text-blue-600">Wash&GO</span> ?
+          Pourquoi choisir <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Wash&GO</span> ?
         </h2>
         <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
           Pour les actifs, Wash&GO propose une expérience de nettoyage automobile haut de gamme,

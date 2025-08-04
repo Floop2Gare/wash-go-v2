@@ -31,7 +31,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onCTAClick, onContactClick })
           className="flex flex-col items-center space-y-4 sm:space-y-6"
         >
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-white drop-shadow-xl leading-tight">
-            La <span className="text-blue-500">Propreté</span> qui vient à vous !
+            La <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">Propreté</span> qui vient à vous !
           </h1>
 
           <p className="text-sm sm:text-base md:text-lg text-gray-200 max-w-xs sm:max-w-md md:max-w-2xl mx-auto drop-shadow px-2">
@@ -61,7 +61,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onCTAClick, onContactClick })
               >
                 <span className="relative z-10 flex items-center space-x-2">
                   <MapPin className="w-4 h-4 sm:w-5 sm:h-5" />
-                  <span>Zone d’intervention & Contact</span>
+                  <span>Zone d'intervention & Contact</span>
                 </span>
               </motion.button>
             )}

@@ -123,7 +123,7 @@ const ContactSection = () => {
           className="text-center mb-12 sm:mb-16 md:mb-20"
         >
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mb-3 sm:mb-4">
-            Contactez <span className="text-[#0049ac]">Wash&Go</span>
+            Contactez <span className="bg-gradient-to-r from-[#0049ac] to-indigo-600 bg-clip-text text-transparent">Wash&Go</span>
           </h2>
           <p className="text-base sm:text-lg text-gray-600 max-w-xl mx-auto">
             Une question, une demande&nbsp;? On est là pour vous aider à redonner vie à votre voiture.
