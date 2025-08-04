@@ -1,12 +1,5 @@
-const API_URL = 'https://node-js-api-graph.onrender.com/api/facebook/posts';
+// Ce fichier est maintenant remplacé par src/services/fetchFacebookPosts.ts
+// Importez depuis le nouveau service pour utiliser le backend local
 
-export async function fetchFacebookPosts() {
-  try {
-    const response = await fetch(API_URL);
-    const data = await response.json();
-    return data.data;
-  } catch (error) {
-    console.error('Erreur lors de la récupération des publications :', error);
-    return [];
-  }
-}
+import { fetchFacebookPosts } from '../services/fetchFacebookPosts';
+export { fetchFacebookPosts };

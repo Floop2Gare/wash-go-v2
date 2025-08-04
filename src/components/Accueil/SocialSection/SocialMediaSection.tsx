@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Facebook, ExternalLink } from 'lucide-react';
-import { fetchFacebookPosts } from "../../../data/fetchFacebookPosts";
+import { fetchFacebookPosts } from "../../../services/fetchFacebookPosts";
 
 const FACEBOOK_URL = "https://www.facebook.com/WashAndGo";
 
