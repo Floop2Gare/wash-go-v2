@@ -204,7 +204,39 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
     setPhotos(photos.filter((_, i) => i !== index));
   };
 
-  // Fonction pour uploader un fichier vers ImgBB
+  // Fonction de fallback avec Cloudinary (gratuit, plus fiable)
+  const uploadToCloudinary = async (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = async () => {
+        try {
+          const base64 = reader.result as string;
+          
+          const formData = new FormData();
+          formData.append('file', base64);
+          formData.append('upload_preset', 'ml_default'); // Preset public Cloudinary
+          
+          const response = await fetch('https://api.cloudinary.com/v1_1/demo/image/upload', {
+            method: 'POST',
+            body: formData,
+          });
+          
+          if (response.ok) {
+            const result = await response.json();
+            resolve(result.secure_url);
+          } else {
+            throw new Error('Échec de l\'upload vers Cloudinary');
+          }
+        } catch (error) {
+          console.error('Erreur upload Cloudinary:', error);
+          reject(new Error('Impossible d\'uploader le fichier vers Cloudinary'));
+        }
+      };
+      reader.onerror = () => reject(new Error('Erreur de lecture du fichier'));
+      reader.readAsDataURL(file);
+    });
+  };
+
   const uploadToImgBB = async (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -217,7 +249,7 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
           formData.append('image', base64Data);
           formData.append('expiration', '86400'); // 1 jour
           
-          const response = await fetch('https://api.imgbb.com/1/upload?key=913a76666159bc972f4ff90aa5d88589', {
+          const response = await fetch('https://api.imgbb.com/1/upload?key=913a666159bc972f4ff90aa5d88589', {
             method: 'POST',
             body: formData,
           });
@@ -230,7 +262,9 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
           }
         } catch (error) {
           console.error('Erreur upload ImgBB:', error);
-          reject(new Error('Impossible d\'uploader le fichier vers ImgBB'));
+          // Continuer sans cette photo plutôt que d'échouer complètement
+          setError(`Photo ${file.name} non envoyée (erreur technique). Le formulaire sera envoyé sans cette image.`);
+          // On continue avec les autres photos
         }
       };
       reader.onerror = () => reject(new Error('Erreur de lecture du fichier'));
@@ -314,26 +348,35 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
       `🔐 Code parrainage : Washgo`;
 
     try {
-      // Upload de TOUS les fichiers vers ImgBB
+      // Upload de TOUS les fichiers avec fallback
       const photoLinks: string[] = [];
       
       if (photos.length > 0) {
         for (const file of photos) {
           try {
+            // Essayer ImgBB d'abord
             const link = await uploadToImgBB(file);
             photoLinks.push(link);
           } catch (error) {
-            setError(`Impossible d'uploader ${file.name}. Veuillez réessayer.`);
-            setLoading(false);
-            return;
+            console.error('Erreur upload ImgBB, essai Cloudinary:', error);
+            try {
+              // Fallback vers Cloudinary
+              const link = await uploadToCloudinary(file);
+              photoLinks.push(link);
+            } catch (cloudinaryError) {
+              console.error('Erreur upload Cloudinary:', cloudinaryError);
+              // Continuer sans cette photo plutôt que d'échouer complètement
+              setError(`Photo ${file.name} non envoyée (erreur technique). Le formulaire sera envoyé sans cette image.`);
+              // On continue avec les autres photos
+            }
           }
         }
       }
       
-      // Ajouter les liens des photos au message
+      // Ajouter les liens des photos au message (format compact)
       let finalMessage = message;
       if (photoLinks.length > 0) {
-        finalMessage += `\n\n📎 Photos envoyées :\n\n${photoLinks.join('\n\n')}\n\n⚠️ Note : Ces liens sont valables 24h et ne peuvent être téléchargés qu'une seule fois.`;
+        finalMessage += `\n\n📎 Photos (${photoLinks.length}) : ${photoLinks.join(' | ')}`;
       }
 
       const formData = new FormData();
