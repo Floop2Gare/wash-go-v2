@@ -13,6 +13,18 @@ export default defineConfig({
     port: 5173,
     strictPort: false
   },
+  build: {
+    outDir: 'dist',
+    sourcemap: false,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          router: ['react-router-dom']
+        }
+      }
+    }
+  },
   logLevel: 'info',
   clearScreen: false
 });
