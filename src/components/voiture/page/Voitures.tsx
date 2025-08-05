@@ -170,9 +170,9 @@ export default function Voitures() {
 
           const props = i === 0 ? { onSelect: handleStepSelect(i, setAspiration), selected: aspiration?.value }
             : i === 1 ? { onSelect: handleStepSelect(i, setVehicule), selected: vehicule?.value }
-            : i === 2 ? { onSelect: handleStepSelect(i, setPressing), vehicleTypeId, selected: pressing.value } // ✅ MODIF
-            : i === 3 ? { onSelect: handleStepSelect(i, setOptions), selected: options.value } // ✅ MODIF
-            : i === 4 ? { onSelect: handleStepSelect(i, setExtras), selected: extras.value } // ✅ MODIF
+            : i === 2 ? { onSelect: handleStepSelect(i, setPressing), vehicleTypeId, selected: pressing.value }
+            : i === 3 ? { onSelect: handleStepSelect(i, setOptions), selected: options.value }
+            : i === 4 ? { onSelect: handleStepSelect(i, setExtras), selected: extras.value }
             : { selections, totalPrice, totalTime, onReset: handleReset };
 
           return (

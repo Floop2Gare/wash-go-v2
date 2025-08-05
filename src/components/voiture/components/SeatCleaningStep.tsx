@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { ArrowRight } from "lucide-react";
-import MobileFixedButton from "./MobileFixedButton";
 
 interface SeatCleaningStepProps {
   onSelect: (data: {
@@ -11,7 +10,7 @@ interface SeatCleaningStepProps {
   }) => void;
   nextSectionId?: string;
   vehicleTypeId?: string;
-  selected?: string[]; // ✅ Nouvelle prop
+  selected?: string[];
 }
 
 const options = [
@@ -42,7 +41,7 @@ const SeatCleaningStep: React.FC<SeatCleaningStepProps> = ({
   onSelect,
   nextSectionId,
   vehicleTypeId,
-  selected = [], // ✅ Valeur par défaut
+  selected = [],
 }) => {
   const [localSelected, setLocalSelected] = useState<string[]>(selected);
   const [loading, setLoading] = useState(false);
@@ -100,7 +99,7 @@ const SeatCleaningStep: React.FC<SeatCleaningStepProps> = ({
   };
 
   return (
-    <section className="w-full flex flex-col gap-10 font-[Outfit] pb-24 md:pb-0">
+    <section className="w-full flex flex-col gap-10 font-[Outfit]">
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {options.map((opt) => {
           const isActive = localSelected.includes(opt.value);
@@ -157,42 +156,22 @@ const SeatCleaningStep: React.FC<SeatCleaningStepProps> = ({
         {localSelected.length ? localSelected.join(", ") : <span className="text-gray-400 italic">Aucune zone sélectionnée</span>}
       </div>
 
-      {/* Bouton fixe mobile */}
-      <MobileFixedButton
-        selectedItems={localSelected}
-        onValidate={handleContinue}
-        onValidateWithoutOptions={handleValidateWithoutOptions}
-        loading={loading}
-        stepName="Pressing sièges"
-      />
-
-      {/* Desktop */}
-      <div className="hidden md:flex justify-center gap-4 mt-6">
+      {/* Boutons d'action - Responsive */}
+      <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mt-6">
         <button
           type="button"
           onClick={handleContinue}
           disabled={!localSelected.length || loading}
-          className={`flex items-center gap-2 px-8 py-3 rounded-xl font-bold text-white bg-[#0049ac] shadow-sm transition-all
+          className={`flex items-center justify-center gap-2 px-6 sm:px-8 py-3 rounded-xl font-bold text-white bg-[#0049ac] shadow-sm transition-all
             ${!localSelected.length || loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-800"}`}
         >
           Valider les sièges <ArrowRight className="w-5 h-5" />
         </button>
         <button
           type="button"
-          onClick={() => {
-            if (loading) return;
-            setLoading(true);
-            onSelect({ step: "Pressing sièges", value: [], price: 0, time: 0 });
-            setTimeout(() => {
-              setLoading(false);
-              if (nextSectionId) {
-                const next = document.getElementById(nextSectionId);
-                if (next) next.scrollIntoView({ behavior: "smooth" });
-              }
-            }, 200);
-          }}
+          onClick={handleValidateWithoutOptions}
           disabled={loading}
-          className="flex items-center gap-2 px-8 py-3 rounded-xl font-bold text-[#0049ac] bg-gray-100 shadow-sm transition-all hover:bg-gray-200"
+          className="flex items-center justify-center gap-2 px-6 sm:px-8 py-3 rounded-xl font-bold text-[#0049ac] bg-gray-100 shadow-sm transition-all hover:bg-gray-200"
         >
           Valider sans pressing
         </button>

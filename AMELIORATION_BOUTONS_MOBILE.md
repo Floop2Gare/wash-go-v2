@@ -2,11 +2,11 @@
 
 ## 🎯 **Objectif atteint**
 
-Amélioration de l'expérience utilisateur sur mobile pour les étapes 3, 4 et 5 de la page Voiture avec un système de bouton fixe adaptatif.
+Amélioration de l'expérience utilisateur sur mobile pour les étapes 3, 4 et 5 de la page Voiture et l'étape 3 de la page Canapé avec un système de bouton fixe adaptatif et **apparition progressive**.
 
 ## ✅ **Fonctionnalités implémentées**
 
-### 📱 **Comportement mobile (étapes 3, 4, 5)**
+### 📱 **Comportement mobile (Voiture: étapes 3, 4, 5 - Canapé: étape 3)**
 
 #### **Bouton fixe en bas à droite**
 - ✅ **Position** : Fixe en bas de l'écran (`fixed bottom-4 right-4 left-4`)
@@ -14,14 +14,15 @@ Amélioration de l'expérience utilisateur sur mobile pour les étapes 3, 4 et 5
 - ✅ **Responsive** : Visible uniquement sur mobile (`md:hidden`)
 
 #### **Libellé dynamique**
-- ✅ **Aucune sélection** : "Valider sans pressing/options/extras"
-- ✅ **Avec sélections** : "Valider les sièges/options/extras"
+- ✅ **Aucune sélection** : "Valider sans pressing/options/extras" (Voiture) / "Passer sans option" (Canapé)
+- ✅ **Avec sélections** : "Valider les sièges/options/extras" (Voiture) / "Valider avec options" (Canapé)
 - ✅ **Couleur adaptative** : Bleu avec sélections, gris sans
 
 #### **Logique de changement**
 - ✅ **Détection automatique** des sélections/désélections
 - ✅ **Mise à jour en temps réel** du libellé
 - ✅ **Gestion des états** de chargement
+- ✅ **Apparition progressive** : bouton visible uniquement à partir de l'étape 3
 
 ### 🖥️ **Maintien desktop**
 
@@ -39,19 +40,24 @@ interface MobileFixedButtonProps {
   onValidateWithoutOptions: () => void;
   loading: boolean;
   stepName: string;
+  isActive?: boolean; // ✅ Contrôle de l'affichage
 }
 ```
 
 ### **Intégration par étape**
-- **Étape 3** (`SeatCleaningStep`) : "Pressing sièges"
-- **Étape 4** (`SpecialOptionsStep`) : "Options spéciales"  
-- **Étape 5** (`ExtrasStep`) : "Extras"
+- **Voiture - Étape 3** (`SeatCleaningStep`) : "Pressing sièges"
+- **Voiture - Étape 4** (`SpecialOptionsStep`) : "Options spéciales"  
+- **Voiture - Étape 5** (`ExtrasStep`) : "Extras"
+- **Canapé - Étape 3** (`CanapeOptionsStep`) : "Options supplémentaires"
 
 ### **Gestion des états**
 ```tsx
 const hasSelections = selectedItems.length > 0;
 const buttonText = hasSelections ? "Valider les..." : "Valider sans...";
 const buttonColor = hasSelections ? "bg-[#0049ac]" : "bg-gray-600";
+
+// ✅ Contrôle de l'affichage
+if (!isActive) return null; // Ne s'affiche que si l'étape est active
 ```
 
 ## 📱 **Expérience utilisateur**
@@ -61,6 +67,7 @@ const buttonColor = hasSelections ? "bg-[#0049ac]" : "bg-gray-600";
 - ❌ Alignement à droite déséquilibré
 - ❌ Navigation peu fluide
 - ❌ Manque de cohérence visuelle
+- ❌ **Bouton fixe apparaît trop tôt** (dès le chargement de la page)
 
 ### **Après (amélioré)**
 - ✅ **Bouton fixe** toujours accessible
@@ -68,6 +75,7 @@ const buttonColor = hasSelections ? "bg-[#0049ac]" : "bg-gray-600";
 - ✅ **Libellé adaptatif** selon le contexte
 - ✅ **Couleur dynamique** pour feedback visuel
 - ✅ **Padding adapté** pour éviter l'occlusion
+- ✅ **Apparition progressive** : bouton visible uniquement à partir de l'étape 3
 
 ## 🎨 **Design et animations**
 
@@ -94,6 +102,8 @@ const buttonColor = hasSelections ? "bg-[#0049ac]" : "bg-gray-600";
 - ✅ **Désélection complète** → Retour à "Valider sans..."
 - ✅ **Changement d'étape** → Libellé adapté
 - ✅ **États de chargement** → Bouton désactivé
+- ✅ **Apparition progressive** → Bouton visible uniquement à partir de l'étape 3
+- ✅ **Navigation fluide** → Pas de bouton prématuré
 
 ### **Responsive**
 - ✅ **Mobile** : Bouton fixe visible
@@ -103,10 +113,12 @@ const buttonColor = hasSelections ? "bg-[#0049ac]" : "bg-gray-600";
 ## 🚀 **Déploiement**
 
 ### **Fichiers modifiés**
-- ✅ `MobileFixedButton.tsx` (nouveau composant)
-- ✅ `SeatCleaningStep.tsx` (étape 3)
-- ✅ `SpecialOptionsStep.tsx` (étape 4)
-- ✅ `ExtrasStep.tsx` (étape 5)
+- ✅ `shared/MobileFixedButton.tsx` (composant partagé + contrôle d'affichage)
+- ✅ `voiture/components/SeatCleaningStep.tsx` (étape 3 + prop isActive)
+- ✅ `voiture/components/SpecialOptionsStep.tsx` (étape 4 + prop isActive)
+- ✅ `voiture/components/ExtrasStep.tsx` (étape 5 + prop isActive)
+- ✅ `voiture/page/Voitures.tsx` (gestion de l'état actif)
+- ✅ `canape/components/CanapeOptionsStep.tsx` (étape 3)
 
 ### **Compatibilité**
 - ✅ **TypeScript** : Types stricts

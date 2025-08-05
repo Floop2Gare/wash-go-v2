@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { ArrowRight } from "lucide-react";
-import MobileFixedButton from "./MobileFixedButton";
 
 interface ExtrasStepProps {
   onSelect: (data: { step: string; value: string[]; price: number; time: number }) => void;
   nextSectionId?: string;
-  selected?: string[]; // ✅ Nouveau pour le contrôle externe
+  selected?: string[];
 }
 
 const options = [
@@ -88,7 +87,7 @@ const ExtrasStep: React.FC<ExtrasStepProps> = ({ onSelect, nextSectionId, select
   };
 
   return (
-    <section className="w-full flex flex-col gap-6 sm:gap-10 font-[Outfit] pb-24 md:pb-0">
+    <section className="w-full flex flex-col gap-6 sm:gap-10 font-[Outfit]">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
         {options.map((opt) => {
           const isActive = localSelected.includes(opt.value);
@@ -135,42 +134,22 @@ const ExtrasStep: React.FC<ExtrasStepProps> = ({ onSelect, nextSectionId, select
         {localSelected.length ? localSelected.join(", ") : <span className="text-gray-400 italic">Aucun extra sélectionné</span>}
       </div>
 
-      {/* Bouton fixe mobile */}
-      <MobileFixedButton
-        selectedItems={localSelected}
-        onValidate={handleContinue}
-        onValidateWithoutOptions={handleValidateWithoutOptions}
-        loading={loading}
-        stepName="Extras"
-      />
-
-      {/* Desktop */}
-      <div className="hidden md:flex justify-center gap-4 mt-6">
+      {/* Boutons d'action - Responsive */}
+      <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mt-6">
         <button
           type="button"
           onClick={handleContinue}
           disabled={!localSelected.length || loading}
-          className={`flex items-center gap-2 px-6 sm:px-8 py-3 rounded-xl font-bold text-white bg-[#0049ac] shadow-sm transition-all
+          className={`flex items-center justify-center gap-2 px-6 sm:px-8 py-3 rounded-xl font-bold text-white bg-[#0049ac] shadow-sm transition-all
             ${!localSelected.length || loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-800"}`}
         >
           Finaliser les extras <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
         <button
           type="button"
-          onClick={() => {
-            if (loading) return;
-            setLoading(true);
-            onSelect({ step: "Extras", value: [], price: 0, time: 0 });
-            setTimeout(() => {
-              setLoading(false);
-              if (nextSectionId) {
-                const next = document.getElementById(nextSectionId);
-                if (next) next.scrollIntoView({ behavior: "smooth" });
-              }
-            }, 200);
-          }}
+          onClick={handleValidateWithoutOptions}
           disabled={loading}
-          className="flex items-center gap-2 px-6 sm:px-8 py-3 rounded-xl font-bold text-[#0049ac] bg-gray-100 shadow-sm transition-all hover:bg-gray-200"
+          className="flex items-center justify-center gap-2 px-6 sm:px-8 py-3 rounded-xl font-bold text-[#0049ac] bg-gray-100 shadow-sm transition-all hover:bg-gray-200"
         >
           Finaliser sans extra
         </button>

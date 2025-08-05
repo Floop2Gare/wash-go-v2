@@ -65,6 +65,19 @@ const CanapeOptionsStep: React.FC<CanapeOptionsStepProps> = ({ onSelect, nextSec
     }, 200);
   };
 
+  const handleValidateWithoutOptions = () => {
+    if (loading) return;
+    setLoading(true);
+    onSelect({ step: "Options supplémentaires", value: [], price: 0, time: 0 });
+    setTimeout(() => {
+      setLoading(false);
+      if (nextSectionId) {
+        const next = document.getElementById(nextSectionId);
+        if (next) next.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 200);
+  };
+
   return (
     <section className="w-full flex flex-col gap-6 sm:gap-10 font-[Outfit]">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
@@ -113,65 +126,22 @@ const CanapeOptionsStep: React.FC<CanapeOptionsStepProps> = ({ onSelect, nextSec
         {localSelected.length ? localSelected.join(", ") : <span className="text-gray-400 italic">Aucune option sélectionnée</span>}
       </div>
 
-      {/* Mobile */}
-      <div className="grid grid-cols-2 gap-3 mt-6 md:hidden">
+      {/* Boutons d'action - Responsive */}
+      <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mt-6">
         <button
           type="button"
           onClick={handleContinue}
           disabled={!localSelected.length || loading}
-          className={`w-full flex-1 rounded-xl py-3 font-bold text-white bg-[#0049ac] shadow-sm text-sm sm:text-base flex items-center justify-center transition-all
-            ${!localSelected.length || loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-800"}`}
-        >
-          Valider avec options <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            if (loading) return;
-            setLoading(true);
-            onSelect({ step: "Options supplémentaires", value: [], price: 0, time: 0 });
-            setTimeout(() => {
-              setLoading(false);
-              if (nextSectionId) {
-                const next = document.getElementById(nextSectionId);
-                if (next) next.scrollIntoView({ behavior: "smooth" });
-              }
-            }, 200);
-          }}
-          disabled={loading}
-          className="w-full flex-1 rounded-xl py-3 font-bold text-[#0049ac] bg-gray-100 shadow-sm text-sm sm:text-base flex items-center justify-center transition-all hover:bg-gray-200"
-        >
-          Passer sans option
-        </button>
-      </div>
-
-      {/* Desktop */}
-      <div className="hidden md:flex justify-center gap-4 mt-6">
-        <button
-          type="button"
-          onClick={handleContinue}
-          disabled={!localSelected.length || loading}
-          className={`flex items-center gap-2 px-6 sm:px-8 py-3 rounded-xl font-bold text-white bg-[#0049ac] shadow-sm transition-all
+          className={`flex items-center justify-center gap-2 px-6 sm:px-8 py-3 rounded-xl font-bold text-white bg-[#0049ac] shadow-sm transition-all
             ${!localSelected.length || loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-800"}`}
         >
           Valider avec options <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
         <button
           type="button"
-          onClick={() => {
-            if (loading) return;
-            setLoading(true);
-            onSelect({ step: "Options supplémentaires", value: [], price: 0, time: 0 });
-            setTimeout(() => {
-              setLoading(false);
-              if (nextSectionId) {
-                const next = document.getElementById(nextSectionId);
-                if (next) next.scrollIntoView({ behavior: "smooth" });
-              }
-            }, 200);
-          }}
+          onClick={handleValidateWithoutOptions}
           disabled={loading}
-          className="flex items-center gap-2 px-6 sm:px-8 py-3 rounded-xl font-bold text-[#0049ac] bg-gray-100 shadow-sm transition-all hover:bg-gray-200"
+          className="flex items-center justify-center gap-2 px-6 sm:px-8 py-3 rounded-xl font-bold text-[#0049ac] bg-gray-100 shadow-sm transition-all hover:bg-gray-200"
         >
           Passer sans option
         </button>
