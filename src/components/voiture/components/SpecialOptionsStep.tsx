@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ArrowRight } from "lucide-react";
+import MobileFixedButton from "./MobileFixedButton";
 
 interface SpecialOptionsStepProps {
   onSelect: (data: { step: string; value: string[]; price: number; time: number }) => void;
@@ -72,8 +73,21 @@ const SpecialOptionsStep: React.FC<SpecialOptionsStepProps> = ({ onSelect, nextS
     }, 200);
   };
 
+  const handleValidateWithoutOptions = () => {
+    if (loading) return;
+    setLoading(true);
+    onSelect({ step: "Options spéciales", value: [], price: 0, time: 0 });
+    setTimeout(() => {
+      setLoading(false);
+      if (nextSectionId) {
+        const next = document.getElementById(nextSectionId);
+        if (next) next.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 200);
+  };
+
   return (
-    <section className="w-full flex flex-col gap-10 font-[Outfit]">
+    <section className="w-full flex flex-col gap-10 font-[Outfit] pb-24 md:pb-0">
       <div className="grid md:grid-cols-2 gap-6">
         {options.map((opt) => {
           const isChecked = localSelected.includes(opt.value);
@@ -119,37 +133,14 @@ const SpecialOptionsStep: React.FC<SpecialOptionsStepProps> = ({ onSelect, nextS
           : <span className="text-gray-400 italic">Aucune option sélectionnée</span>}
       </div>
 
-      {/* Boutons validation mobile */}
-      <div className="grid grid-cols-2 gap-3 mt-6 md:hidden">
-        <button
-          type="button"
-          onClick={handleContinue}
-          disabled={loading}
-          className={`w-full flex-1 rounded-xl py-3 font-bold text-white bg-[#0049ac] shadow-sm text-base flex items-center justify-center transition-all
-            ${loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-800"}`}
-        >
-          Valider les options <ArrowRight className="w-5 h-5 ml-2" />
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            if (loading) return;
-            setLoading(true);
-            onSelect({ step: "Options spéciales", value: [], price: 0, time: 0 });
-            setTimeout(() => {
-              setLoading(false);
-              if (nextSectionId) {
-                const next = document.getElementById(nextSectionId);
-                if (next) next.scrollIntoView({ behavior: "smooth" });
-              }
-            }, 200);
-          }}
-          disabled={loading}
-          className="w-full flex-1 rounded-xl py-3 font-bold text-[#0049ac] bg-gray-100 shadow-sm text-base flex items-center justify-center transition-all hover:bg-gray-200"
-        >
-          Valider sans options
-        </button>
-      </div>
+      {/* Bouton fixe mobile */}
+      <MobileFixedButton
+        selectedItems={localSelected}
+        onValidate={handleContinue}
+        onValidateWithoutOptions={handleValidateWithoutOptions}
+        loading={loading}
+        stepName="Options spéciales"
+      />
 
       {/* Desktop */}
       <div className="hidden md:flex justify-center gap-4 mt-6">
