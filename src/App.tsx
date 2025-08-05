@@ -11,7 +11,11 @@ import HeroSection from "./components/Accueil/HeroSection";
 import FeaturesSection from "./components/Accueil/FeaturesSection";
 import SocialMediaSection from "./components/Accueil/SocialSection/SocialMediaSection";
 import PricingSection from "./components/Accueil/ChoixSection";
-import ContactSection from "./components/Accueil/ContactSection";
+// — Ancienne version (conservée pour rollback)
+// import ContactSection from "./components/Accueil/ContactSection";
+
+// — Nouvelle version ultra-design
+import ContactSectionUltra from "./components/Accueil/ContactSectionUltra";
 import TestimonialsSection from "./components/Accueil/TestimonialsSection";
 
 // — Pages
@@ -54,7 +58,12 @@ const App: React.FC = () => {
                 </section>
 
                 <section id="contact-section">
+                  {/* — Nouvelle version ultra-design */}
+                  <ContactSectionUltra />
+                  
+                  {/* — Ancienne version (commentée pour rollback facile)
                   <ContactSection />
+                  */}
                 </section>
 
                 <TestimonialsSection />

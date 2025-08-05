@@ -98,9 +98,9 @@ Mise à jour des durées et tarifs sur la page Voiture pour refléter des durée
 - ✅ `VehicleTypeStep.tsx` : Tarifs SUV/4x4 et Utilitaire (+15€→+10€)
 - ✅ `SeatCleaningStep.tsx` : Durée sièges arrière (15→20 min)
 - ✅ `SpecialOptionsStep.tsx` : Durées et fusion Vitres/Pare-brise
-- ✅ `ExtrasStep.tsx` : Durées et réintégration "Véhicule très sale"
-- ✅ `TotalSummary.tsx` : Gestion des valeurs "À voir sur devis"
-- ✅ `Voitures.tsx` : Calculs adaptés pour les valeurs spéciales
+- ✅ `ExtrasStep.tsx` : Logique "Véhicule très sale" identique à "Hors gabarit"
+- ✅ `TotalSummary.tsx` : Types simplifiés (number uniquement)
+- ✅ `Voitures.tsx` : Calculs simplifiés (addition directe)
 
 ## 📊 **Impact sur les calculs**
 
@@ -131,6 +131,7 @@ Mise à jour des durées et tarifs sur la page Voiture pour refléter des durée
 - ✅ **Affichage durée** : Gestion des valeurs "À voir sur devis"
 - ✅ **Calculs dynamiques** : Éviter la concaténation string + number
 - ✅ **Résumé final** : Affichage propre des valeurs spéciales
+- ✅ **"Véhicule très sale"** : Logique identique à "Hors gabarit" (affichage spécial, calcul normal)
 
 ## 🧪 **Tests et validation**
 

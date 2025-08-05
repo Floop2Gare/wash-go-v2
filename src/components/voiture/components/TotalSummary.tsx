@@ -2,19 +2,14 @@ import React, { useState } from "react";
 import { Clock, Euro, X } from "lucide-react";
 
 interface TotalSummaryProps {
-  price: number | string;
-  time: number | string;
+  price: number;
+  time: number;
   onReset?: () => void;
   mobileOpen?: boolean;
   setMobileOpen?: (open: boolean) => void;
 }
 
-function formatTime(time: number | string): string {
-  if (typeof time === 'string') {
-    return time; // Retourne directement "À voir sur devis"
-  }
-  
-  const minutes = time;
+function formatTime(minutes: number): string {
   const h = Math.floor(minutes / 60);
   const m = minutes % 60;
   if (h && m) return `${h}h${m.toString().padStart(2, "0")}`;
@@ -40,11 +35,9 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
           <div className="space-y-1 sm:space-y-2 text-xs text-gray-700">
             <div className="flex items-center gap-2">
               <Euro size={14} className="sm:w-4 sm:h-4 text-[#0049ac]" />
-              <span>
-                Prix : <span className="font-bold text-[#0049ac]">
-                  {typeof price === 'number' ? `${price} €` : price}
+                              <span>
+                  Prix : <span className="font-bold text-[#0049ac]">{price} €</span>
                 </span>
-              </span>
             </div>
             <div className="flex items-center gap-2">
               <Clock size={14} className="sm:w-4 sm:h-4 text-[#0049ac]" />
@@ -84,9 +77,7 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
               <div className="flex items-center gap-2 justify-center">
                 <Euro size={14} className="sm:w-4 sm:h-4 text-[#0049ac]" />
                 <span>
-                  Prix : <span className="font-bold text-[#0049ac]">
-                    {typeof price === 'number' ? `${price} €` : price}
-                  </span>
+                  Prix : <span className="font-bold text-[#0049ac]">{price} €</span>
                 </span>
               </div>
               <div className="flex items-center gap-2 justify-center">

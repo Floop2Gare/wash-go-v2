@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ArrowRight } from "lucide-react";
 
 interface ExtrasStepProps {
-  onSelect: (data: { step: string; value: string[]; price: number | string; time: number | string }) => void;
+  onSelect: (data: { step: string; value: string[]; price: number; time: number }) => void;
   nextSectionId?: string;
   selected?: string[];
 }
@@ -58,26 +58,24 @@ const ExtrasStep: React.FC<ExtrasStepProps> = ({ onSelect, nextSectionId, select
     if (!localSelected.length) return;
     setLoading(true);
     
-    // Calcul du prix total en gérant les valeurs spéciales
+    // Calcul du prix total (comme "Hors gabarit" : afficher spécial mais calculer normal)
     const selectedOptions = options.filter((o) => localSelected.includes(o.value));
-    const hasSpecialPricing = selectedOptions.some(o => typeof o.price === 'string');
+    const totalPrice = selectedOptions.reduce((sum, o) => {
+      // Si l'option a un prix spécial, on l'ignore dans le calcul (comme "Hors gabarit")
+      if (typeof o.price === 'string') {
+        return sum; // Ne pas ajouter au total
+      }
+      return sum + o.price;
+    }, 0);
     
-    let totalPrice: number | string;
-    if (hasSpecialPricing) {
-      totalPrice = "À voir sur devis";
-    } else {
-      totalPrice = selectedOptions.reduce((sum, o) => sum + (o.price as number), 0);
-    }
-    
-    // Calcul du temps total en gérant les valeurs spéciales
-    const hasSpecialTime = selectedOptions.some(o => typeof o.time === 'string');
-    
-    let totalTime: number | string;
-    if (hasSpecialTime) {
-      totalTime = "À voir sur devis";
-    } else {
-      totalTime = selectedOptions.reduce((sum, o) => sum + (o.time as number), 0);
-    }
+    // Calcul du temps total (même logique)
+    const totalTime = selectedOptions.reduce((sum, o) => {
+      // Si l'option a un temps spécial, on l'ignore dans le calcul
+      if (typeof o.time === 'string') {
+        return sum; // Ne pas ajouter au total
+      }
+      return sum + o.time;
+    }, 0);
     
     onSelect({ step: "Extras", value: localSelected, price: totalPrice, time: totalTime });
     setTimeout(() => {
