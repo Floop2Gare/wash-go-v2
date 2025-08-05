@@ -14,7 +14,7 @@ const VILLES_DATA = {
     "Auriol", "Roquevaire", "La Destrousse", "La Bouilladisse", "Belcodène", "Cadolive", "Saint-Savournin",
     "Mimet", "Gréasque", "Gardanne", "Fuveau", "Meyreuil", "Rousset", "Trets", "Peynier", "Châteauneuf-le-Rouge",
     "Pourcieux", "Pourrières", "Plan-de-Cuques", "Château-Gombert", "Bouc-Bel-Air", "Simiane-Collongue",
-    "Cabriès", "Gémenos", "Carnoux-en-Provence", "Allauch", "Saint-Maximin-la-Sainte-Baume"
+    "Cabriès", "Gémenos", "Carnoux-en-Provence", "Allauch", "Saint-Maximin-la-Sainte-Baume","Peypin"
   ],
   deuxVehicules: [
     "Aubagne", "Saint-Zacharie", "Marseille"

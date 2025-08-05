@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { features } from "../../data/featuresdata";
 
 interface FeaturesSectionProps {
@@ -43,7 +44,7 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({ onNextClick }) => {
         ))}
       </div>
 
-      <div className="mt-16 text-center">
+      <div className="mt-16 text-center flex flex-col sm:flex-row gap-4 justify-center items-center">
         <motion.button
           onClick={onNextClick}
           whileHover={{ scale: 1.05 }}
@@ -53,6 +54,19 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({ onNextClick }) => {
           <span>Nos Résultats</span>
           <ArrowRight className="w-5 h-5 ml-2" />
         </motion.button>
+        
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <Link
+            to="/a-propos"
+            className="inline-flex items-center justify-center px-8 py-3 text-blue-600 font-semibold bg-white border-2 border-blue-600 rounded-full shadow-xl hover:bg-blue-50 hover:border-blue-700 transition duration-300"
+          >
+            <span>Découvrir notre vision</span>
+            <ArrowRight className="w-5 h-5 ml-2" />
+          </Link>
+        </motion.div>
       </div>
     </section>
   );

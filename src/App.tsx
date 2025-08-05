@@ -21,6 +21,7 @@ import TestimonialsSection from "./components/Accueil/TestimonialsSection";
 // — Pages
 import Voitures from "./components/voiture/page/Voitures";
 import Canapes from "./components/canape/page/Canapes";
+import Apropos from "./pages/Apropos";
 import MentionsLegales from "./pages/MentionsLegales";
 import PolitiqueCookies from "./pages/PolitiqueCookies";
 import RgpdPage from "./pages/RgpdPage";
@@ -77,6 +78,7 @@ const App: React.FC = () => {
         <Route path="/voitures" element={<Voitures />} />
         <Route path="/canapes" element={<Canapes />} />
         <Route path="/canapés" element={<Canapes />} />
+        <Route path="/a-propos" element={<Apropos />} />
         {/* Route produits supprimée */}
         <Route path="/mentions-legales" element={<MentionsLegales />} />
         <Route path="/politique-cookies" element={<PolitiqueCookies />} />
