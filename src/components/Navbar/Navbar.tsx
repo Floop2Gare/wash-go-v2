@@ -64,20 +64,20 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Mobile burger icon */}
+        {/* Mobile burger icon - Taille augmentée pour meilleure accessibilité */}
         <button
           onClick={() => setMenuOpen((prev) => !prev)}
-          className="md:hidden text-inherit focus:outline-none p-1 sm:p-2"
+          className="md:hidden text-inherit focus:outline-none p-2 sm:p-3 min-w-[44px] min-h-[44px] flex items-center justify-center"
           aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
         >
-          {menuOpen ? <X size={20} className="sm:w-6 sm:h-6" /> : <Menu size={20} className="sm:w-6 sm:h-6" />}
+          {menuOpen ? <X size={24} className="sm:w-7 sm:h-7" /> : <Menu size={24} className="sm:w-7 sm:h-7" />}
         </button>
       </div>
 
-      {/* Mobile navigation */}
+      {/* Mobile navigation - Zones de clic élargies */}
       {menuOpen && (
         <div
-          className="fixed inset-0 bg-black/90 backdrop-blur-sm z-40 flex flex-col items-center justify-center gap-6 sm:gap-8 text-white text-lg sm:text-xl font-semibold tracking-wide md:hidden transition-all"
+          className="fixed inset-0 bg-black/90 backdrop-blur-sm z-40 flex flex-col items-center justify-center gap-4 sm:gap-6 text-white text-lg sm:text-xl font-semibold tracking-wide md:hidden transition-all"
           role="dialog"
           aria-modal="true"
         >
@@ -89,7 +89,7 @@ export default function Navbar() {
                 navigate(to);
                 setMenuOpen(false);
               }}
-              className={`transition-colors px-4 sm:px-6 py-2 sm:py-3 rounded-lg ${
+              className={`transition-colors px-6 sm:px-8 py-4 sm:py-5 rounded-lg min-h-[48px] flex items-center justify-center w-full max-w-xs ${
                 location.pathname === to ? "text-blue-400 bg-blue-900/20" : "hover:text-blue-300 hover:bg-white/10"
               }`}
             >
@@ -97,13 +97,13 @@ export default function Navbar() {
             </Link>
           ))}
 
-          {/* Close icon top-right */}
+          {/* Close icon top-right - Zone de clic élargie */}
           <button
             onClick={() => setMenuOpen(false)}
-            className="absolute top-3 sm:top-4 right-3 sm:right-4 text-white p-1 sm:p-2"
+            className="absolute top-4 sm:top-6 right-4 sm:right-6 text-white p-2 sm:p-3 min-w-[44px] min-h-[44px] flex items-center justify-center"
             aria-label="Fermer le menu"
           >
-            <X size={20} className="sm:w-6 sm:h-6" />
+            <X size={24} className="sm:w-7 sm:h-7" />
           </button>
         </div>
       )}
