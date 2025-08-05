@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { CalendarDays, Send, AlertCircle } from "lucide-react";
 import TimeSlotSelector, { TimeSlot, generateTimeSlots, formatDuration } from "./TimeSlotSelector";
+import { sendEmailViaWeb3Forms, formatServiceRequest } from "../../../config/web3forms";
 
 interface ContactStepProps {
   selections: { step: string; value: string | string[] }[];
@@ -216,49 +217,29 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
       return `± ${m} min`;
     };
 
-    const message = `🚗 Nouvelle demande Wash&GO\n\n` +
-      `Aspiration : ${getValue("Aspiration")}\n` +
-      `Type de véhicule : ${getValue("Véhicule")}\n` +
-      `Sièges à nettoyer : ${getValue("Pressing sièges")}\n` +
-      `Options choisies : ${getValue("Options spéciales")}\n` +
-      `Spécificités : ${getValue("Extras")}\n` +
-      `Prix total : ${localTotalPrice} €\n` +
-      `Temps estimé : ${formatTime(localTotalTime)}\n\n` +
-      `📩 Contact client :\n` +
-      `Nom : ${form.nom} ${form.prenom}\n` +
-      `Téléphone : ${form.telephone}\n` +
-      `Email : ${form.email}\n` +
-      `Adresse : ${form.adresse}\n` +
-      `Date souhaitée : ${form.date}\n` +
-      `Créneau : ${form.timeSlot}\n` +
-      `Message perso : ${form.message || "-"}\n\n` +
-      `🔐 Code parrainage : Washgo`;
+    const message = formatServiceRequest('voiture', localSelections, localTotalPrice, localTotalTime, {
+      nom: form.nom,
+      prenom: form.prenom,
+      telephone: form.telephone,
+      email: form.email,
+      adresse: form.adresse,
+      date: form.date,
+      timeSlot: form.timeSlot,
+      message: form.message
+    });
 
     try {
-
-      const formData = new FormData();
-      formData.append('access_key', 'b1c483a3-32a0-4ab0-8382-f7b50840048f');
-      formData.append('name', `${form.nom} ${form.prenom}`);
-      formData.append('email', form.email);
-      formData.append('message', message);
-
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        body: formData,
-      });
+      await sendEmailViaWeb3Forms(`${form.nom} ${form.prenom}`, form.email, message);
       
-      if (response.ok) {
-        setSuccess(true);
-        setShowSuccessOverlay(true);
-        setForm(initialForm);
-        setRgpd(false);
-        setShowTimeSlots(false);
-        if (typeof onReset === 'function') onReset();
-      } else {
-        setError("Erreur lors de l'envoi, merci de réessayer.");
-      }
+      setSuccess(true);
+      setShowSuccessOverlay(true);
+      setForm(initialForm);
+      setRgpd(false);
+      setShowTimeSlots(false);
+      if (typeof onReset === 'function') onReset();
     } catch (err) {
-      setError("Erreur lors de l'envoi, merci de réessayer.");
+      console.error("Erreur lors de l'envoi:", err);
+      setError(err instanceof Error ? err.message : "Erreur lors de l'envoi, merci de réessayer.");
     } finally {
       setLoading(false);
     }
