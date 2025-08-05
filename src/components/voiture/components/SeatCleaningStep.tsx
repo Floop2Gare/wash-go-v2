@@ -24,8 +24,8 @@ const options = [
   {
     value: "Arrière",
     label: "Sièges arrière",
-    price: 15,
-    time: 15,
+    price: 10,
+    time: 20,
     img: "/voiture/pressing/arriere.jpg",
   },
   {

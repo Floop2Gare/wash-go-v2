@@ -2,14 +2,19 @@ import React, { useState } from "react";
 import { Clock, Euro, X } from "lucide-react";
 
 interface TotalSummaryProps {
-  price: number;
-  time: number;
+  price: number | string;
+  time: number | string;
   onReset?: () => void;
   mobileOpen?: boolean;
   setMobileOpen?: (open: boolean) => void;
 }
 
-function formatTime(minutes: number) {
+function formatTime(time: number | string): string {
+  if (typeof time === 'string') {
+    return time; // Retourne directement "À voir sur devis"
+  }
+  
+  const minutes = time;
   const h = Math.floor(minutes / 60);
   const m = minutes % 60;
   if (h && m) return `${h}h${m.toString().padStart(2, "0")}`;
@@ -36,7 +41,9 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
             <div className="flex items-center gap-2">
               <Euro size={14} className="sm:w-4 sm:h-4 text-[#0049ac]" />
               <span>
-                Prix : <span className="font-bold text-[#0049ac]">{price} €</span>
+                Prix : <span className="font-bold text-[#0049ac]">
+                  {typeof price === 'number' ? `${price} €` : price}
+                </span>
               </span>
             </div>
             <div className="flex items-center gap-2">
@@ -77,7 +84,9 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
               <div className="flex items-center gap-2 justify-center">
                 <Euro size={14} className="sm:w-4 sm:h-4 text-[#0049ac]" />
                 <span>
-                  Prix : <span className="font-bold text-[#0049ac]">{price} €</span>
+                  Prix : <span className="font-bold text-[#0049ac]">
+                    {typeof price === 'number' ? `${price} €` : price}
+                  </span>
                 </span>
               </div>
               <div className="flex items-center gap-2 justify-center">

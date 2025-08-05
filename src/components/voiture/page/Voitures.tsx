@@ -23,8 +23,8 @@ const steps = [
 ];
 
 export default function Voitures() {
-  const [aspiration, setAspiration] = useState(null);
-  const [vehicule, setVehicule] = useState(null);
+  const [aspiration, setAspiration] = useState<any>(null);
+  const [vehicule, setVehicule] = useState<any>(null);
   const [pressing, setPressing] = useState({ value: [], price: 0, time: 0 });
   const [options, setOptions] = useState({ value: [], price: 0, time: 0 });
   const [extras, setExtras] = useState({ value: [], price: 0, time: 0 });
@@ -52,8 +52,48 @@ export default function Voitures() {
     return () => observer.disconnect();
   }, []);
 
-  const totalPrice = (aspiration?.price || 0) + (vehicule?.price || 0) + pressing.price + options.price + extras.price;
-  const totalTime = (aspiration?.time || 0) + (vehicule?.time || 0) + pressing.time + options.time + extras.time;
+  // Calcul du prix total en gérant les valeurs spéciales
+  const calculateTotalPrice = () => {
+    const prices = [
+      aspiration?.price || 0,
+      vehicule?.price || 0,
+      pressing.price,
+      options.price,
+      extras.price
+    ];
+    
+    // Si une valeur est "À voir sur devis", retourner cette valeur
+    const hasSpecialPricing = prices.some(price => typeof price === 'string');
+    if (hasSpecialPricing) {
+      return "À voir sur devis";
+    }
+    
+    // Sinon, additionner les valeurs numériques
+    return prices.reduce((sum, price) => sum + (price as number), 0);
+  };
+
+  // Calcul du temps total en gérant les valeurs spéciales
+  const calculateTotalTime = () => {
+    const times = [
+      aspiration?.time || 0,
+      vehicule?.time || 0,
+      pressing.time,
+      options.time,
+      extras.time
+    ];
+    
+    // Si une valeur est "À voir sur devis", retourner cette valeur
+    const hasSpecialTime = times.some(time => typeof time === 'string');
+    if (hasSpecialTime) {
+      return "À voir sur devis";
+    }
+    
+    // Sinon, additionner les valeurs numériques
+    return times.reduce((sum, time) => sum + (time as number), 0);
+  };
+
+  const totalPrice = calculateTotalPrice();
+  const totalTime = calculateTotalTime();
 
   const selections = [
     aspiration ? { step: "Aspiration", value: aspiration.value } : null,

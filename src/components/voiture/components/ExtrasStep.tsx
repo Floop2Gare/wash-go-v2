@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ArrowRight } from "lucide-react";
 
 interface ExtrasStepProps {
-  onSelect: (data: { step: string; value: string[]; price: number; time: number }) => void;
+  onSelect: (data: { step: string; value: string[]; price: number | string; time: number | string }) => void;
   nextSectionId?: string;
   selected?: string[];
 }
@@ -12,28 +12,28 @@ const options = [
     value: "Poils animaux",
     label: "Poils animaux",
     price: 10,
-    time: 15,
+    time: 30,
     img: "/voiture/specific/poils.jpg",
   },
   {
     value: "Véhicule très sale",
     label: "Véhicule très sale",
-    price: 10,
-    time: 15,
+    price: "À voir sur devis",
+    time: "À voir sur devis",
     img: "/voiture/specific/tressale.jpg",
   },
   {
     value: "Shampoing sol",
     label: "Shampoing sol",
     price: 15,
-    time: 20,
+    time: 30,
     img: "/voiture/specific/moquettes.jpg",
   },
   {
     value: "Sous Coffre",
     label: "Sous Coffre",
     price: 10,
-    time: 10,
+    time: 15,
     img: "/voiture/specific/souscoffre.jpg",
   },
 ];
@@ -57,12 +57,28 @@ const ExtrasStep: React.FC<ExtrasStepProps> = ({ onSelect, nextSectionId, select
   const handleContinue = () => {
     if (!localSelected.length) return;
     setLoading(true);
-    const totalPrice = options
-      .filter((o) => localSelected.includes(o.value))
-      .reduce((sum, o) => sum + o.price, 0);
-    const totalTime = options
-      .filter((o) => localSelected.includes(o.value))
-      .reduce((sum, o) => sum + o.time, 0);
+    
+    // Calcul du prix total en gérant les valeurs spéciales
+    const selectedOptions = options.filter((o) => localSelected.includes(o.value));
+    const hasSpecialPricing = selectedOptions.some(o => typeof o.price === 'string');
+    
+    let totalPrice: number | string;
+    if (hasSpecialPricing) {
+      totalPrice = "À voir sur devis";
+    } else {
+      totalPrice = selectedOptions.reduce((sum, o) => sum + (o.price as number), 0);
+    }
+    
+    // Calcul du temps total en gérant les valeurs spéciales
+    const hasSpecialTime = selectedOptions.some(o => typeof o.time === 'string');
+    
+    let totalTime: number | string;
+    if (hasSpecialTime) {
+      totalTime = "À voir sur devis";
+    } else {
+      totalTime = selectedOptions.reduce((sum, o) => sum + (o.time as number), 0);
+    }
+    
     onSelect({ step: "Extras", value: localSelected, price: totalPrice, time: totalTime });
     setTimeout(() => {
       setLoading(false);
@@ -108,11 +124,15 @@ const ExtrasStep: React.FC<ExtrasStepProps> = ({ onSelect, nextSectionId, select
                 className="w-full h-40 sm:h-48 object-cover"
               />
               <div className="p-4 sm:p-5">
-                <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-base sm:text-lg font-semibold text-gray-900">{opt.label}</h3>
-                  <span className="text-[#0049ac] font-bold text-sm sm:text-base">+{opt.price}€</span>
-                </div>
-                <p className="text-xs text-gray-400 mb-3">Durée : {opt.time} min</p>
+                                 <div className="flex justify-between items-center mb-2">
+                   <h3 className="text-base sm:text-lg font-semibold text-gray-900">{opt.label}</h3>
+                   <span className="text-[#0049ac] font-bold text-sm sm:text-base">
+                     {typeof opt.price === 'number' ? `+${opt.price}€` : opt.price}
+                   </span>
+                 </div>
+                 <p className="text-xs text-gray-400 mb-3">
+                   Durée : {typeof opt.time === 'number' ? `${opt.time} min` : opt.time}
+                 </p>
                 <div className="mt-4">
                   <span
                     className={`inline-block px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors duration-300
