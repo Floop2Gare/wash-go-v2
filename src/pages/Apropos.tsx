@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import Navbar from "../components/Navbar/Navbar";
 import Footer from "../components/Accueil/Footer";
-import { Users, Target, Heart, Award, ArrowRight, Sparkles, Zap, MapPin } from "lucide-react";
+import { Users, Target, Heart, ArrowRight, Sparkles, Zap, MapPin } from "lucide-react";
 
 const Apropos: React.FC = () => {
   const scrollToTeam = () => {
@@ -119,9 +119,10 @@ const Apropos: React.FC = () => {
                     </span>
                   </h3>
                   <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-4 sm:mb-6">
-                    Clément, 21 ans, est étudiant en école d'agent immobilier et en alternance dans une agence immobilière. 
-                    Il a décidé de se lancer dans Wash&Go car il aime l'entrepreneuriat, et le fait de répondre à des besoins 
-                    concrets avec des solutions simples et efficaces.
+                    À 22 ans, Clément jongle entre ses études en école professionnelle de l'immobilier et son alternance en agence. 
+                    Cette double expérience lui a forgé un œil redoutable pour les détails et un vrai sens du contact humain. 
+                    Co-fondateur de Wash&Go, il est le moteur de nos opérations terrain : c'est lui qui s'assure que chaque client 
+                    vive une expérience impeccable. Son approche ? Allier l'exigence du secteur immobilier à la proximité du service à domicile.
                   </p>
                   <div className="flex items-center space-x-2 text-blue-600">
                     <Users className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -153,9 +154,10 @@ const Apropos: React.FC = () => {
                     </span>
                   </h3>
                   <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-4 sm:mb-6">
-                    Adrien, 20 ans, est étudiant à l'IUT d'Aix-Marseille en BUT Techniques de Commercialisation. 
-                    Il est en alternance dans une entreprise du bâtiment en tant que commercial. Passionné par l'entrepreneuriat, 
-                    il a co-fondé Wash&Go avec Clément pour développer un projet utile, professionnel, et formateur.
+                    Adrien, 20 ans, étudie les Techniques de Commercialisation à l'IUT d'Aix-Marseille tout en évoluant comme commercial 
+                    dans le secteur BTP. Cette immersion dans l'univers du bâtiment lui a donné une vision pragmatique des besoins clients. 
+                    Entrepreneur dans l'âme, il a imaginé Wash&Go comme bien plus qu'un simple service : une vraie révolution du nettoyage à domicile. 
+                    Son rôle ? Développer la stratégie commerciale et porter la vision long terme qui fera de Wash&Go la référence de demain.
                   </p>
                   <div className="flex items-center space-x-2 text-blue-600">
                     <Users className="w-4 h-4 sm:w-5 sm:h-5" />

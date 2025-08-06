@@ -13,6 +13,11 @@ const options = [
     path: '/canapes',
     image: '/accueil/canape.svg',
   },
+  {
+    label: 'Textiles',
+    path: '/textile',
+    image: '/accueil/canape.svg', // Réutilisation temporaire de l'image canapé
+  },
 ];
 
 const ChoixSection: React.FC = () => {
@@ -29,8 +34,8 @@ const ChoixSection: React.FC = () => {
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-8 sm:mb-12 px-2">
           Que souhaitez-vous faire ?
         </h2>
-        <div className="grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2 max-w-2xl sm:max-w-none mx-auto">
-          {options.map(({ label, path, image }, index) => (
+        <div className="grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-2xl lg:max-w-none mx-auto">
+          {options.map(({ label, path, image, description }, index) => (
             <motion.div
               key={label}
               initial={{ opacity: 0, y: 20 }}
@@ -45,7 +50,12 @@ const ChoixSection: React.FC = () => {
                 alt={`Icône ${label}`}
                 className="h-32 sm:h-36 md:h-42 w-auto mb-4 sm:mb-6 object-contain scale-110"
               />
-              <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-800">{label}</h3>
+              <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-800 mb-2">{label}</h3>
+              {description && (
+                <p className="text-sm sm:text-base text-gray-600 text-center px-2">
+                  {description}
+                </p>
+              )}
             </motion.div>
           ))}
         </div>

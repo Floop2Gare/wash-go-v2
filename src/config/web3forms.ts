@@ -77,7 +77,7 @@ export const sendEmailViaWeb3Forms = async (
 
 // Fonction pour formater un message de demande de service
 export const formatServiceRequest = (
-  serviceType: 'voiture' | 'canape',
+  serviceType: 'voiture' | 'canape' | 'textile',
   selections: { step: string; value: string | string[] }[],
   totalPrice: number,
   totalTime: number,
@@ -110,8 +110,8 @@ export const formatServiceRequest = (
     return `± ${m} min`;
   };
 
-  const emoji = serviceType === 'voiture' ? '🚗' : '🛋️';
-  const serviceName = serviceType === 'voiture' ? 'Voiture' : 'Canapé';
+  const emoji = serviceType === 'voiture' ? '🚗' : serviceType === 'canape' ? '🛋️' : '🧺';
+  const serviceName = serviceType === 'voiture' ? 'Voiture' : serviceType === 'canape' ? 'Canapé' : 'Textile';
 
   let message = `${emoji} Nouvelle demande Wash&GO ${serviceName}\n\n`;
 
@@ -121,9 +121,27 @@ export const formatServiceRequest = (
     message += `Sièges à nettoyer : ${getValue("Pressing sièges")}\n`;
     message += `Options choisies : ${getValue("Options spéciales")}\n`;
     message += `Spécificités : ${getValue("Extras")}\n`;
-  } else {
+  } else if (serviceType === 'canape') {
     message += `Type de tissu : ${getValue("Type de tissu")}\n`;
     message += `Nombre de places : ${getValue("Nombre de places")}\n`;
+    message += `Options supplémentaires : ${getValue("Options supplémentaires")}\n`;
+  } else {
+    message += `Type de textile : ${getValue("Type de textile")}\n`;
+    
+    // Gérer les différents cas selon le type de textile
+    const textileType = getValue("Type de textile");
+    if (textileType === "Matelas") {
+      message += `Taille du matelas : ${getValue("Taille du matelas")}\n`;
+    } else if (textileType === "Chaises") {
+      message += `Nombre de chaises : ${getValue("Nombre de chaises")}\n`;
+      message += `Matière des chaises : ${getValue("Matière des chaises")}\n`;
+    } else if (textileType === "Tapis") {
+      message += `Surface du tapis : ${getValue("Surface du tapis")}\n`;
+      message += `Matière : ${getValue("Matière")}\n`;
+    } else {
+      message += `Matière : ${getValue("Matière")}\n`;
+    }
+    
     message += `Options supplémentaires : ${getValue("Options supplémentaires")}\n`;
   }
 

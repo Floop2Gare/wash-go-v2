@@ -5,8 +5,9 @@ import { Menu, X } from "lucide-react";
 const navLinks = [
   { to: "/", label: "Accueil" },
   { to: "/voitures", label: "Voitures" },
-  { to: "/canapes", label: "Canapés" },
-  { to: "/a-propos", label: "À propos" },
+      { to: "/canapes", label: "Canapés" },
+    { to: "/textile", label: "Textile" },
+    { to: "/a-propos", label: "À propos" },
 ];
 
 export default function Navbar() {
