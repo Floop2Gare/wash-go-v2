@@ -1,165 +1,190 @@
-import { Facebook, Instagram } from 'lucide-react';
+import { Facebook, Instagram, Phone, Mail, MapPin, Clock } from 'lucide-react';
 import { SiTiktok } from 'react-icons/si';
 import React from 'react';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-[#0F52BA] text-white py-8 sm:py-10 md:py-12 px-4 sm:px-6 md:px-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Version mobile - centrée */}
-        <div className="md:hidden text-center space-y-6">
-          {/* Réseaux sociaux */}
-          <div>
-            <h4 className="text-lg font-bold mb-4">Suivez-nous</h4>
-            <div className="flex flex-col items-center space-y-3">
-              <a
-                href="https://www.facebook.com/profile.php?id=61571447229404"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Wash&GO sur Facebook"
-                className="flex items-center gap-3 hover:text-gray-300 transition text-base"
-              >
-                <Facebook className="h-5 w-5" />
-                <span>Facebook</span>
-              </a>
-              <a
-                href="https://www.instagram.com/washandgo13/"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Wash&GO sur Instagram"
-                className="flex items-center gap-3 hover:text-gray-300 transition text-base"
-              >
-                <Instagram className="h-5 w-5" />
-                <span>Instagram</span>
-              </a>
-              <a
-                href="https://www.tiktok.com/@washandgo13"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Wash&GO sur TikTok"
-                className="flex items-center gap-3 hover:text-gray-300 transition text-base"
-              >
-                <SiTiktok className="h-5 w-5" />
-                <span>TikTok</span>
-              </a>
+    <footer className="bg-[#0049ac] text-white">
+      {/* Section principale */}
+      <div className="py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          {/* Grille principale */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+            
+            {/* Logo et description */}
+            <div className="lg:col-span-1">
+              <div className="flex items-center mb-4">
+                <img 
+                  src="/logo/logophrase.svg" 
+                  alt="Wash & Go" 
+                  className="h-8 w-auto filter brightness-0 invert"
+                />
+              </div>
+              <p className="text-sm text-gray-200 mb-4 leading-relaxed">
+                Service de nettoyage professionnel à domicile dans les Bouches-du-Rhône. 
+                Spécialisés dans le nettoyage de véhicules et canapés.
+              </p>
+              <div className="flex items-center text-sm text-gray-200">
+                <MapPin className="h-4 w-4 mr-2 flex-shrink-0" />
+                <span>Intervention à domicile dans les Bouches-du-Rhône</span>
+              </div>
             </div>
-          </div>
 
-          {/* Séparateur visuel */}
-          <div className="w-16 h-px bg-white/30 mx-auto"></div>
+            {/* Contact */}
+            <div>
+              <h3 className="text-lg font-bold mb-6 text-white">Contact</h3>
+              <div className="space-y-4">
+                {/* Adrien */}
+                <div className="flex items-start space-x-3">
+                  <div className="bg-white/10 rounded-full p-2 flex-shrink-0">
+                    <Phone className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm">Adrien</p>
+                    <a 
+                      href="tel:0612345678" 
+                      className="text-sm text-gray-200 hover:text-white transition-colors"
+                    >
+                      06 12 34 56 78
+                    </a>
+                  </div>
+                </div>
 
-          {/* Liens légaux */}
-          <div>
-            <h4 className="text-lg font-bold mb-4">Informations</h4>
-            <ul className="space-y-2">
-              <li>
+                {/* Clément */}
+                <div className="flex items-start space-x-3">
+                  <div className="bg-white/10 rounded-full p-2 flex-shrink-0">
+                    <Phone className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm">Clément</p>
+                    <a 
+                      href="tel:0623034700" 
+                      className="text-sm text-gray-200 hover:text-white transition-colors"
+                    >
+                      06 23 03 47 00
+                    </a>
+                  </div>
+                </div>
+
+                {/* Email */}
+                <div className="flex items-start space-x-3">
+                  <div className="bg-white/10 rounded-full p-2 flex-shrink-0">
+                    <Mail className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <a 
+                      href="mailto:contact@washandgo.fr" 
+                      className="text-sm text-gray-200 hover:text-white transition-colors"
+                    >
+                      contact@washandgo.fr
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Horaires */}
+            <div>
+              <h3 className="text-lg font-bold mb-6 text-white">Horaires</h3>
+              <div className="flex items-start space-x-3 mb-4">
+                <div className="bg-white/10 rounded-full p-2 flex-shrink-0">
+                  <Clock className="h-4 w-4" />
+                </div>
+                <div className="space-y-2 text-sm text-gray-200">
+                  <div>
+                    <p className="font-medium">Lundi - Vendredi</p>
+                    <p>8h00 - 19h00</p>
+                  </div>
+                  <div>
+                    <p className="font-medium">Samedi</p>
+                    <p>9h00 - 17h00</p>
+                  </div>
+                  <div>
+                    <p className="font-medium">Dimanche</p>
+                    <p>Sur rendez-vous</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Réseaux sociaux et liens légaux */}
+            <div>
+              <h3 className="text-lg font-bold mb-6 text-white">Suivez-nous</h3>
+              <div className="space-y-3 mb-6">
                 <a
-                  href="/mentions-legales"
+                  href="https://www.facebook.com/profile.php?id=61571447229404"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline hover:text-gray-300 transition text-sm"
+                  aria-label="Wash&GO sur Facebook"
+                  className="flex items-center space-x-3 hover:text-gray-300 transition-colors text-sm"
                 >
-                  Mentions légales
+                  <Facebook className="h-4 w-4" />
+                  <span>Facebook</span>
                 </a>
-              </li>
-              <li>
                 <a
-                  href="/politique-cookies"
+                  href="https://www.instagram.com/washandgo13/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline hover:text-gray-300 transition text-sm"
+                  aria-label="Wash&GO sur Instagram"
+                  className="flex items-center space-x-3 hover:text-gray-300 transition-colors text-sm"
                 >
-                  Politique de cookies
+                  <Instagram className="h-4 w-4" />
+                  <span>Instagram</span>
                 </a>
-              </li>
-              <li>
                 <a
-                  href="/rgpd"
+                  href="https://www.tiktok.com/@washandgo13"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline hover:text-gray-300 transition text-sm"
+                  aria-label="Wash&GO sur TikTok"
+                  className="flex items-center space-x-3 hover:text-gray-300 transition-colors text-sm"
                 >
-                  Respect du RGPD
+                  <SiTiktok className="h-4 w-4" />
+                  <span>TikTok</span>
                 </a>
-              </li>
-            </ul>
+              </div>
+
+              <h4 className="text-sm font-bold mb-3 text-white">Informations légales</h4>
+              <ul className="space-y-2 text-xs">
+                <li>
+                  <a
+                    href="/mentions-legales"
+                    className="text-gray-200 hover:text-white transition-colors"
+                  >
+                    Mentions légales
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/politique-cookies"
+                    className="text-gray-200 hover:text-white transition-colors"
+                  >
+                    Politique de cookies
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/rgpd"
+                    className="text-gray-200 hover:text-white transition-colors"
+                  >
+                    Respect du RGPD
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
+      </div>
 
-        {/* Version desktop - grille */}
-        <div className="hidden md:grid md:grid-cols-2 gap-8 lg:gap-12">
-          {/* Réseaux sociaux */}
-          <div>
-            <h4 className="text-lg font-bold mb-3">Suivez-nous</h4>
-            <div className="flex flex-row gap-6 items-center">
-              <a
-                href="https://www.facebook.com/profile.php?id=61571447229404"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Wash&GO sur Facebook"
-                className="flex items-center gap-2 hover:text-gray-300 transition text-base"
-              >
-                <Facebook className="h-5 w-5" />
-                <span>Facebook</span>
-              </a>
-              <a
-                href="https://www.instagram.com/washandgo13/"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Wash&GO sur Instagram"
-                className="flex items-center gap-2 hover:text-gray-300 transition text-base"
-              >
-                <Instagram className="h-5 w-5" />
-                <span>Instagram</span>
-              </a>
-              <a
-                href="https://www.tiktok.com/@washandgo13"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Wash&GO sur TikTok"
-                className="flex items-center gap-2 hover:text-gray-300 transition text-base"
-              >
-                <SiTiktok className="h-5 w-5" />
-                <span>TikTok</span>
-              </a>
-            </div>
-          </div>
-
-          {/* Liens légaux */}
-          <div>
-            <h4 className="text-lg font-bold mb-3">Informations</h4>
-            <ul className="text-sm space-y-2">
-              <li>
-                <a
-                  href="/mentions-legales"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline hover:text-gray-300 transition"
-                >
-                  Mentions légales
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/politique-cookies"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline hover:text-gray-300 transition"
-                >
-                  Politique de cookies
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/rgpd"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline hover:text-gray-300 transition"
-                >
-                  Respect du RGPD
-                </a>
-              </li>
-            </ul>
+      {/* Barre de copyright */}
+      <div className="border-t border-white/20 bg-[#003d8f] py-4 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
+            <p className="text-xs text-gray-200 text-center sm:text-left">
+              © 2024 Wash & Go. Tous droits réservés.
+            </p>
+            <p className="text-xs text-gray-200 text-center sm:text-right">
+              Intervention à domicile dans les Bouches-du-Rhône
+            </p>
           </div>
         </div>
       </div>

@@ -55,6 +55,7 @@ const CanapeOptionsStep: React.FC<CanapeOptionsStepProps> = ({ onSelect, nextSec
     const totalTime = options
       .filter((o) => localSelected.includes(o.value))
       .reduce((sum, o) => sum + o.time, 0);
+    
     onSelect({ step: "Options supplémentaires", value: localSelected, price: totalPrice, time: totalTime });
     setTimeout(() => {
       setLoading(false);
@@ -68,6 +69,7 @@ const CanapeOptionsStep: React.FC<CanapeOptionsStepProps> = ({ onSelect, nextSec
   const handleValidateWithoutOptions = () => {
     if (loading) return;
     setLoading(true);
+    
     onSelect({ step: "Options supplémentaires", value: [], price: 0, time: 0 });
     setTimeout(() => {
       setLoading(false);

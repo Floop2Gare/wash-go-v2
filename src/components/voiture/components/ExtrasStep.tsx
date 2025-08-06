@@ -90,6 +90,7 @@ const ExtrasStep: React.FC<ExtrasStepProps> = ({ onSelect, nextSectionId, select
   const handleValidateWithoutOptions = () => {
     if (loading) return;
     setLoading(true);
+    
     onSelect({ step: "Extras", value: [], price: 0, time: 0 });
     setTimeout(() => {
       setLoading(false);

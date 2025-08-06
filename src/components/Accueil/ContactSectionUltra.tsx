@@ -156,30 +156,88 @@ const ContactSectionUltra = () => {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="lg:col-span-1 flex flex-col h-full gap-4"
           >
-            {/* Phone Card - Padding réduit */}
-            <motion.div
-              whileHover={{ y: -3, scale: 1.01 }}
-              transition={{ duration: 0.3 }}
-              className="bg-white rounded-2xl p-5 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 flex-shrink-0"
-            >
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <Phone className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-gray-900">Téléphone</h3>
-                  <p className="text-xs text-gray-600">Service client</p>
-                </div>
-              </div>
-              <p className="text-xl font-bold text-gray-900 mb-3">06 22 70 60 00</p>
-              <a
-                href="tel:0622706000"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-semibold hover:from-green-600 hover:to-emerald-700 transition-all duration-300 shadow-lg hover:shadow-xl text-sm"
-              >
-                Appeler maintenant
-                <ArrowRight className="w-4 h-4" />
-              </a>
-            </motion.div>
+                         {/* Phone Card - Design amélioré */}
+             <motion.div
+               whileHover={{ y: -3, scale: 1.02 }}
+               transition={{ duration: 0.3 }}
+               className="bg-gradient-to-br from-white to-gray-50 rounded-2xl p-6 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 flex-shrink-0 relative overflow-hidden"
+             >
+               {/* Background decorative elements */}
+               <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-green-400/20 to-emerald-500/20 rounded-full -translate-y-10 translate-x-10"></div>
+               <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-blue-400/20 to-indigo-500/20 rounded-full translate-y-8 -translate-x-8"></div>
+               
+               <div className="relative z-10">
+                 <div className="flex items-center gap-3 mb-4">
+                   <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg relative">
+                     <Phone className="w-6 h-6 text-white" />
+                     <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-xl"></div>
+                   </div>
+                   <div>
+                     <h3 className="text-lg font-bold text-gray-900">Téléphone</h3>
+                     <p className="text-sm text-gray-600">Service client disponible</p>
+                   </div>
+                 </div>
+                 
+                 <div className="space-y-3 mb-4">
+                   <motion.div 
+                     className="bg-white rounded-xl p-3 border border-gray-200 hover:border-green-300 transition-all duration-300 hover:shadow-md"
+                     whileHover={{ scale: 1.02 }}
+                     transition={{ duration: 0.2 }}
+                   >
+                     <div className="flex items-center justify-between">
+                       <div className="flex items-center gap-2">
+                         <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                         <span className="text-sm font-semibold text-gray-700">Adrien</span>
+                       </div>
+                       <a 
+                         href="tel:0622706000" 
+                         className="text-lg font-bold text-gray-900 hover:text-green-600 transition-colors flex items-center gap-1 group"
+                       >
+                         06 22 70 60 00
+                         <Phone className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                       </a>
+                     </div>
+                   </motion.div>
+                   
+                   <motion.div 
+                     className="bg-white rounded-xl p-3 border border-gray-200 hover:border-blue-300 transition-all duration-300 hover:shadow-md"
+                     whileHover={{ scale: 1.02 }}
+                     transition={{ duration: 0.2 }}
+                   >
+                     <div className="flex items-center justify-between">
+                       <div className="flex items-center gap-2">
+                         <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                         <span className="text-sm font-semibold text-gray-700">Clément</span>
+                       </div>
+                       <a 
+                         href="tel:0623034700" 
+                         className="text-lg font-bold text-gray-900 hover:text-blue-600 transition-colors flex items-center gap-1 group"
+                       >
+                         06 23 03 47 00
+                         <Phone className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                       </a>
+                     </div>
+                   </motion.div>
+                 </div>
+                 
+                 <div className="flex gap-2">
+                   <a
+                     href="tel:0622706000"
+                     className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-semibold hover:from-green-600 hover:to-emerald-700 transition-all duration-300 shadow-lg hover:shadow-xl text-sm group"
+                   >
+                     <Phone className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                     Appeler Adrien
+                   </a>
+                   <a
+                     href="tel:0623034700"
+                     className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl font-semibold hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl text-sm group"
+                   >
+                     <Phone className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                     Appeler Clément
+                   </a>
+                 </div>
+               </div>
+             </motion.div>
 
             {/* Email Card - Alignement cohérent */}
             <motion.div

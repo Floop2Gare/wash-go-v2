@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { CalendarDays, Send, AlertCircle } from "lucide-react";
+import { motion } from "framer-motion";
 import TimeSlotSelector, { TimeSlot, generateTimeSlots, formatDuration } from "../../voiture/components/TimeSlotSelector";
 import { sendEmailViaWeb3Forms, formatServiceRequest } from "../../../config/web3forms";
 
@@ -260,154 +261,426 @@ const CanapeContactStep: React.FC<CanapeContactStepProps> = ({ selections, total
   const displayPhone = form.telephone.replace(/\D/g, "").replace(/(\d{2})(?=\d)/g, "$1 ").trim();
 
   return (
-    <section className="py-20 px-4 sm:px-8 bg-gradient-to-b from-gray-50 to-white">
-      {/* Overlay de succès */}
+    <section className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-12 px-4 sm:px-6 lg:px-8">
+      {/* Overlay de succès amélioré */}
       {showSuccessOverlay && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur bg-black/30">
-          <div className="bg-white rounded-2xl shadow-2xl px-8 py-10 max-w-md w-full text-center relative animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md bg-black/40">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-3xl shadow-2xl px-8 py-12 max-w-md w-full text-center relative"
+          >
             <button
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-3xl font-bold focus:outline-none transition-colors duration-200 hover:scale-110"
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl font-light focus:outline-none transition-colors duration-200 hover:scale-110"
               onClick={() => setShowSuccessOverlay(false)}
               aria-label="Fermer"
             >
               ×
             </button>
-            <svg className="mx-auto mb-4" width="48" height="48" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#e0f7fa"/><path d="M7 13l3 3 7-7" stroke="#009688" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            <h2 className="text-2xl font-bold text-[#0049ac] mb-2">Message envoyé !</h2>
-            <p className="text-gray-700 mb-6">Nous vous recontacterons sous peu.</p>
             
-            {/* Bouton Fermer en bas */}
+            {/* Animation de succès */}
+            <div className="mb-6">
+              <div className="mx-auto w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-600 rounded-full flex items-center justify-center mb-4">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+            </div>
+            
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Demande envoyée !</h2>
+            <p className="text-gray-600 mb-8">Nous vous recontacterons dans les plus brefs délais pour confirmer votre rendez-vous.</p>
+            
             <button
               onClick={() => setShowSuccessOverlay(false)}
-              className="bg-[#0049ac] text-white font-semibold px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              className="bg-gradient-to-r from-[#0049ac] to-blue-600 text-white font-semibold px-8 py-3 rounded-xl hover:from-blue-600 hover:to-[#0049ac] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-300 transform hover:scale-105"
             >
-              Fermer
+              Parfait !
             </button>
-          </div>
-          <style>{`
-            @keyframes fade-in {
-              from { opacity: 0; transform: scale(0.98); }
-              to { opacity: 1; transform: scale(1); }
-            }
-            .animate-fade-in {
-              animation: fade-in 0.3s ease;
-            }
-          `}</style>
+          </motion.div>
         </div>
       )}
-      {/* Fin overlay */}
-      <div className="max-w-4xl mx-auto">
-        <h2 className="text-4xl font-extrabold text-gray-900 text-center mb-8">
-          Finalisez votre <span className="text-[#0049ac]">demande de nettoyage canapé</span>
-        </h2>
 
-        <div className="bg-blue-50 border-l-4 border-[#0049ac] rounded-xl p-6 mb-10 shadow-sm">
-          <h3 className="font-semibold text-[#0049ac] mb-4 text-lg">Récapitulatif de votre sélection</h3>
-          <ul className="text-gray-700 space-y-2 text-sm">
-            {selections.map((sel, idx) => (
-              <li key={idx}>
-                <span className="font-medium">{sel.step} :</span>{" "}
-                {Array.isArray(sel.value) ? sel.value.join(", ") : sel.value}
-              </li>
-            ))}
-          </ul>
-          <div className="mt-4 text-sm">
-            <p><strong>Prix total :</strong> <span className="text-[#0049ac] font-bold">{totalPrice} €</span></p>
-            <p><strong>Durée estimée :</strong> <span className="text-[#0049ac] font-bold">{formatDuration(totalTime)}</span></p>
+      <div className="max-w-7xl mx-auto">
+        {/* Header avec navigation */}
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-6 py-3 shadow-lg mb-6">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            <span className="text-sm font-medium text-gray-700">Étape finale</span>
           </div>
+          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+            Vos <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0049ac] to-blue-600">coordonnées</span>
+          </h1>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Remplissez vos informations pour finaliser votre demande de nettoyage canapé
+          </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-white shadow-xl rounded-2xl p-8 space-y-6">
-          <div className="grid sm:grid-cols-2 gap-6">
-            <input className={getFieldClasses("nom")} name="nom" placeholder="Nom *" value={form.nom} onChange={handleChange} />
-            {renderFieldError("nom")}
-            <input className={getFieldClasses("prenom")} name="prenom" placeholder="Prénom *" value={form.prenom} onChange={handleChange} />
-            {renderFieldError("prenom")}
-            <input
-              className={getFieldClasses("telephone")}
-              name="telephone"
-              placeholder="Téléphone *"
-              value={displayPhone}
-              onChange={handleChange}
-              maxLength={14}
-              inputMode="numeric"
-              pattern="[0-9 ]*"
-            />
-            {renderFieldError("telephone")}
-            <input className={getFieldClasses("email")} type="email" name="email" placeholder="Email *" value={form.email} onChange={handleChange} />
-            {renderFieldError("email")}
-            <input className={getFieldClasses("adresse")} name="adresse" placeholder="Adresse / Ville (facultatif)" value={form.adresse} onChange={handleChange} />
-            
-            {/* Sélection de date */}
-            <div className="relative sm:col-span-2">
-              <CalendarDays className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                type="date"
-                name="date"
-                value={form.date}
-                onChange={handleDateChange}
-                className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#0049ac] focus:outline-none pl-10"
-                min={new Date().toISOString().split("T")[0]}
-              />
-            </div>
-            {renderFieldError("date")}
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Colonne de gauche - Résumé */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-8">
+              <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-white/20">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 bg-gradient-to-br from-[#0049ac] to-blue-600 rounded-xl flex items-center justify-center">
+                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900">Récapitulatif</h3>
+                </div>
 
-            {/* Sélection de créneau horaire */}
-            {showTimeSlots && (
-              <div className="sm:col-span-2">
-                <TimeSlotSelector
-                  date={form.date}
-                  serviceDuration={localTotalTime}
-                  selectedSlot={form.timeSlot}
-                  onSlotSelect={handleTimeSlotSelect}
-                />
+                <div className="space-y-4 mb-6">
+                  {selections.map((sel, idx) => (
+                    <div key={idx} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
+                      <div className="w-2 h-2 bg-[#0049ac] rounded-full mt-2 flex-shrink-0"></div>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900">{sel.step}</p>
+                        <p className="text-sm text-gray-600">
+                          {Array.isArray(sel.value) ? sel.value.join(", ") : sel.value}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="border-t border-gray-200 pt-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-gray-600">Prix total</span>
+                    <span className="text-2xl font-bold text-[#0049ac]">{totalPrice} €</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600">Durée estimée</span>
+                    <span className="text-lg font-semibold text-gray-900">{formatDuration(totalTime)}</span>
+                  </div>
+                </div>
               </div>
-            )}
-            {renderFieldError("timeSlot")}
+            </div>
           </div>
 
-          
-
-          <div className="flex items-center gap-2 text-sm text-gray-700">
-            <input type="checkbox" checked={rgpd} onChange={() => setRgpd(v => !v)} className="accent-[#0049ac] w-5 h-5" required />
-            <span>J'accepte l'utilisation de mes données (RGPD)</span>
-          </div>
-          {renderFieldError("rgpd")}
-
-          <textarea className={getFieldClasses("message")} rows={3} name="message" placeholder="Message" value={form.message} onChange={handleChange} />
-          {renderFieldError("message")}
-
-          {error && <div className="text-red-600 text-sm font-semibold">{error}</div>}
-          {success && <div className="text-green-600 text-sm font-semibold">Votre demande a bien été envoyée !</div>}
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-            {/* Bouton Réinitialiser à gauche */}
-            <button
-              type="button"
-                             onClick={() => {
-                 setForm(initialForm);
-                 setRgpd(false);
-                 setError("");
-                 setSuccess(false);
-                 setShowTimeSlots(false);
-                 setFieldErrors({}); // Clear field errors on reset
-                 setIsSubmitted(false); // Reset submitted state
-                 if (typeof onReset === 'function') onReset();
-               }}
-              className="flex items-center gap-2 bg-gray-100 text-gray-800 font-semibold rounded-lg px-4 py-2 shadow-sm hover:bg-gray-200 transition"
+          {/* Colonne de droite - Formulaire */}
+          <div className="lg:col-span-2">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5"><path fillRule="evenodd" d="M4.293 6.293a1 1 0 011.414 0L8 8.586V7a1 1 0 112 0v4a1 1 0 01-1 1H5a1 1 0 110-2h1.586l-2.293-2.293a1 1 0 010-1.414zM10 18a8 8 0 100-16 8 8 0 000 16zm0-2a6 6 0 110-12 6 6 0 010 12z" clipRule="evenodd" /></svg>
-              Réinitialiser le formulaire
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="bg-[#0049ac] text-white font-bold rounded-2xl px-6 py-3 flex items-center justify-center gap-2 shadow hover:bg-blue-800 transition disabled:opacity-60 disabled:cursor-not-allowed"
-            >
-              <Send className="w-5 h-5" /> Envoyer ma demande
-            </button>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Informations personnelles */}
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <svg className="w-5 h-5 text-[#0049ac]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    Informations personnelles
+                  </h3>
+                  
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-700">Nom *</label>
+                      <div className="relative">
+                        <input 
+                          className={`w-full border-2 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:outline-none transition-all duration-200 ${
+                            fieldErrors.nom && isSubmitted
+                              ? "border-red-400 focus:ring-red-300 bg-red-50"
+                              : "border-gray-200 focus:ring-[#0049ac] focus:border-[#0049ac] hover:border-gray-300"
+                          }`}
+                          name="nom" 
+                          placeholder="Votre nom" 
+                          value={form.nom} 
+                          onChange={handleChange} 
+                        />
+                        {fieldErrors.nom && isSubmitted && (
+                          <div className="absolute -bottom-6 left-0 text-red-500 text-xs flex items-center gap-1">
+                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                            </svg>
+                            {fieldErrors.nom}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-700">Prénom *</label>
+                      <div className="relative">
+                        <input 
+                          className={`w-full border-2 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:outline-none transition-all duration-200 ${
+                            fieldErrors.prenom && isSubmitted
+                              ? "border-red-400 focus:ring-red-300 bg-red-50"
+                              : "border-gray-200 focus:ring-[#0049ac] focus:border-[#0049ac] hover:border-gray-300"
+                          }`}
+                          name="prenom" 
+                          placeholder="Votre prénom" 
+                          value={form.prenom} 
+                          onChange={handleChange} 
+                        />
+                        {fieldErrors.prenom && isSubmitted && (
+                          <div className="absolute -bottom-6 left-0 text-red-500 text-xs flex items-center gap-1">
+                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                            </svg>
+                            {fieldErrors.prenom}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Contact */}
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <svg className="w-5 h-5 text-[#0049ac]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                    Contact
+                  </h3>
+                  
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-700">Téléphone *</label>
+                      <div className="relative">
+                        <input 
+                          className={`w-full border-2 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:outline-none transition-all duration-200 ${
+                            fieldErrors.telephone && isSubmitted
+                              ? "border-red-400 focus:ring-red-300 bg-red-50"
+                              : "border-gray-200 focus:ring-[#0049ac] focus:border-[#0049ac] hover:border-gray-300"
+                          }`}
+                          name="telephone"
+                          placeholder="06 12 34 56 78"
+                          value={displayPhone}
+                          onChange={handleChange}
+                          maxLength={14}
+                          inputMode="numeric"
+                          pattern="[0-9 ]*"
+                        />
+                        {fieldErrors.telephone && isSubmitted && (
+                          <div className="absolute -bottom-6 left-0 text-red-500 text-xs flex items-center gap-1">
+                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                            </svg>
+                            {fieldErrors.telephone}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-700">Email *</label>
+                      <div className="relative">
+                        <input 
+                          className={`w-full border-2 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:outline-none transition-all duration-200 ${
+                            fieldErrors.email && isSubmitted
+                              ? "border-red-400 focus:ring-red-300 bg-red-50"
+                              : "border-gray-200 focus:ring-[#0049ac] focus:border-[#0049ac] hover:border-gray-300"
+                          }`}
+                          type="email" 
+                          name="email" 
+                          placeholder="votre@email.com" 
+                          value={form.email} 
+                          onChange={handleChange} 
+                        />
+                        {fieldErrors.email && isSubmitted && (
+                          <div className="absolute -bottom-6 left-0 text-red-500 text-xs flex items-center gap-1">
+                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                            </svg>
+                            {fieldErrors.email}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 space-y-2">
+                    <label className="text-sm font-medium text-gray-700">Adresse (facultatif)</label>
+                    <input 
+                      className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#0049ac] focus:border-[#0049ac] focus:outline-none transition-all duration-200 hover:border-gray-300"
+                      name="adresse" 
+                      placeholder="123 Rue de la Paix, 75001 Paris" 
+                      value={form.adresse} 
+                      onChange={handleChange} 
+                    />
+                  </div>
+                </div>
+
+                {/* Planning */}
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <svg className="w-5 h-5 text-[#0049ac]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    Planning
+                  </h3>
+                  
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-700">Date souhaitée *</label>
+                      <div className="relative">
+                        <CalendarDays className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                        <input
+                          type="date"
+                          name="date"
+                          value={form.date}
+                          onChange={handleDateChange}
+                          className={`w-full border-2 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:outline-none pl-12 transition-all duration-200 ${
+                            fieldErrors.date && isSubmitted
+                              ? "border-red-400 focus:ring-red-300 bg-red-50"
+                              : "border-gray-200 focus:ring-[#0049ac] focus:border-[#0049ac] hover:border-gray-300"
+                          }`}
+                          min={new Date().toISOString().split("T")[0]}
+                        />
+                        {fieldErrors.date && isSubmitted && (
+                          <div className="absolute -bottom-6 left-0 text-red-500 text-xs flex items-center gap-1">
+                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                            </svg>
+                            {fieldErrors.date}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {showTimeSlots && (
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium text-gray-700">Créneau horaire *</label>
+                        <TimeSlotSelector
+                          date={form.date}
+                          serviceDuration={localTotalTime}
+                          selectedSlot={form.timeSlot}
+                          onSlotSelect={handleTimeSlotSelect}
+                        />
+                        {fieldErrors.timeSlot && isSubmitted && (
+                          <div className="text-red-500 text-xs flex items-center gap-1 mt-1">
+                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                            </svg>
+                            {fieldErrors.timeSlot}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Message */}
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <svg className="w-5 h-5 text-[#0049ac]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                    Message (optionnel)
+                  </h3>
+                  <textarea 
+                    className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#0049ac] focus:border-[#0049ac] focus:outline-none transition-all duration-200 hover:border-gray-300 resize-none"
+                    rows={4} 
+                    name="message" 
+                    placeholder="Informations complémentaires, instructions spéciales..." 
+                    value={form.message} 
+                    onChange={handleChange} 
+                  />
+                </div>
+
+                {/* RGPD */}
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100">
+                  <div className="flex items-start gap-3">
+                    <input 
+                      type="checkbox" 
+                      checked={rgpd} 
+                      onChange={() => setRgpd(v => !v)} 
+                      className="accent-[#0049ac] w-5 h-5 mt-0.5 flex-shrink-0" 
+                      required 
+                    />
+                    <div>
+                      <p className="text-sm font-medium text-gray-900 mb-1">
+                        J'accepte l'utilisation de mes données personnelles
+                      </p>
+                      <p className="text-xs text-gray-600">
+                        Vos données sont collectées pour traiter votre demande et vous recontacter. 
+                        Elles ne seront pas partagées avec des tiers.
+                      </p>
+                    </div>
+                  </div>
+                  {fieldErrors.rgpd && isSubmitted && (
+                    <div className="text-red-500 text-xs flex items-center gap-1 mt-2">
+                      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                      {fieldErrors.rgpd}
+                    </div>
+                  )}
+                </div>
+
+                {/* Messages d'erreur généraux */}
+                {error && (
+                  <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+                    <div className="flex items-center gap-2">
+                      <svg className="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                      <span className="text-red-700 font-medium">{error}</span>
+                    </div>
+                  </div>
+                )}
+
+                {success && (
+                  <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+                    <div className="flex items-center gap-2">
+                      <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      <span className="text-green-700 font-medium">Votre demande a bien été envoyée !</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Boutons d'action */}
+                <div className="flex flex-col sm:flex-row gap-4 pt-6">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setForm(initialForm);
+                      setRgpd(false);
+                      setError("");
+                      setSuccess(false);
+                      setShowTimeSlots(false);
+                      setFieldErrors({});
+                      setIsSubmitted(false);
+                      if (typeof onReset === 'function') onReset();
+                    }}
+                    className="flex items-center justify-center gap-2 bg-gray-100 text-gray-700 font-semibold rounded-xl px-6 py-3 hover:bg-gray-200 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    Recommencer
+                  </button>
+                  
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-[#0049ac] to-blue-600 text-white font-bold rounded-xl px-8 py-3 hover:from-blue-600 hover:to-[#0049ac] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-60 disabled:cursor-not-allowed transform hover:scale-105"
+                  >
+                    {loading ? (
+                      <>
+                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Envoi en cours...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-5 h-5" />
+                        Envoyer ma demande
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
           </div>
-        </form>
+        </div>
       </div>
     </section>
   );

@@ -28,6 +28,8 @@ export default function Canapes() {
   const heroRef = useRef(null);
   const fabricTypeRef = useRef(null);
   const [stickyBarVisible, setStickyBarVisible] = useState(false);
+  
+
 
   useEffect(() => {
     if (!fabricTypeRef.current) return;
@@ -68,21 +70,14 @@ export default function Canapes() {
     setShowErrorModal(true);
   };
 
-  const handleStepSelect = (stepIdx: number, setter: (data: any) => void) => (data: any) => {
-    setter(data);
-    if (stepIdx < steps.length - 1) {
-      setTimeout(() => {
-        setActiveStep(stepIdx + 1);
-        sectionRefs.current[stepIdx + 1]?.scrollIntoView({ behavior: "smooth" });
-      }, 200);
-    }
-  };
+
 
   const handleReset = () => {
     setFabricType(null);
     setPlaces(null);
     setOptions({ value: [], price: 0, time: 0 });
     setActiveStep(0);
+    
     if (heroRef.current) {
       heroRef.current.scrollIntoView({ behavior: 'smooth' });
     }
@@ -181,10 +176,43 @@ export default function Canapes() {
         {steps.map((step, i) => {
           const StepComponent = step.component;
 
-          const props = i === 0 ? { onSelect: handleStepSelect(i, setFabricType), selected: fabricType?.value }
-            : i === 1 ? { onSelect: handleStepSelect(i, setPlaces), selected: places?.value }
-            : i === 2 ? { onSelect: handleStepSelect(i, setOptions), selected: options.value }
-            : { selections, totalPrice, totalTime, onReset: handleReset };
+          // Props originales pour chaque étape
+          const props = i === 0 ? { 
+              onSelect: (selection) => {
+                setFabricType(selection);
+                setTimeout(() => {
+                  setActiveStep(1);
+                  sectionRefs.current[1]?.scrollIntoView({ behavior: "smooth" });
+                }, 100);
+              }, 
+              selected: fabricType?.value
+            }
+            : i === 1 ? { 
+                onSelect: (selection) => {
+                  setPlaces(selection);
+                  setTimeout(() => {
+                    setActiveStep(2);
+                    sectionRefs.current[2]?.scrollIntoView({ behavior: "smooth" });
+                  }, 100);
+                }, 
+                selected: places?.value
+              }
+            : i === 2 ? { 
+                onSelect: (selection) => {
+                  setOptions(selection);
+                  setTimeout(() => {
+                    setActiveStep(3);
+                    sectionRefs.current[3]?.scrollIntoView({ behavior: "smooth" });
+                  }, 100);
+                }, 
+                selected: options.value
+              }
+            : { 
+                selections, 
+                totalPrice, 
+                totalTime, 
+                onReset: handleReset
+              };
 
           return (
             <section key={i} ref={i === 0 ? fabricTypeRef : (el) => (sectionRefs.current[i] = el)} className="section scroll-mt-16 sm:scroll-mt-20 md:scroll-mt-24 bg-white rounded-2xl shadow-lg p-3 sm:p-4 md:p-6 lg:p-8">

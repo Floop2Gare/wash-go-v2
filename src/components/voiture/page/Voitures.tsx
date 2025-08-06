@@ -53,10 +53,7 @@ export default function Voitures() {
     return () => observer.disconnect();
   }, []);
 
-  // Calcul du prix total (maintenant tous les composants envoient des nombres)
   const totalPrice = (aspiration?.price || 0) + (vehicule?.price || 0) + pressing.price + options.price + extras.price;
-  
-  // Calcul du temps total (maintenant tous les composants envoient des nombres)
   const totalTime = (aspiration?.time || 0) + (vehicule?.time || 0) + pressing.time + options.time + extras.time;
 
   const selections = [
@@ -80,17 +77,6 @@ export default function Voitures() {
     setShowErrorModal(true);
   };
 
-  const handleStepSelect = (stepIdx: number, setter: (data: any) => void) => (data: any) => {
-    setter(data);
-    if (stepIdx < steps.length - 1) {
-      setTimeout(() => {
-        setActiveStep(stepIdx + 1);
-        sectionRefs.current[stepIdx + 1]?.scrollIntoView({ behavior: "smooth" });
-      }, 200);
-    }
-  };
-
-  // ✅ MODIF : Fonction de réinitialisation totale
   const handleReset = () => {
     setAspiration(null);
     setVehicule(null);
@@ -98,6 +84,7 @@ export default function Voitures() {
     setOptions({ value: [], price: 0, time: 0 });
     setExtras({ value: [], price: 0, time: 0 });
     setActiveStep(0);
+    
     if (heroRef.current) {
       heroRef.current.scrollIntoView({ behavior: 'smooth' });
     }
@@ -208,12 +195,73 @@ export default function Voitures() {
             vehicleTypeId = found?.id;
           }
 
-          const props = i === 0 ? { onSelect: handleStepSelect(i, setAspiration), selected: aspiration?.value }
-            : i === 1 ? { onSelect: handleStepSelect(i, setVehicule), selected: vehicule?.value }
-            : i === 2 ? { onSelect: handleStepSelect(i, setPressing), vehicleTypeId, selected: pressing.value }
-            : i === 3 ? { onSelect: handleStepSelect(i, setOptions), selected: options.value }
-            : i === 4 ? { onSelect: handleStepSelect(i, setExtras), selected: extras.value }
-            : { selections, totalPrice, totalTime, onReset: handleReset };
+          const props = i === 0 ? { 
+              onSelect: (data) => {
+                setAspiration(data);
+                if (i < steps.length - 1) {
+                  setTimeout(() => {
+                    setActiveStep(i + 1);
+                    sectionRefs.current[i + 1]?.scrollIntoView({ behavior: "smooth" });
+                  }, 200);
+                }
+              }, 
+              selected: aspiration?.value
+            }
+            : i === 1 ? { 
+                onSelect: (data) => {
+                  setVehicule(data);
+                  if (i < steps.length - 1) {
+                    setTimeout(() => {
+                      setActiveStep(i + 1);
+                      sectionRefs.current[i + 1]?.scrollIntoView({ behavior: "smooth" });
+                    }, 200);
+                  }
+                }, 
+                selected: vehicule?.value
+              }
+            : i === 2 ? { 
+                onSelect: (data) => {
+                  setPressing(data);
+                  if (i < steps.length - 1) {
+                    setTimeout(() => {
+                      setActiveStep(i + 1);
+                      sectionRefs.current[i + 1]?.scrollIntoView({ behavior: "smooth" });
+                    }, 200);
+                  }
+                },
+                vehicleTypeId, 
+                selected: pressing.value
+              }
+            : i === 3 ? { 
+                onSelect: (data) => {
+                  setOptions(data);
+                  if (i < steps.length - 1) {
+                    setTimeout(() => {
+                      setActiveStep(i + 1);
+                      sectionRefs.current[i + 1]?.scrollIntoView({ behavior: "smooth" });
+                    }, 200);
+                  }
+                },
+                selected: options.value
+              }
+            : i === 4 ? { 
+                onSelect: (data) => {
+                  setExtras(data);
+                  if (i < steps.length - 1) {
+                    setTimeout(() => {
+                      setActiveStep(i + 1);
+                      sectionRefs.current[i + 1]?.scrollIntoView({ behavior: "smooth" });
+                    }, 200);
+                  }
+                },
+                selected: extras.value
+              }
+            : { 
+                selections, 
+                totalPrice, 
+                totalTime, 
+                onReset: handleReset
+              };
 
           return (
             <section key={i} ref={i === 0 ? aspirationRef : (el) => (sectionRefs.current[i] = el)} className="section scroll-mt-16 sm:scroll-mt-20 md:scroll-mt-24 bg-white rounded-2xl shadow-lg p-3 sm:p-4 md:p-6 lg:p-8">
