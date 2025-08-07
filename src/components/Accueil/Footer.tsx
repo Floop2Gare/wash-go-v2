@@ -42,10 +42,10 @@ const Footer: React.FC = () => {
                   <div>
                     <p className="font-medium text-sm">Adrien</p>
                     <a 
-                      href="tel:0612345678" 
+                      href="tel:0622706000" 
                       className="text-sm text-gray-200 hover:text-white transition-colors"
                     >
-                      06 12 34 56 78
+                      06 22 70 60 00
                     </a>
                   </div>
                 </div>
