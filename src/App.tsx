@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ScrollToTop from "./components/Accueil/ScrollToTop";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Accueil/Footer";
+import CookieConsentBanner from "./components/CookieConsent/CookieConsentBanner";
 
 // — Composants Accueil
 import HeroSection from "./components/Accueil/HeroSection";
@@ -38,6 +39,7 @@ const App: React.FC = () => {
   return (
     <Router>
       <ScrollToTop />
+      <CookieConsentBanner />
 
       <Routes>
         <Route
