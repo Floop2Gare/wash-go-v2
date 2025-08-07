@@ -48,13 +48,13 @@ const TextileTapisSurfaceStep: React.FC<TextileTapisSurfaceStepProps> = ({ onSel
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="max-w-2xl mx-auto space-y-4 sm:space-y-6 px-4 sm:px-0">
       {/* Titre et description */}
-      <div className="text-center mb-8">
-        <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
+      <div className="text-center mb-6 sm:mb-8">
+        <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">
           Dimensions de votre tapis
         </h3>
-        <p className="text-lg text-gray-600">
+        <p className="text-sm sm:text-base md:text-lg text-gray-600">
           Indiquez les dimensions pour calculer automatiquement le prix
         </p>
       </div>
@@ -64,9 +64,9 @@ const TextileTapisSurfaceStep: React.FC<TextileTapisSurfaceStepProps> = ({ onSel
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="bg-white rounded-2xl p-6 sm:p-8 shadow-lg border-2 border-gray-200"
+        className="bg-white rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg border-2 border-gray-200"
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
           {/* Longueur */}
           <div>
             <label htmlFor="longueur" className="block text-sm font-medium text-gray-700 mb-2">

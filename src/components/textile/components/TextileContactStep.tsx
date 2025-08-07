@@ -259,7 +259,7 @@ const TextileContactStep: React.FC<TextileContactStepProps> = ({ selections, tot
   const displayPhone = form.telephone.replace(/\D/g, "").replace(/(\d{2})(?=\d)/g, "$1 ").trim();
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-12 px-4 sm:px-6 lg:px-8">
+    <section className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
       {/* Overlay de succès amélioré */}
       {showSuccessOverlay && (
         <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md bg-black/40">

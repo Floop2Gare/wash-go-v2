@@ -77,28 +77,28 @@ const Apropos: React.FC = () => {
         </section>
 
         {/* Section Pourquoi choisir Wash&GO ? */}
-        <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-100 via-white to-slate-300">
+        <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-100 via-white to-slate-300">
           <div className="max-w-7xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="text-center mb-12 sm:mb-16"
+              className="text-center mb-8 sm:mb-12 md:mb-16"
             >
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 sm:mb-4 md:mb-6">
                 Pourquoi choisir{" "}
                 <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                   Wash&GO
                 </span>{" "}?
               </h2>
-                          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl sm:max-w-3xl mx-auto px-2">
+                          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 max-w-2xl sm:max-w-3xl mx-auto px-2">
               Wash&GO est fondé et géré par deux étudiants sérieux et motivés, avec une vraie culture du service et de la qualité.
               Notre approche humaine et professionnelle garantit une proximité et un engagement total envers chaque client.
             </p>
             </motion.div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 max-w-6xl mx-auto">
                           {[
               { icon: TeamIcon, title: "Équipe Étudiante", desc: "Jeunes entrepreneurs motivés et sérieux", bg: "bg-gradient-to-br from-blue-500 to-blue-600" },
               { icon: ValuesIcon, title: "Valeurs Humaines", desc: "Proximité et engagement client", bg: "bg-gradient-to-br from-green-500 to-emerald-600" },
@@ -111,13 +111,13 @@ const Apropos: React.FC = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.15 }}
                   whileHover={{ scale: 1.02 }}
-                  className="bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 text-center flex flex-col items-center h-full border border-gray-100"
+                  className="bg-white p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 text-center flex flex-col items-center h-full border border-gray-100"
                 >
-                  <div className={`h-12 h-12 sm:w-14 sm:h-14 ${bg} rounded-xl flex items-center justify-center mb-4 sm:mb-6 shadow-inner`}>
+                  <div className={`w-12 h-12 sm:w-14 sm:h-14 ${bg} rounded-xl flex items-center justify-center mb-3 sm:mb-4 md:mb-6 shadow-inner`}>
                     <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
                   </div>
-                  <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-3">{title}</h3>
-                  <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{desc}</p>
+                  <h3 className="text-base sm:text-lg md:text-xl font-semibold text-gray-900 mb-2 sm:mb-3">{title}</h3>
+                  <p className="text-xs sm:text-sm md:text-base text-gray-600 leading-relaxed">{desc}</p>
                 </motion.div>
               ))}
             </div>
@@ -132,18 +132,18 @@ const Apropos: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="text-center mb-12 sm:mb-16"
+              className="text-center mb-8 sm:mb-12 md:mb-16"
             >
-              <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full mb-4 sm:mb-6">
+              <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full mb-3 sm:mb-4 md:mb-6">
                 <Users className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </div>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 sm:mb-4 md:mb-6">
                 Notre{" "}
                 <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                   Équipe
                 </span>
               </h2>
-              <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl sm:max-w-3xl mx-auto px-2">
+              <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 max-w-2xl sm:max-w-3xl mx-auto px-2">
                 Deux jeunes entrepreneurs passionnés qui ont décidé de révolutionner le nettoyage automobile
               </p>
             </motion.div>
@@ -154,7 +154,7 @@ const Apropos: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center mb-16 sm:mb-20"
+              className="grid lg:grid-cols-2 gap-6 sm:gap-8 md:gap-12 lg:gap-16 items-center mb-12 sm:mb-16 md:mb-20"
             >
               {/* Image Clément */}
               <motion.div
@@ -169,7 +169,7 @@ const Apropos: React.FC = () => {
                   <img
                     src="/about/clement.png"
                     alt="Clément - Co-fondateur Wash&Go"
-                    className="relative w-full h-64 sm:h-80 md:h-96 lg:h-[500px] object-cover rounded-2xl sm:rounded-3xl shadow-xl sm:shadow-2xl transform -rotate-1 group-hover:-rotate-2 transition-transform duration-300"
+                    className="relative w-full h-48 sm:h-64 md:h-80 lg:h-96 xl:h-[500px] object-cover rounded-2xl sm:rounded-3xl shadow-xl sm:shadow-2xl transform -rotate-1 group-hover:-rotate-2 transition-transform duration-300"
                   />
                 </div>
               </motion.div>
@@ -182,13 +182,13 @@ const Apropos: React.FC = () => {
                 transition={{ duration: 0.8, delay: 0.4 }}
                 className="order-1 lg:order-2"
               >
-                <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-lg sm:shadow-xl border border-gray-100">
-                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-lg sm:shadow-xl border border-gray-100">
+                  <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
                     <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                       Clément
                     </span>
                   </h3>
-                  <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-4 sm:mb-6">
+                  <p className="text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed mb-4 sm:mb-6">
                     Clément, 22 ans, est actuellement en BTS Professions Immobilières à Aix-en-Provence. Rigoureux et impliqué, 
                     il combine ses études avec son engagement terrain chez Wash&Go, où il met son sens du service et de l'organisation 
                     au service des clients. Cette double expérience lui a forgé un œil redoutable pour les détails et un vrai sens 
@@ -198,7 +198,7 @@ const Apropos: React.FC = () => {
                   </p>
                   <div className="flex items-center space-x-2 text-blue-600">
                     <Users className="w-4 h-4 sm:w-5 sm:h-5" />
-                    <span className="font-semibold text-sm sm:text-base">Co-fondateur</span>
+                    <span className="font-semibold text-xs sm:text-sm md:text-base">Co-fondateur</span>
                   </div>
                 </div>
               </motion.div>
@@ -210,7 +210,7 @@ const Apropos: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center"
+              className="grid lg:grid-cols-2 gap-6 sm:gap-8 md:gap-12 lg:gap-16 items-center"
             >
               {/* Texte Adrien */}
               <motion.div
@@ -219,13 +219,13 @@ const Apropos: React.FC = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
-                <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-lg sm:shadow-xl border border-gray-100">
-                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-lg sm:shadow-xl border border-gray-100">
+                  <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
                     <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                       Adrien
                     </span>
                   </h3>
-                  <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-4 sm:mb-6">
+                  <p className="text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed mb-4 sm:mb-6">
                     Adrien, 20 ans, étudie les Techniques de Commercialisation à l'IUT d'Aix-Marseille tout en évoluant comme commercial 
                     dans le secteur BTP. Cette immersion dans l'univers du bâtiment lui a donné une vision pragmatique des besoins clients. 
                     Entrepreneur dans l'âme, il a imaginé Wash&Go comme bien plus qu'un simple service : une vraie révolution du nettoyage à domicile. 
@@ -233,7 +233,7 @@ const Apropos: React.FC = () => {
                   </p>
                   <div className="flex items-center space-x-2 text-blue-600">
                     <Users className="w-4 h-4 sm:w-5 sm:h-5" />
-                    <span className="font-semibold text-sm sm:text-base">Co-fondateur</span>
+                    <span className="font-semibold text-xs sm:text-sm md:text-base">Co-fondateur</span>
                   </div>
                 </div>
               </motion.div>

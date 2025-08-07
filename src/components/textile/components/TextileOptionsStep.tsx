@@ -81,8 +81,8 @@ const TextileOptionsStep: React.FC<TextileOptionsStepProps> = ({ onSelect, nextS
   };
 
   return (
-    <section className="w-full flex flex-col gap-6 sm:gap-10 font-[Outfit]">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+    <section className="w-full flex flex-col gap-4 sm:gap-6 md:gap-10 font-[Outfit]">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 lg:gap-8 max-w-6xl mx-auto">
         {options.map((opt) => {
           const isActive = localSelected.includes(opt.value);
           return (

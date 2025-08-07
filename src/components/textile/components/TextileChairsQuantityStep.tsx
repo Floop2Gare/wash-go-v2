@@ -44,14 +44,14 @@ const TextileChairsQuantityStep: React.FC<TextileChairsQuantityStepProps> = ({ o
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8">
-        <div className="text-center mb-6">
-          <h3 className="text-2xl font-bold text-gray-900 mb-2">Nombre de chaises</h3>
-          <p className="text-gray-600">Sélectionnez le nombre de chaises à nettoyer</p>
+    <div className="max-w-2xl mx-auto px-4 sm:px-0">
+      <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 md:p-8">
+        <div className="text-center mb-4 sm:mb-6">
+          <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Nombre de chaises</h3>
+          <p className="text-sm sm:text-base text-gray-600">Sélectionnez le nombre de chaises à nettoyer</p>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-4 sm:space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Nombre de chaises à nettoyer
@@ -62,26 +62,26 @@ const TextileChairsQuantityStep: React.FC<TextileChairsQuantityStepProps> = ({ o
               max="20"
               value={quantity}
               onChange={handleQuantityChange}
-              className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 text-lg font-semibold text-center focus:ring-2 focus:ring-[#0049ac] focus:border-[#0049ac] transition-colors"
+              className="w-full border-2 border-gray-300 rounded-xl px-3 sm:px-4 py-3 text-base sm:text-lg font-semibold text-center focus:ring-2 focus:ring-[#0049ac] focus:border-[#0049ac] transition-colors"
               placeholder="1"
             />
             {error && (
-              <p className="text-red-500 text-sm mt-2">{error}</p>
+              <p className="text-red-500 text-xs sm:text-sm mt-2">{error}</p>
             )}
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2 sm:space-y-3">
             <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-600">Prix unitaire :</span>
-              <span className="text-xl font-bold text-[#0049ac]">10 € / chaise</span>
+              <span className="text-xs sm:text-sm text-gray-600">Prix unitaire :</span>
+              <span className="text-lg sm:text-xl font-bold text-[#0049ac]">10 € / chaise</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-600">Prix total :</span>
-              <span className="text-xl font-bold text-[#0049ac]">{quantity * 10} €</span>
+              <span className="text-xs sm:text-sm text-gray-600">Prix total :</span>
+              <span className="text-lg sm:text-xl font-bold text-[#0049ac]">{quantity * 10} €</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-600">Durée estimée :</span>
-              <span className="text-sm text-gray-500">{quantity * 15} min</span>
+              <span className="text-xs sm:text-sm text-gray-600">Durée estimée :</span>
+              <span className="text-xs sm:text-sm text-gray-500">{quantity * 15} min</span>
             </div>
           </div>
 
@@ -91,7 +91,7 @@ const TextileChairsQuantityStep: React.FC<TextileChairsQuantityStepProps> = ({ o
 
           <button
             onClick={handleValidate}
-            className="w-full bg-gradient-to-r from-[#0049ac] to-blue-600 text-white font-bold py-3 px-6 rounded-xl hover:from-blue-600 hover:to-[#0049ac] transition-all duration-300 transform hover:scale-105"
+            className="w-full bg-gradient-to-r from-[#0049ac] to-blue-600 text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-xl hover:from-blue-600 hover:to-[#0049ac] transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
           >
             Valider - {quantity} {quantity === 1 ? 'chaise sélectionnée' : 'chaises sélectionnées'}
           </button>

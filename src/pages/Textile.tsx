@@ -303,7 +303,7 @@ export default function Textile() {
 
       <div ref={heroRef} className="relative h-screen w-full bg-cover bg-center bg-no-repeat flex items-center justify-center px-4 sm:px-6 text-white text-center" style={{ backgroundImage: "url('/textile/hero.png')" }}>
         <div className="absolute inset-0 bg-black/70 z-0" />
-        <div className="relative z-10 flex flex-col items-center justify-center h-full w-full space-y-6 sm:space-y-8 px-4">
+        <div className="relative z-10 flex flex-col items-center justify-center h-full w-full space-y-4 sm:space-y-6 md:space-y-8 px-4">
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-white drop-shadow-xl leading-tight">
             Nettoyage Professionnel de{" "}
             <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
@@ -317,40 +317,40 @@ export default function Textile() {
             onClick={handleStartClick}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="relative inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 font-semibold tracking-wide text-white rounded-full bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 shadow-lg group transition-all duration-300 hover:from-blue-600 hover:to-blue-800 text-sm sm:text-base"
+            className="relative inline-flex items-center justify-center px-4 sm:px-6 md:px-8 py-3 sm:py-4 font-semibold tracking-wide text-white rounded-full bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 shadow-lg group transition-all duration-300 hover:from-blue-600 hover:to-blue-800 text-sm sm:text-base w-full max-w-sm sm:max-w-md"
           >
             <span className="absolute inset-0 w-full h-full bg-gradient-to-br from-white/10 via-transparent to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-md" />
-            <span className="relative z-10 flex items-center space-x-2">
-              <span>Commencer ma demande sur mesure</span>
-              <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-y-1" />
+            <span className="relative z-10 flex items-center justify-center space-x-2">
+              <span className="text-center">Commencer ma demande sur mesure</span>
+              <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-y-1 flex-shrink-0" />
             </span>
           </motion.button>
         </div>
       </div>
 
       {/* Section Pourquoi choisir Wash&GO ? */}
-      <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-100 via-white to-slate-300">
+      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-100 via-white to-slate-300">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="text-center mb-12 sm:mb-16"
+            className="text-center mb-8 sm:mb-12 md:mb-16"
           >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 sm:mb-4 md:mb-6">
               Pourquoi choisir{" "}
               <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                 Wash&GO
               </span>{" "}?
             </h2>
-            <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl sm:max-w-3xl mx-auto px-2">
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 max-w-2xl sm:max-w-3xl mx-auto px-2">
               Pour vos textiles précieux, Wash&GO propose un nettoyage professionnel qui respecte chaque matière.
               Notre expertise garantit un traitement délicat de vos tissus tout en éliminant efficacement les taches.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 max-w-6xl mx-auto">
             {[
               { icon: DelicateIcon, title: "Traitement Délicat", desc: "Respect de chaque matière textile", bg: "bg-gradient-to-br from-blue-500 to-blue-600" },
               { icon: ExpertiseIcon, title: "Expertise Textile", desc: "Savoir-faire pour tous types de tissus", bg: "bg-gradient-to-br from-green-500 to-emerald-600" },
@@ -363,13 +363,13 @@ export default function Textile() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.15 }}
                 whileHover={{ scale: 1.02 }}
-                className="bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 text-center flex flex-col items-center h-full border border-gray-100"
+                className="bg-white p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 text-center flex flex-col items-center h-full border border-gray-100"
               >
-                <div className={`h-12 h-12 sm:w-14 sm:h-14 ${bg} rounded-xl flex items-center justify-center mb-4 sm:mb-6 shadow-inner`}>
+                <div className={`w-12 h-12 sm:w-14 sm:h-14 ${bg} rounded-xl flex items-center justify-center mb-3 sm:mb-4 md:mb-6 shadow-inner`}>
                   <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
                 </div>
-                <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-3">{title}</h3>
-                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{desc}</p>
+                <h3 className="text-base sm:text-lg md:text-xl font-semibold text-gray-900 mb-2 sm:mb-3">{title}</h3>
+                <p className="text-xs sm:text-sm md:text-base text-gray-600 leading-relaxed">{desc}</p>
               </motion.div>
             ))}
           </div>
@@ -377,16 +377,16 @@ export default function Textile() {
       </section>
 
       {/* Section des étapes - Affichage cumulatif */}
-      <div id="textile-steps" className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
-        <div className="max-w-6xl mx-auto space-y-16">
+      <div id="textile-steps" className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
+        <div className="max-w-6xl mx-auto space-y-12 sm:space-y-16">
           
           {/* Étape 1 - Type de textile (toujours visible) */}
-          <div className="space-y-8">
+          <div className="space-y-6 sm:space-y-8">
             <div className="text-center">
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
                 Étape 1 : Type de textile
               </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto px-2">
                 Sélectionnez le type de textile que vous souhaitez nettoyer
               </p>
             </div>

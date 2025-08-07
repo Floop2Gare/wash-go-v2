@@ -69,7 +69,7 @@ const TextileMaterialStep: React.FC<TextileMaterialStepProps> = ({ onSelect, sel
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 max-w-6xl mx-auto">
       {options.map((material) => {
         const isActive = selected === material.value;
 
@@ -84,32 +84,32 @@ const TextileMaterialStep: React.FC<TextileMaterialStepProps> = ({ onSelect, sel
             <img
               src={material.img}
               alt={material.title}
-              className="w-full h-32 sm:h-40 object-cover"
+              className="w-full h-28 sm:h-32 md:h-40 object-cover"
             />
 
-            <div className="p-4">
-              <div className="mb-3">
-                <h3 className="text-lg font-semibold text-gray-900 mb-1">{material.title}</h3>
+            <div className="p-3 sm:p-4">
+              <div className="mb-2 sm:mb-3">
+                <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 mb-1">{material.title}</h3>
                 
                 {/* Affichage du prix supplémentaire */}
                 {material.price > 0 && (
                   <div className="mb-2">
-                    <span className="text-xl font-bold text-[#0049ac]">
+                    <span className="text-lg sm:text-xl font-bold text-[#0049ac]">
                       +{material.price} €
                     </span>
                   </div>
                 )}
               </div>
 
-              <p className="text-sm text-gray-600 mb-3">{material.desc}</p>
+              <p className="text-xs sm:text-sm text-gray-600 mb-2 sm:mb-3">{material.desc}</p>
               
               {material.time > 0 && (
-                <p className="text-xs text-gray-400 mb-3">Temps supplémentaire : +{material.time} min</p>
+                <p className="text-xs text-gray-400 mb-2 sm:mb-3">Temps supplémentaire : +{material.time} min</p>
               )}
 
-              <div className="mt-4">
+              <div className="mt-3 sm:mt-4">
                 <span
-                  className={`inline-block px-4 py-2 rounded-lg font-medium text-sm transition-colors duration-300 ${
+                  className={`inline-block px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 rounded-lg font-medium text-xs sm:text-sm transition-colors duration-300 ${
                     isActive
                       ? "bg-[#0049ac] text-white"
                       : "bg-gray-100 text-[#0049ac] hover:bg-[#0049ac] hover:text-white"
