@@ -62,26 +62,30 @@ const TextileChairsQuantityStep: React.FC<TextileChairsQuantityStepProps> = ({ o
               max="20"
               value={quantity}
               onChange={handleQuantityChange}
-              className="w-full border-2 border-gray-300 rounded-xl px-3 sm:px-4 py-3 text-base sm:text-lg font-semibold text-center focus:ring-2 focus:ring-[#0049ac] focus:border-[#0049ac] transition-colors"
+              className="w-full border-2 border-gray-300 rounded-xl px-4 py-4 text-lg font-semibold text-center focus:ring-2 focus:ring-[#0049ac] focus:border-[#0049ac] transition-colors appearance-none bg-white"
               placeholder="1"
+              style={{
+                WebkitAppearance: 'none',
+                MozAppearance: 'textfield'
+              }}
             />
             {error && (
-              <p className="text-red-500 text-xs sm:text-sm mt-2">{error}</p>
+              <p className="text-red-500 text-sm mt-2">{error}</p>
             )}
           </div>
 
-          <div className="space-y-2 sm:space-y-3">
+          <div className="space-y-3">
             <div className="flex justify-between items-center">
-              <span className="text-xs sm:text-sm text-gray-600">Prix unitaire :</span>
-              <span className="text-lg sm:text-xl font-bold text-[#0049ac]">10 € / chaise</span>
+              <span className="text-sm text-gray-600">Prix unitaire :</span>
+              <span className="text-xl font-bold text-[#0049ac]">10 € / chaise</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-xs sm:text-sm text-gray-600">Prix total :</span>
-              <span className="text-lg sm:text-xl font-bold text-[#0049ac]">{quantity * 10} €</span>
+              <span className="text-sm text-gray-600">Prix total :</span>
+              <span className="text-xl font-bold text-[#0049ac]">{quantity * 10} €</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-xs sm:text-sm text-gray-600">Durée estimée :</span>
-              <span className="text-xs sm:text-sm text-gray-500">{quantity * 15} min</span>
+              <span className="text-sm text-gray-600">Durée estimée :</span>
+              <span className="text-sm text-gray-500">{quantity * 15} min</span>
             </div>
           </div>
 
@@ -91,7 +95,7 @@ const TextileChairsQuantityStep: React.FC<TextileChairsQuantityStepProps> = ({ o
 
           <button
             onClick={handleValidate}
-            className="w-full bg-gradient-to-r from-[#0049ac] to-blue-600 text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-xl hover:from-blue-600 hover:to-[#0049ac] transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
+            className="w-full bg-gradient-to-r from-[#0049ac] to-blue-600 text-white font-bold py-4 px-6 rounded-xl hover:from-blue-600 hover:to-[#0049ac] transition-all duration-300 transform hover:scale-105 text-base"
           >
             Valider - {quantity} {quantity === 1 ? 'chaise sélectionnée' : 'chaises sélectionnées'}
           </button>
