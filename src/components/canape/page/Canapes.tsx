@@ -10,6 +10,41 @@ import TotalSummary from "../../voiture/components/TotalSummary";
 import { ChevronDown, Shield, Sparkles, Home, Droplets, Zap, Heart, Brush } from "lucide-react";
 import { motion } from "framer-motion";
 
+// Icônes SVG personnalisées dans le style de la page Accueil
+const SteamIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 2v6m0 0v6m0-6h6m-6 0H6"/>
+    <path d="M12 18v4"/>
+    <path d="M8 18v4"/>
+    <path d="M16 18v4"/>
+  </svg>
+);
+
+const DisinfectIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+    <path d="M8 12h8"/>
+    <path d="M12 8v8"/>
+  </svg>
+);
+
+const OdorIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2"/>
+    <path d="M18 8a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-2z"/>
+  </svg>
+);
+
+const FabricIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M3 3h18v18H3z"/>
+    <path d="M3 9h18"/>
+    <path d="M3 15h18"/>
+    <path d="M9 3v18"/>
+    <path d="M15 3v18"/>
+  </svg>
+);
+
 const steps = [
   { label: "Type de tissu", component: FabricTypeStep },
   { label: "Nombre de places", component: CanapeTypeStep },
@@ -29,7 +64,6 @@ export default function Canapes() {
   const fabricTypeRef = useRef(null);
   const [stickyBarVisible, setStickyBarVisible] = useState(false);
   
-
 
   useEffect(() => {
     if (!fabricTypeRef.current) return;
@@ -70,8 +104,6 @@ export default function Canapes() {
     setShowErrorModal(true);
   };
 
-
-
   const handleReset = () => {
     setFabricType(null);
     setPlaces(null);
@@ -89,69 +121,89 @@ export default function Canapes() {
 
       <div ref={heroRef} className="relative h-screen w-full bg-cover bg-center bg-no-repeat flex items-center justify-center px-4 sm:px-6 text-white text-center" style={{ backgroundImage: "url('/canapé/canape.jpg')" }}>
         <div className="absolute inset-0 bg-black/70 z-0" />
-        <div className="relative z-10 flex flex-col items-center justify-center h-full w-full space-y-6 sm:space-y-8 px-4">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-white drop-shadow-xl leading-tight">
-            Nettoyage Professionnel de{" "}
-            <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
-              Canapés
-            </span>
-          </h1>
-          <p className="text-sm sm:text-base md:text-lg text-gray-200 max-w-xs sm:max-w-md md:max-w-2xl mx-auto drop-shadow px-2">
-            Offrez à vos canapés une expérience de propreté haut de gamme
-          </p>
-          <motion.button
-            onClick={() => {
-              const target = fabricTypeRef.current || sectionRefs.current[0];
-              if (target) target.scrollIntoView({ behavior: "smooth" });
-            }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="relative inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 font-semibold tracking-wide text-white rounded-full bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 shadow-lg group transition-all duration-300 hover:from-blue-600 hover:to-blue-800 text-sm sm:text-base"
+        <div className="relative z-10 flex flex-col items-center justify-center h-full w-full space-y-4 sm:space-y-6 md:space-y-8 px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="flex flex-col items-center space-y-3 sm:space-y-4 md:space-y-6"
           >
-            <span className="absolute inset-0 w-full h-full bg-gradient-to-br from-white/10 via-transparent to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-md" />
-            <span className="relative z-10 flex items-center space-x-2">
-              <span>Commencer ma demande sur mesure</span>
-              <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-y-1" />
-            </span>
-          </motion.button>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-white drop-shadow-xl leading-tight">
+              Nettoyage Professionnel de{" "}
+              <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+                Canapés
+              </span>
+            </h1>
+            <p className="text-sm sm:text-base md:text-lg text-gray-200 max-w-xs sm:max-w-md md:max-w-2xl mx-auto drop-shadow px-2">
+              Offrez à vos canapés une expérience de propreté haut de gamme
+            </p>
+            
+            {/* Bouton CTA harmonisé */}
+            <motion.button
+              onClick={() => {
+                const target = fabricTypeRef.current || sectionRefs.current[0];
+                if (target) target.scrollIntoView({ behavior: "smooth" });
+              }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="relative inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 font-semibold tracking-wide text-white rounded-full bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 shadow-lg group transition-all duration-300 hover:from-blue-600 hover:to-blue-800 text-sm sm:text-base md:text-lg"
+            >
+              <span className="absolute inset-0 w-full h-full bg-gradient-to-br from-white/10 via-transparent to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-md" />
+              <span className="relative z-10 flex items-center space-x-2">
+                <span>Commencer ma demande sur mesure</span>
+                <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-y-1" />
+              </span>
+            </motion.button>
+          </motion.div>
         </div>
       </div>
 
       {/* Section Features harmonisée avec Accueil */}
-      <section className="py-20 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-100 via-white to-slate-300">
-        <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">
-            Pourquoi choisir <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Wash&GO</span> ?
-          </h2>
-          <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
-            Pour les actifs, Wash&GO propose une expérience de nettoyage de canapés haut de gamme,
-            pensée pour vous faire gagner du temps sans sacrifier la qualité.
-          </p>
-        </div>
+      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-100 via-white to-slate-300">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-12 sm:mb-16"
+          >
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
+              Pourquoi choisir{" "}
+              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                Wash&GO
+              </span>{" "}?
+            </h2>
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl sm:max-w-3xl mx-auto px-2">
+              Pour les actifs, Wash&GO propose une expérience de nettoyage de canapés haut de gamme,
+              pensée pour vous faire gagner du temps sans sacrifier la qualité.
+            </p>
+          </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10 mt-14 max-w-6xl mx-auto">
-          {[
-            { icon: Droplets, title: "Nettoyage vapeur", desc: "Élimination des saletés incrustées", bg: "bg-gradient-to-br from-blue-500 to-blue-600" },
-            { icon: Zap, title: "Désinfection", desc: "Protection antibactérienne complète", bg: "bg-gradient-to-br from-green-500 to-emerald-600" },
-            { icon: Heart, title: "Anti-odeurs", desc: "Traitement neutralisant les mauvaises odeurs", bg: "bg-gradient-to-br from-purple-500 to-purple-600" },
-            { icon: Brush, title: "Soin du tissu", desc: "Brossage et protection du matériau", bg: "bg-gradient-to-br from-orange-500 to-orange-600" },
-          ].map(({ icon: Icon, title, desc, bg }, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.15 }}
-              whileHover={{ scale: 1.02 }}
-              className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition duration-300 hover:-translate-y-1.5 text-center flex flex-col items-center h-full"
-            >
-              <div className={`h-14 w-14 ${bg} rounded-xl flex items-center justify-center mb-5 shadow-inner`}>
-                <Icon className="w-7 h-7 text-white" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">{desc}</p>
-            </motion.div>
-          ))}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 max-w-6xl mx-auto">
+            {[
+              { icon: SteamIcon, title: "Nettoyage vapeur", desc: "Élimination des saletés incrustées", bg: "bg-gradient-to-br from-blue-500 to-blue-600" },
+              { icon: DisinfectIcon, title: "Désinfection", desc: "Protection antibactérienne complète", bg: "bg-gradient-to-br from-green-500 to-emerald-600" },
+              { icon: OdorIcon, title: "Anti-odeurs", desc: "Traitement neutralisant les mauvaises odeurs", bg: "bg-gradient-to-br from-purple-500 to-purple-600" },
+              { icon: FabricIcon, title: "Soin du tissu", desc: "Brossage et protection du matériau", bg: "bg-gradient-to-br from-orange-500 to-orange-600" },
+            ].map(({ icon: Icon, title, desc, bg }, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.15 }}
+                whileHover={{ scale: 1.02 }}
+                className="bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 text-center flex flex-col items-center h-full border border-gray-100"
+              >
+                <div className={`h-12 w-12 sm:w-14 sm:h-14 ${bg} rounded-xl flex items-center justify-center mb-4 sm:mb-6 shadow-inner`}>
+                  <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
+                </div>
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-3">{title}</h3>
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{desc}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -172,58 +224,68 @@ export default function Canapes() {
         </div>
       )}
 
-      <div className="max-w-5xl mx-auto px-4 py-6 sm:py-8 md:py-12 space-y-12 sm:space-y-16 md:space-y-24">
-        {steps.map((step, i) => {
-          const StepComponent = step.component;
+      <div className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
+        <div className="max-w-6xl mx-auto space-y-12 sm:space-y-16 md:space-y-20">
+          {steps.map((step, i) => {
+            const StepComponent = step.component;
 
-          // Props originales pour chaque étape
-          const props = i === 0 ? { 
-              onSelect: (selection) => {
-                setFabricType(selection);
-                setTimeout(() => {
-                  setActiveStep(1);
-                  sectionRefs.current[1]?.scrollIntoView({ behavior: "smooth" });
-                }, 100);
-              }, 
-              selected: fabricType?.value
-            }
-            : i === 1 ? { 
+            // Props originales pour chaque étape
+            const props = i === 0 ? { 
                 onSelect: (selection) => {
-                  setPlaces(selection);
+                  setFabricType(selection);
                   setTimeout(() => {
-                    setActiveStep(2);
-                    sectionRefs.current[2]?.scrollIntoView({ behavior: "smooth" });
+                    setActiveStep(1);
+                    sectionRefs.current[1]?.scrollIntoView({ behavior: "smooth" });
                   }, 100);
                 }, 
-                selected: places?.value
+                selected: fabricType?.value
               }
-            : i === 2 ? { 
-                onSelect: (selection) => {
-                  setOptions(selection);
-                  setTimeout(() => {
-                    setActiveStep(3);
-                    sectionRefs.current[3]?.scrollIntoView({ behavior: "smooth" });
-                  }, 100);
-                }, 
-                selected: options.value
-              }
-            : { 
-                selections, 
-                totalPrice, 
-                totalTime, 
-                onReset: handleReset
-              };
+              : i === 1 ? { 
+                  onSelect: (selection) => {
+                    setPlaces(selection);
+                    setTimeout(() => {
+                      setActiveStep(2);
+                      sectionRefs.current[2]?.scrollIntoView({ behavior: "smooth" });
+                    }, 100);
+                  }, 
+                  selected: places?.value
+                }
+              : i === 2 ? { 
+                  onSelect: (selection) => {
+                    setOptions(selection);
+                    setTimeout(() => {
+                      setActiveStep(3);
+                      sectionRefs.current[3]?.scrollIntoView({ behavior: "smooth" });
+                    }, 100);
+                  }, 
+                  selected: options.value
+                }
+              : { 
+                  selections, 
+                  totalPrice, 
+                  totalTime, 
+                  onReset: handleReset
+                };
 
-          return (
-            <section key={i} ref={i === 0 ? fabricTypeRef : (el) => (sectionRefs.current[i] = el)} className="section scroll-mt-16 sm:scroll-mt-20 md:scroll-mt-24 bg-white rounded-2xl shadow-lg p-3 sm:p-4 md:p-6 lg:p-8">
-              <div className="flex items-center gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6 md:mb-8">
-                <div className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white flex items-center justify-center font-bold text-xs sm:text-sm md:text-base">{i + 1}</div>
-                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">{step.label}</h2>
-              </div>
-              <StepComponent {...props} />
-            </section>
-          );
-        })}
+            return (
+              <motion.section 
+                key={i} 
+                ref={i === 0 ? fabricTypeRef : (el) => (sectionRefs.current[i] = el)} 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="bg-white rounded-2xl sm:rounded-3xl shadow-lg p-6 sm:p-8 lg:p-10 border border-gray-100"
+              >
+                <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white flex items-center justify-center font-bold text-sm sm:text-base md:text-lg">{i + 1}</div>
+                  <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">{step.label}</h2>
+                </div>
+                <StepComponent {...props} />
+              </motion.section>
+            );
+          })}
+        </div>
       </div>
 
       <Footer />

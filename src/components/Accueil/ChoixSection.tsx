@@ -16,7 +16,7 @@ const options = [
   {
     label: 'Textiles',
     path: '/textile',
-    image: '/accueil/canape.svg', // Réutilisation temporaire de l'image canapé
+    image: '/textile/choix.png', // Utilisation de l'image textile
   },
 ];
 

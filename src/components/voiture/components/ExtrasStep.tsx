@@ -123,12 +123,12 @@ const ExtrasStep: React.FC<ExtrasStepProps> = ({ onSelect, nextSectionId, select
                 className="w-full h-40 sm:h-48 object-cover"
               />
               <div className="p-4 sm:p-5">
-                                 <div className="flex justify-between items-center mb-2">
-                   <h3 className="text-base sm:text-lg font-semibold text-gray-900">{opt.label}</h3>
-                   <span className="text-[#0049ac] font-bold text-sm sm:text-base">
-                     {typeof opt.price === 'number' ? `+${opt.price}€` : opt.price}
-                   </span>
-                 </div>
+                <div className="mb-2">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">{opt.label}</h3>
+                  <span className="text-xl font-bold text-[#0049ac]">
+                    {typeof opt.price === 'number' ? `+${opt.price} €` : opt.price}
+                  </span>
+                </div>
                  <p className="text-xs text-gray-400 mb-3">
                    Durée : {typeof opt.time === 'number' ? `${opt.time} min` : opt.time}
                  </p>

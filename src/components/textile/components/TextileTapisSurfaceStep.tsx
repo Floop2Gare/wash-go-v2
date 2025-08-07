@@ -121,7 +121,7 @@ const TextileTapisSurfaceStep: React.FC<TextileTapisSurfaceStepProps> = ({ onSel
               <div className="flex justify-center items-center space-x-6">
                 <div className="text-center">
                   <span className="text-sm text-gray-600">Prix estimé :</span>
-                  <p className="text-xl font-semibold text-green-600">
+                  <p className="text-xl font-semibold text-[#0049ac]">
                     {price.toFixed(2)} €
                   </p>
                 </div>

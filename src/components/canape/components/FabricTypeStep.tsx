@@ -63,13 +63,20 @@ const FabricTypeStep: React.FC<FabricTypeStepProps> = ({ onSelect, selected: par
             />
 
             <div className="p-3 sm:p-4 md:p-5">
-              <div className="flex justify-between items-center mb-2">
-                <h3 className="text-base sm:text-lg font-semibold text-gray-900">{opt.title}</h3>
-                <span className="text-[#0049ac] text-sm sm:text-base font-bold">{opt.price}€</span>
+              <div className="mb-3">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">{opt.title}</h3>
+                
+                {/* Affichage harmonisé des mentions tarifaires */}
+                <div className="mb-3">
+                  <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full border border-blue-200">
+                    Inclus
+                  </span>
+                </div>
               </div>
 
-              <p className="text-xs sm:text-sm text-gray-600 mb-1">{opt.desc}</p>
-              <p className="text-xs text-gray-400">Durée : {opt.time} min</p>
+              <p className="text-xs sm:text-sm text-gray-600 mb-3">{opt.desc}</p>
+              
+              <p className="text-xs text-gray-400 mb-3">Durée estimée : {opt.time} min</p>
 
               <div className="mt-3 sm:mt-4">
                 <span

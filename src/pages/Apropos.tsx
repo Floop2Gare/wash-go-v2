@@ -1,8 +1,30 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { ChevronDown, Users, Heart, Award, Target, Zap, MapPin } from "lucide-react";
 import Navbar from "../components/Navbar/Navbar";
 import Footer from "../components/Accueil/Footer";
-import { Users, Target, Heart, ArrowRight, Sparkles, Zap, MapPin } from "lucide-react";
+
+// Icônes SVG personnalisées dans le style de la page Accueil
+const TeamIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+    <circle cx="9" cy="7" r="4"/>
+    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+  </svg>
+);
+
+const ValuesIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+  </svg>
+);
+
+const QualityIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+  </svg>
+);
 
 const Apropos: React.FC = () => {
   const scrollToTeam = () => {
@@ -47,10 +69,58 @@ const Apropos: React.FC = () => {
                 <span className="absolute inset-0 w-full h-full bg-gradient-to-br from-white/10 via-transparent to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-md" />
                 <span className="relative z-10 flex items-center space-x-2">
                   <span>Découvrir notre équipe</span>
-                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-1" />
+                  <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-y-1" />
                 </span>
               </motion.button>
             </motion.div>
+          </div>
+        </section>
+
+        {/* Section Pourquoi choisir Wash&GO ? */}
+        <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-100 via-white to-slate-300">
+          <div className="max-w-7xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="text-center mb-12 sm:mb-16"
+            >
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
+                Pourquoi choisir{" "}
+                <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                  Wash&GO
+                </span>{" "}?
+              </h2>
+                          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl sm:max-w-3xl mx-auto px-2">
+              Wash&GO est fondé et géré par deux étudiants sérieux et motivés, avec une vraie culture du service et de la qualité.
+              Notre approche humaine et professionnelle garantit une proximité et un engagement total envers chaque client.
+            </p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
+                          {[
+              { icon: TeamIcon, title: "Équipe Étudiante", desc: "Jeunes entrepreneurs motivés et sérieux", bg: "bg-gradient-to-br from-blue-500 to-blue-600" },
+              { icon: ValuesIcon, title: "Valeurs Humaines", desc: "Proximité et engagement client", bg: "bg-gradient-to-br from-green-500 to-emerald-600" },
+              { icon: QualityIcon, title: "Culture Qualité", desc: "Excellence et professionnalisme", bg: "bg-gradient-to-br from-purple-500 to-purple-600" },
+            ].map(({ icon: Icon, title, desc, bg }, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.15 }}
+                  whileHover={{ scale: 1.02 }}
+                  className="bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 text-center flex flex-col items-center h-full border border-gray-100"
+                >
+                  <div className={`h-12 h-12 sm:w-14 sm:h-14 ${bg} rounded-xl flex items-center justify-center mb-4 sm:mb-6 shadow-inner`}>
+                    <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
+                  </div>
+                  <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-3">{title}</h3>
+                  <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{desc}</p>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -119,10 +189,12 @@ const Apropos: React.FC = () => {
                     </span>
                   </h3>
                   <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-4 sm:mb-6">
-                    À 22 ans, Clément jongle entre ses études en école professionnelle de l'immobilier et son alternance en agence. 
-                    Cette double expérience lui a forgé un œil redoutable pour les détails et un vrai sens du contact humain. 
-                    Co-fondateur de Wash&Go, il est le moteur de nos opérations terrain : c'est lui qui s'assure que chaque client 
-                    vive une expérience impeccable. Son approche ? Allier l'exigence du secteur immobilier à la proximité du service à domicile.
+                    Clément, 22 ans, est actuellement en BTS Professions Immobilières à Aix-en-Provence. Rigoureux et impliqué, 
+                    il combine ses études avec son engagement terrain chez Wash&Go, où il met son sens du service et de l'organisation 
+                    au service des clients. Cette double expérience lui a forgé un œil redoutable pour les détails et un vrai sens 
+                    du contact humain. Co-fondateur de Wash&Go, il est le moteur de nos opérations terrain : c'est lui qui s'assure 
+                    que chaque client vive une expérience impeccable. Son approche ? Allier l'exigence du secteur immobilier à la 
+                    proximité du service à domicile.
                   </p>
                   <div className="flex items-center space-x-2 text-blue-600">
                     <Users className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -197,7 +269,7 @@ const Apropos: React.FC = () => {
               className="text-center mb-12 sm:mb-16"
             >
               <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full mb-4 sm:mb-6">
-                <Target className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+                <Award className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </div>
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
                 Notre{" "}
@@ -216,7 +288,7 @@ const Apropos: React.FC = () => {
               className="text-center mb-12 sm:mb-16"
             >
               <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 text-white shadow-lg sm:shadow-xl">
-                <Sparkles className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 mx-auto mb-4 sm:mb-6 text-blue-200" />
+                <Zap className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 mx-auto mb-4 sm:mb-6 text-blue-200" />
                 <blockquote className="text-lg sm:text-xl md:text-2xl font-semibold leading-relaxed max-w-3xl sm:max-w-4xl mx-auto">
                   "Rendre le nettoyage automobile plus simple, plus flexible, plus humain"
                 </blockquote>
@@ -233,7 +305,7 @@ const Apropos: React.FC = () => {
             >
               <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-lg border border-blue-100 text-center">
                 <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
-                  <Zap className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+                  <Award className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                 </div>
                 <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">Simplicité</h3>
                 <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
@@ -244,7 +316,7 @@ const Apropos: React.FC = () => {
 
               <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-lg border border-indigo-100 text-center">
                 <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
-                  <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+                  <Award className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                 </div>
                 <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">Flexibilité</h3>
                 <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
@@ -323,7 +395,7 @@ const Apropos: React.FC = () => {
                   tout en permettant à d'autres étudiants de travailler avec nous.
                 </p>
                 <div className="flex items-center space-x-2">
-                  <Target className="w-4 h-4 sm:w-6 sm:h-6" />
+                  <Award className="w-4 h-4 sm:w-6 sm:h-6" />
                   <span className="font-semibold text-sm sm:text-base">À terme, nous voulons développer ce modèle à l'échelle nationale</span>
                 </div>
               </div>

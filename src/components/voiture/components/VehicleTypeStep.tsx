@@ -90,37 +90,46 @@ const CarcleanStep: React.FC<CarcleanStepProps> = ({ selected, onSelect }) => {
               time: veh.time,
             })}
             aria-pressed={isActive}
-            className={`flex flex-col h-full rounded-2xl overflow-hidden border-2 cursor-pointer transition-transform duration-300 hover:scale-[1.015]
-              ${isActive ? "border-[#0049ac]" : "border-gray-200 hover:border-[#0049ac]/40"}
-            `}
+            className={`cursor-pointer rounded-2xl shadow-md overflow-hidden transition-transform duration-300 border-2 hover:scale-[1.015]
+              ${isActive ? "border-[#0049ac]" : "border-gray-200 hover:border-[#0049ac]/30"}`}
           >
             <img
               src={veh.img}
               alt={veh.label}
-              className="w-full h-40 sm:h-48 object-cover"
+              className="w-full h-32 sm:h-40 md:h-48 object-cover"
             />
 
-            <div className="flex flex-col flex-1 p-4 sm:p-5">
-              <div className="flex justify-between items-center mb-2">
-                <h3 className="text-base sm:text-lg font-semibold text-gray-900">{veh.label}</h3>
-                <span className="text-[#0049ac] font-bold text-sm sm:text-base">
-                  {veh.price > 0 ? `+${veh.price}€` : "Inclus"}
-                </span>
+            <div className="p-3 sm:p-4 md:p-5">
+              <div className="mb-3">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">{veh.label}</h3>
+                
+                {/* Affichage harmonisé des mentions tarifaires - TOUS EN BLEU */}
+                <div className="mb-2">
+                  {veh.price > 0 ? (
+                    <span className="text-xl font-bold text-[#0049ac]">
+                      +{veh.price} €
+                    </span>
+                  ) : (
+                    <span className="text-xl font-bold text-[#0049ac]">
+                      Inclus
+                    </span>
+                  )}
+                </div>
               </div>
 
-              <p className="text-xs sm:text-sm text-gray-600 mb-1">{veh.desc}</p>
-              <p className="text-xs text-gray-400">Durée : {veh.time} min</p>
+              <p className="text-xs sm:text-sm text-gray-600 mb-3">{veh.desc}</p>
+              
+              <p className="text-xs text-gray-400 mb-3">Durée estimée : {veh.time} min</p>
 
-              <div className="mt-auto pt-3 sm:pt-4">
-                <button
-                  className={`w-full px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors duration-300
+              <div className="mt-3 sm:mt-4">
+                <span
+                  className={`inline-block px-3 sm:px-4 py-2 rounded-lg font-medium text-xs sm:text-sm transition-colors duration-300
                     ${isActive
                       ? "bg-[#0049ac] text-white"
-                      : "bg-gray-100 text-[#0049ac] hover:bg-[#0049ac] hover:text-white"}
-                  `}
+                      : "bg-gray-100 text-[#0049ac] hover:bg-[#0049ac] hover:text-white"}`}
                 >
                   {isActive ? "Sélectionné" : "Choisir"}
-                </button>
+                </span>
               </div>
             </div>
           </div>
@@ -133,34 +142,37 @@ const CarcleanStep: React.FC<CarcleanStepProps> = ({ selected, onSelect }) => {
         role="button"
         tabIndex={0}
         aria-pressed={selected === horsGabarit.label}
-        className={`flex flex-col h-full rounded-2xl overflow-hidden border-2 cursor-pointer transition-transform duration-300 hover:scale-[1.015] shadow-sm
-          ${selected === horsGabarit.label ? "border-[#0049ac]" : "border-gray-200 hover:border-[#0049ac]/40"}
-        `}
+        className={`cursor-pointer rounded-2xl shadow-md overflow-hidden transition-transform duration-300 border-2 hover:scale-[1.015]
+          ${selected === horsGabarit.label ? "border-[#0049ac]" : "border-gray-200 hover:border-[#0049ac]/30"}`}
       >
         <img
           src={horsGabarit.img}
           alt={horsGabarit.label}
-          className="w-full h-40 sm:h-48 object-cover"
+          className="w-full h-32 sm:h-40 md:h-48 object-cover"
         />
-        <div className="flex flex-col flex-1 p-4 sm:p-5">
-          <div className="flex justify-between items-center mb-2">
-            <h3 className="text-base sm:text-lg font-semibold text-gray-900">{horsGabarit.label}</h3>
-            <span className="inline-block px-2 sm:px-3 py-1 rounded-full bg-[#0049ac] text-white text-xs font-semibold shadow">
-              Sur devis
-            </span>
+        <div className="p-3 sm:p-4 md:p-5">
+          <div className="mb-3">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">{horsGabarit.label}</h3>
+            
+            {/* Affichage harmonisé des mentions tarifaires - EN BLEU */}
+            <div className="mb-2">
+              <span className="text-xl font-bold text-[#0049ac]">
+                Sur devis
+              </span>
+            </div>
           </div>
-          <p className="text-xs sm:text-sm text-gray-600 mb-1">{horsGabarit.desc}</p>
-          <div className="mt-auto pt-3 sm:pt-4">
-            <button
-              className={`w-full px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors duration-300
+          
+          <p className="text-xs sm:text-sm text-gray-600 mb-3">{horsGabarit.desc}</p>
+          
+          <div className="mt-3 sm:mt-4">
+            <span
+              className={`inline-block px-3 sm:px-4 py-2 rounded-lg font-medium text-xs sm:text-sm transition-colors duration-300
                 ${selected === horsGabarit.label
                   ? "bg-[#0049ac] text-white"
-                  : "bg-gray-100 text-[#0049ac] hover:bg-[#0049ac] hover:text-white"}
-              `}
-              onClick={e => { e.stopPropagation(); handleHorsGabaritClick(); }}
+                  : "bg-gray-100 text-[#0049ac] hover:bg-[#0049ac] hover:text-white"}`}
             >
               {selected === horsGabarit.label ? "Sélectionné" : "Choisir"}
-            </button>
+            </span>
           </div>
         </div>
       </div>

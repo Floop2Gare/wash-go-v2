@@ -5,54 +5,54 @@ interface TextileChairsMaterialStepProps {
   selected?: string;
 }
 
-const materials = [
+const options = [
   {
     value: "Tissu",
     title: "Tissu",
-    desc: "Nettoyage standard pour tissus classiques",
+    desc: "Idéal pour les tissus classiques. Le service inclut l'ensemble des traitements standards pour un résultat optimal et durable.",
     price: 0,
     time: 0,
-    img: "/canapé/tissu.jpg",
-  },
-  {
-    value: "Velours",
-    title: "Velours",
-    desc: "Traitement spécialisé pour velours délicat",
-    price: 3,
-    time: 5,
-    img: "/canapé/tissu.jpg",
-  },
-  {
-    value: "Coton",
-    title: "Coton",
-    desc: "Traitement doux pour coton naturel",
-    price: 1,
-    time: 5,
-    img: "/canapé/tissu.jpg",
-  },
-  {
-    value: "Alcantara",
-    title: "Alcantara",
-    desc: "Nettoyage premium pour Alcantara",
-    price: 5,
-    time: 8,
-    img: "/canapé/alcantara.jpg",
+    img: "/textile/chaises/tissu.jpg",
   },
   {
     value: "Cuir",
     title: "Cuir",
-    desc: "Traitement spécialisé pour cuir véritable",
-    price: 8,
-    time: 10,
-    img: "/canapé/cuir.jpg",
+    desc: "Une attention particulière est portée à l'hydratation du cuir, en complément des soins habituels. Convient parfaitement aux salons haut de gamme.",
+    price: 0,
+    time: 0,
+    img: "/textile/chaises/cuir.jpg",
+  },
+  {
+    value: "Velours",
+    title: "Velours",
+    desc: "Matière délicate nécessitant un traitement ajusté. Le nettoyage est adapté selon la texture et la sensibilité du revêtement.",
+    price: 0,
+    time: 0,
+    img: "/textile/chaises/velours.jpg",
+  },
+  {
+    value: "Coton",
+    title: "Coton",
+    desc: "Fibre naturelle, confortable et durable. Traitement doux adapté aux tissus en coton.",
+    price: 0,
+    time: 0,
+    img: "/textile/chaises/coton.jpg",
+  },
+  {
+    value: "Alcantara",
+    title: "Alcantara",
+    desc: "Matière délicate nécessitant un traitement ajusté. Le nettoyage est adapté selon la texture et la sensibilité du revêtement.",
+    price: 0,
+    time: 0,
+    img: "/textile/chaises/alcanatra.jpg",
   },
   {
     value: "Autre",
     title: "Autre",
-    desc: "Matière spécifique à évaluer",
+    desc: "Matière spécifique non listée. Nous adapterons le traitement selon vos besoins.",
     price: 0,
     time: 0,
-    img: "/canapé/tissu.jpg",
+    img: "/textile/chaises/autre.jpg",
   },
 ];
 
@@ -63,7 +63,7 @@ const TextileChairsMaterialStep: React.FC<TextileChairsMaterialStepProps> = ({ o
     setSelected(parentSelected ?? null);
   }, [parentSelected]);
 
-  const handleClick = (material: typeof materials[0]) => {
+  const handleClick = (material: typeof options[0]) => {
     setSelected(material.value);
     onSelect({ 
       step: "Matière des chaises", 
@@ -75,7 +75,7 @@ const TextileChairsMaterialStep: React.FC<TextileChairsMaterialStepProps> = ({ o
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-      {materials.map((material) => {
+      {options.map((material) => {
         const isActive = selected === material.value;
 
         return (
@@ -99,7 +99,7 @@ const TextileChairsMaterialStep: React.FC<TextileChairsMaterialStepProps> = ({ o
                 {/* Affichage du prix supplémentaire */}
                 {material.price > 0 && (
                   <div className="mb-2">
-                    <span className="inline-block px-2 py-1 bg-orange-100 text-orange-800 text-xs font-semibold rounded-full border border-orange-200">
+                    <span className="text-xl font-bold text-[#0049ac]">
                       +{material.price} € / chaise
                     </span>
                   </div>

@@ -13,7 +13,7 @@ const options = [
     price: null,
     time: 0,
     pricingInfo: "À voir selon la demande",
-    img: "/canapé/canape.jpg", // Image temporaire
+    img: "/textile/matelas/matelas.png",
   },
   {
     value: "Chaises",
@@ -22,7 +22,7 @@ const options = [
     price: 10,
     time: 15,
     pricingInfo: "10 € / chaise",
-    img: "/canapé/tissu.jpg", // Image temporaire
+    img: "/textile/chaises/chaise.png",
   },
   {
     value: "Tapis",
@@ -31,7 +31,7 @@ const options = [
     price: 5,
     time: 10,
     pricingInfo: "5 € / m²",
-    img: "/canapé/canape.jpg", // Image temporaire
+    img: "/textile/tapis/tapis.jpg",
   },
 ];
 
@@ -44,7 +44,7 @@ const TextileTypeStep: React.FC<TextileTypeStepProps> = ({ onSelect, selected: p
 
   const handleClick = (opt: typeof options[0]) => {
     setSelected(opt.value);
-    onSelect({ step: "Type de textile", value: opt.value, price: opt.price, time: opt.time });
+    onSelect({ step: "Type de textile", value: opt.value, price: opt.price || 0, time: opt.time });
   };
 
   return (
@@ -69,19 +69,11 @@ const TextileTypeStep: React.FC<TextileTypeStepProps> = ({ onSelect, selected: p
               <div className="mb-3">
                 <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">{opt.title}</h3>
                 
-                {/* Affichage harmonisé des mentions tarifaires */}
-                <div className="mb-3">
-                  {opt.price !== null ? (
-                    // Prix fixe pour les tapis
-                    <span className="inline-block px-3 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full border border-green-200">
-                      {opt.pricingInfo}
-                    </span>
-                  ) : (
-                    // Mentions spéciales pour matelas
-                    <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full border border-blue-200">
-                      {opt.pricingInfo}
-                    </span>
-                  )}
+                {/* Affichage harmonisé des mentions tarifaires - TOUS EN BLEU */}
+                <div className="mb-2">
+                  <span className="text-xl font-bold text-[#0049ac]">
+                    {opt.pricingInfo}
+                  </span>
                 </div>
               </div>
 

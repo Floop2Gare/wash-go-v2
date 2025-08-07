@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar/Navbar";
 import Footer from "../components/Accueil/Footer";
 import TextileTypeStep from "../components/textile/components/TextileTypeStep";
 import TextileMaterialStep from "../components/textile/components/TextileMaterialStep";
+import TextileTapisMaterialStep from "../components/textile/components/TextileTapisMaterialStep";
 import TextileMatelasSizeStep from "../components/textile/components/TextileMatelasSizeStep";
 import TextileOptionsStep from "../components/textile/components/TextileOptionsStep";
 import TextileContactStep from "../components/textile/components/TextileContactStep";
@@ -12,8 +13,33 @@ import TextileTapisSurfaceStep from "../components/textile/components/TextileTap
 
 import TextileVerticalProgressBar from "../components/textile/components/TextileVerticalProgressBar";
 import TextileTotalSummary from "../components/textile/components/TextileTotalSummary";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Car, Shield, Sparkles, Droplets, Scissors, Home } from "lucide-react";
 import { motion } from "framer-motion";
+
+// Icônes SVG personnalisées dans le style de la page Accueil
+const DelicateIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 2v6m0 0v6m0-6h6m-6 0H6"/>
+    <path d="M12 18v4"/>
+    <path d="M8 18v4"/>
+    <path d="M16 18v4"/>
+    <path d="M3 3h18v18H3z"/>
+  </svg>
+);
+
+const ExpertiseIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+    <path d="M9 12l6 6"/>
+  </svg>
+);
+
+const HomeServiceIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+    <polyline points="9,22 9,12 15,12 15,22"/>
+  </svg>
+);
 
 export default function Textile() {
   const heroRef = useRef(null);
@@ -275,7 +301,7 @@ export default function Textile() {
         </>
       )}
 
-      <div ref={heroRef} className="relative h-screen w-full bg-cover bg-center bg-no-repeat flex items-center justify-center px-4 sm:px-6 text-white text-center" style={{ backgroundImage: "url('/canapé/canape.jpg')" }}>
+      <div ref={heroRef} className="relative h-screen w-full bg-cover bg-center bg-no-repeat flex items-center justify-center px-4 sm:px-6 text-white text-center" style={{ backgroundImage: "url('/textile/hero.png')" }}>
         <div className="absolute inset-0 bg-black/70 z-0" />
         <div className="relative z-10 flex flex-col items-center justify-center h-full w-full space-y-6 sm:space-y-8 px-4">
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-white drop-shadow-xl leading-tight">
@@ -301,6 +327,54 @@ export default function Textile() {
           </motion.button>
         </div>
       </div>
+
+      {/* Section Pourquoi choisir Wash&GO ? */}
+      <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-100 via-white to-slate-300">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-12 sm:mb-16"
+          >
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
+              Pourquoi choisir{" "}
+              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                Wash&GO
+              </span>{" "}?
+            </h2>
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl sm:max-w-3xl mx-auto px-2">
+              Pour vos textiles précieux, Wash&GO propose un nettoyage professionnel qui respecte chaque matière.
+              Notre expertise garantit un traitement délicat de vos tissus tout en éliminant efficacement les taches.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
+            {[
+              { icon: DelicateIcon, title: "Traitement Délicat", desc: "Respect de chaque matière textile", bg: "bg-gradient-to-br from-blue-500 to-blue-600" },
+              { icon: ExpertiseIcon, title: "Expertise Textile", desc: "Savoir-faire pour tous types de tissus", bg: "bg-gradient-to-br from-green-500 to-emerald-600" },
+              { icon: HomeServiceIcon, title: "Service à Domicile", desc: "Confort et praticité garantis", bg: "bg-gradient-to-br from-purple-500 to-purple-600" },
+            ].map(({ icon: Icon, title, desc, bg }, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.15 }}
+                whileHover={{ scale: 1.02 }}
+                className="bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 text-center flex flex-col items-center h-full border border-gray-100"
+              >
+                <div className={`h-12 h-12 sm:w-14 sm:h-14 ${bg} rounded-xl flex items-center justify-center mb-4 sm:mb-6 shadow-inner`}>
+                  <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
+                </div>
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-3">{title}</h3>
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* Section des étapes - Affichage cumulatif */}
       <div id="textile-steps" className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
@@ -366,10 +440,17 @@ export default function Textile() {
                 </p>
               </div>
               
-              <TextileMaterialStep 
-                onSelect={handleTextileMaterialSelect}
-                selected={textileMaterial?.value}
-              />
+              {textileType?.value === "Tapis" ? (
+                <TextileTapisMaterialStep 
+                  onSelect={handleTextileMaterialSelect}
+                  selected={textileMaterial?.value}
+                />
+              ) : (
+                <TextileMaterialStep 
+                  onSelect={handleTextileMaterialSelect}
+                  selected={textileMaterial?.value}
+                />
+              )}
             </motion.div>
           )}
 

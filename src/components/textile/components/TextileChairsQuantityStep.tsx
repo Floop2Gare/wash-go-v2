@@ -70,18 +70,18 @@ const TextileChairsQuantityStep: React.FC<TextileChairsQuantityStepProps> = ({ o
             )}
           </div>
 
-          <div className="bg-blue-50 rounded-xl p-4 border border-blue-200">
-            <div className="flex justify-between items-center text-sm text-blue-800 mb-2">
-              <span>Prix unitaire :</span>
-              <span className="font-semibold">10 € / chaise</span>
+          <div className="space-y-2">
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-gray-600">Prix unitaire :</span>
+              <span className="text-xl font-bold text-[#0049ac]">10 € / chaise</span>
             </div>
-            <div className="flex justify-between items-center text-lg font-bold text-blue-900">
-              <span>Prix total :</span>
-              <span>{quantity * 10} €</span>
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-gray-600">Prix total :</span>
+              <span className="text-xl font-bold text-[#0049ac]">{quantity * 10} €</span>
             </div>
-            <div className="flex justify-between items-center text-sm text-blue-700 mt-1">
-              <span>Durée estimée :</span>
-              <span>{quantity * 15} min</span>
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-gray-600">Durée estimée :</span>
+              <span className="text-sm text-gray-500">{quantity * 15} min</span>
             </div>
           </div>
 
