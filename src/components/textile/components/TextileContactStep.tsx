@@ -17,6 +17,7 @@ const initialForm = {
   telephone: "",
   email: "",
   adresse: "",
+  parrainage: "",
   date: "",
   timeSlot: "",
   message: "",
@@ -225,6 +226,7 @@ const TextileContactStep: React.FC<TextileContactStepProps> = ({ selections, tot
       telephone: form.telephone,
       email: form.email,
       adresse: form.adresse,
+      parrainage: form.parrainage,
       date: form.date,
       timeSlot: form.timeSlot,
       message: form.message,
@@ -497,6 +499,17 @@ const TextileContactStep: React.FC<TextileContactStepProps> = ({ selections, tot
                       name="adresse" 
                       placeholder="123 Rue de la Paix, 75001 Paris" 
                       value={form.adresse} 
+                      onChange={handleChange} 
+                    />
+                  </div>
+
+                  <div className="mt-4 space-y-2">
+                    <label className="text-sm font-medium text-gray-700">Code de parrainage (si vous en avez un)</label>
+                    <input 
+                      className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#0049ac] focus:border-[#0049ac] focus:outline-none transition-all duration-200 hover:border-gray-300"
+                      name="parrainage" 
+                      placeholder="Ex : WASH123 ou prénom de votre parrain" 
+                      value={form.parrainage} 
                       onChange={handleChange} 
                     />
                   </div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 interface TextileTapisSurfaceStepProps {
-  onSelect: (data: { step: string; value: string; price: number; time: number; surface: number }) => void;
+  onSelect: (data: { step: string; value: string; price: number; time: number; surface: number; discount?: number; originalPrice?: number }) => void;
   selected?: { longueur: number; largeur: number; surface: number; price: number; time: number } | null;
 }
 
@@ -11,9 +11,25 @@ const TextileTapisSurfaceStep: React.FC<TextileTapisSurfaceStepProps> = ({ onSel
   const [largeur, setLargeur] = useState<number>(selected?.largeur || 0);
   const [isValid, setIsValid] = useState(false);
 
+  // Fonction de calcul de la remise dégressive
+  const calculateDiscount = (surface: number): { discount: number; discountPercentage: number } => {
+    if (surface >= 15) {
+      return { discount: 30, discountPercentage: 30 };
+    } else if (surface >= 10) {
+      return { discount: 20, discountPercentage: 20 };
+    } else if (surface >= 5) {
+      return { discount: 10, discountPercentage: 10 };
+    } else {
+      return { discount: 0, discountPercentage: 0 };
+    }
+  };
+
   // Calculs automatiques
   const surface = (longueur && largeur) ? (longueur * largeur) / 10000 : 0;
-  const price = surface * 5; // 5€ par m²
+  const basePrice = 5; // 5€ par m²
+  const originalPrice = surface * basePrice;
+  const { discount, discountPercentage } = calculateDiscount(surface);
+  const discountedPrice = originalPrice * (1 - discount / 100);
   const time = Math.ceil(surface * 10); // 10 min par m²
 
   useEffect(() => {
@@ -38,9 +54,11 @@ const TextileTapisSurfaceStep: React.FC<TextileTapisSurfaceStepProps> = ({ onSel
       const dataToSend = {
         step: "Surface du tapis",
         value: `${longueur} cm x ${largeur} cm = ${surfaceFormatted} m²`,
-        price: price,
+        price: discountedPrice,
         time: time,
         surface: parseFloat(surfaceFormatted),
+        discount: discount,
+        originalPrice: originalPrice
       };
 
       onSelect(dataToSend);
@@ -118,19 +136,38 @@ const TextileTapisSurfaceStep: React.FC<TextileTapisSurfaceStepProps> = ({ onSel
                 </p>
               </div>
 
-              <div className="flex justify-center items-center space-x-6">
-                <div className="text-center">
-                  <span className="text-sm text-gray-600">Prix estimé :</span>
-                  <p className="text-xl font-semibold text-[#0049ac]">
-                    {price.toFixed(2)} €
-                  </p>
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Prix unitaire :</span>
+                  <span className="text-lg font-bold text-[#0049ac]">5 € / m²</span>
                 </div>
                 
-                <div className="text-center">
+                {discount > 0 && (
+                  <div className="flex justify-between items-center bg-green-50 rounded-lg p-3">
+                    <span className="text-sm text-gray-600">Remise ({discountPercentage}%) :</span>
+                    <span className="text-lg font-bold text-green-600">-{(originalPrice - discountedPrice).toFixed(2)} €</span>
+                  </div>
+                )}
+                
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Prix total :</span>
+                  <span className="text-xl font-semibold text-[#0049ac]">
+                    {discount > 0 ? (
+                      <span>
+                        <span className="line-through text-gray-400 mr-2">{originalPrice.toFixed(2)} €</span>
+                        {discountedPrice.toFixed(2)} €
+                      </span>
+                    ) : (
+                      `${originalPrice.toFixed(2)} €`
+                    )}
+                  </span>
+                </div>
+                
+                <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-600">Durée estimée :</span>
-                  <p className="text-xl font-semibold text-orange-600">
+                  <span className="text-xl font-semibold text-orange-600">
                     ≈ {time} min
-                  </p>
+                  </span>
                 </div>
               </div>
 
@@ -149,7 +186,39 @@ const TextileTapisSurfaceStep: React.FC<TextileTapisSurfaceStepProps> = ({ onSel
         )}
       </motion.div>
 
-              {/* Bouton de validation manuel */}
+      {/* Information sur la tarification dégressive */}
+      {isValid && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+          className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-200"
+        >
+          <div className="text-center">
+            <h4 className="text-sm font-semibold text-blue-800 mb-3">💡 Tarification dégressive</h4>
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div className="bg-white rounded-lg p-2 border border-blue-100">
+                <span className="font-medium text-blue-700">0-4.99 m²</span>
+                <div className="text-gray-600">Tarif plein</div>
+              </div>
+              <div className="bg-green-50 rounded-lg p-2 border border-green-200">
+                <span className="font-medium text-green-700">5-9.99 m²</span>
+                <div className="text-green-600">-10%</div>
+              </div>
+              <div className="bg-green-50 rounded-lg p-2 border border-green-200">
+                <span className="font-medium text-green-700">10-14.99 m²</span>
+                <div className="text-green-600">-20%</div>
+              </div>
+              <div className="bg-green-50 rounded-lg p-2 border border-green-200">
+                <span className="font-medium text-green-700">15+ m²</span>
+                <div className="text-green-600">-30%</div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Bouton de validation manuel */}
       {isValid && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -165,6 +234,7 @@ const TextileTapisSurfaceStep: React.FC<TextileTapisSurfaceStepProps> = ({ onSel
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
             Valider les dimensions
+            {discount > 0 && ` (${discountPercentage}% de remise)`}
           </button>
           <p className="text-sm text-gray-500 mt-2">
             Cliquez pour passer à l'étape suivante

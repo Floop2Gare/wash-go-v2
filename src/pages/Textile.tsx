@@ -260,13 +260,21 @@ export default function Textile() {
   const tapisSurfacePrice = textileTapisSurface ? (textileTapisSurface.price || 0) : 0;
   const tapisSurfaceTime = textileTapisSurface ? (textileTapisSurface.time || 0) : 0;
 
-
-
-
+  // Calcul du prix total avec remises appliquées
   const totalPrice = (textileType?.price || 0) + (textileMaterial?.price || 0) + (textileMatelasSize?.price || 0) + 
     chairsQuantityPrice + chairsMaterialPrice + tapisSurfacePrice + textileOptions.price;
   const totalTime = (textileType?.time || 0) + (textileMaterial?.time || 0) + (textileMatelasSize?.time || 0) + 
     chairsQuantityTime + chairsMaterialTime + tapisSurfaceTime + textileOptions.time;
+
+  // Calcul du prix original (sans remises) et de la remise totale
+  const chairsQuantityOriginalPrice = textileChairsQuantity ? (textileChairsQuantity.originalPrice || textileChairsQuantity.price || 0) : 0;
+  const tapisSurfaceOriginalPrice = textileTapisSurface ? (textileTapisSurface.originalPrice || textileTapisSurface.price || 0) : 0;
+  
+  const totalOriginalPrice = (textileType?.price || 0) + (textileMaterial?.price || 0) + (textileMatelasSize?.price || 0) + 
+    chairsQuantityOriginalPrice + chairsMaterialPrice + tapisSurfaceOriginalPrice + textileOptions.price;
+  
+  const totalDiscount = totalOriginalPrice - totalPrice;
+  const discountPercentage = totalOriginalPrice > 0 ? Math.round((totalDiscount / totalOriginalPrice) * 100) : 0;
 
   // Préparer les sélections pour le formulaire de contact et la progress bar
   const selections = [
@@ -297,6 +305,8 @@ export default function Textile() {
             onReset={handleReset}
             mobileOpen={summaryMobileOpen}
             setMobileOpen={setSummaryMobileOpen}
+            discount={discountPercentage}
+            originalPrice={totalOriginalPrice}
           />
         </>
       )}

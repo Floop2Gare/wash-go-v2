@@ -11,7 +11,7 @@ const options = [
   {
     value: "Plastiques intérieurs",
     label: "Plastiques intérieurs",
-    price: 15,
+    price: 10,
     time: 30,
     img: "/voiture/extras/plastiques.jpg",
   },
@@ -32,7 +32,7 @@ const options = [
   {
     value: "Encadrements de porte",
     label: "Encadrements de porte",
-    price: 15,
+    price: 10,
     time: 30,
     img: "/voiture/extras/portes.jpg",
   },

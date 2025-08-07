@@ -87,6 +87,7 @@ export const formatServiceRequest = (
     telephone: string;
     email: string;
     adresse?: string;
+    parrainage?: string;
     date: string;
     timeSlot: string;
     message?: string;
@@ -154,7 +155,8 @@ export const formatServiceRequest = (
   message += `Adresse : ${contactInfo.adresse || "Non renseignée"}\n`;
   message += `Date souhaitée : ${contactInfo.date}\n`;
   message += `Créneau : ${contactInfo.timeSlot}\n`;
-  message += `Message perso : ${contactInfo.message || "Aucun message"}\n\n`;
+  message += `Message perso : ${contactInfo.message || "Aucun message"}\n`;
+  message += `Code parrainage : ${contactInfo.parrainage || "Aucun"}\n\n`;
   message += `🔐 Code parrainage : Washgo`;
 
   return message;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Clock, Euro, X } from "lucide-react";
+import { Clock, Euro, X, Percent } from "lucide-react";
 
 interface TextileTotalSummaryProps {
   price: number;
@@ -7,6 +7,8 @@ interface TextileTotalSummaryProps {
   onReset?: () => void;
   mobileOpen?: boolean;
   setMobileOpen?: (open: boolean) => void;
+  discount?: number;
+  originalPrice?: number;
 }
 
 function formatTime(minutes: number): string {
@@ -23,8 +25,11 @@ const TextileTotalSummary: React.FC<TextileTotalSummaryProps> = ({
   onReset,
   mobileOpen,
   setMobileOpen,
+  discount = 0,
+  originalPrice,
 }) => {
   const formattedTime = formatTime(time);
+  const hasDiscount = discount > 0 && originalPrice && originalPrice > price;
 
   return (
     <>
@@ -33,10 +38,27 @@ const TextileTotalSummary: React.FC<TextileTotalSummaryProps> = ({
         <div className="bg-white/90 backdrop-blur-md border border-[#0049ac] shadow-lg rounded-xl px-3 sm:px-4 py-2 sm:py-3 w-56 sm:w-60">
           <h4 className="text-[#0049ac] font-semibold text-xs sm:text-sm mb-2 sm:mb-3">Résumé</h4>
           <div className="space-y-1 sm:space-y-2 text-xs text-gray-700">
+            {hasDiscount && (
+              <div className="flex items-center gap-2">
+                <Percent size={14} className="sm:w-4 sm:h-4 text-green-600" />
+                <span>
+                  Remise : <span className="font-bold text-green-600">-{discount}%</span>
+                </span>
+              </div>
+            )}
             <div className="flex items-center gap-2">
               <Euro size={14} className="sm:w-4 sm:h-4 text-[#0049ac]" />
               <span>
-                Prix : <span className="font-bold text-[#0049ac]">{price} €</span>
+                Prix : <span className="font-bold text-[#0049ac]">
+                  {hasDiscount ? (
+                    <span>
+                      <span className="line-through text-gray-400 mr-1">{originalPrice?.toFixed(2)} €</span>
+                      {price.toFixed(2)} €
+                    </span>
+                  ) : (
+                    `${price.toFixed(2)} €`
+                  )}
+                </span>
               </span>
             </div>
             <div className="flex items-center gap-2">
@@ -74,10 +96,27 @@ const TextileTotalSummary: React.FC<TextileTotalSummaryProps> = ({
             </button>
             <h4 className="text-[#0049ac] font-semibold text-base sm:text-lg mb-3">Résumé</h4>
             <div className="space-y-2 text-xs sm:text-sm text-gray-700 mb-4">
+              {hasDiscount && (
+                <div className="flex items-center gap-2 justify-center">
+                  <Percent size={14} className="sm:w-4 sm:h-4 text-green-600" />
+                  <span>
+                    Remise : <span className="font-bold text-green-600">-{discount}%</span>
+                  </span>
+                </div>
+              )}
               <div className="flex items-center gap-2 justify-center">
                 <Euro size={14} className="sm:w-4 sm:h-4 text-[#0049ac]" />
                 <span>
-                  Prix : <span className="font-bold text-[#0049ac]">{price} €</span>
+                  Prix : <span className="font-bold text-[#0049ac]">
+                    {hasDiscount ? (
+                      <span>
+                        <span className="line-through text-gray-400 mr-1">{originalPrice?.toFixed(2)} €</span>
+                        {price.toFixed(2)} €
+                      </span>
+                    ) : (
+                      `${price.toFixed(2)} €`
+                    )}
+                  </span>
                 </span>
               </div>
               <div className="flex items-center gap-2 justify-center">
