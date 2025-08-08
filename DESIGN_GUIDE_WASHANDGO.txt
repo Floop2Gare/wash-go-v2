@@ -1,0 +1,354 @@
+# 🎨 GUIDE DE DESIGN WASH&GO
+
+## 🌐 Design global du site
+
+### Ton général
+- **Professionnel** : Service haut de gamme avec expertise technique
+- **Rassurant** : Transparence des prix, étapes claires, garanties
+- **Fluide** : Parcours utilisateur intuitif, animations douces
+- **Humain** : Service à domicile, proximité géographique, contact direct
+
+### Police(s) utilisée(s)
+- **Police principale** : Outfit (Google Fonts)
+  - Poids : 400 (normal), 500 (medium), 600 (semibold), 700 (bold)
+  - Usage : Tous les textes du site
+  - Caractéristiques : Moderne, lisible, professionnelle
+- **Fallback** : Inter (définie dans Tailwind config)
+- **Hiérarchie** : 
+  - H1 : text-2xl à text-5xl, font-extrabold
+  - H2 : text-xl à text-4xl, font-bold
+  - H3 : text-lg à text-2xl, font-semibold
+  - Paragraphes : text-sm à text-lg, font-normal
+
+### Palette de couleurs
+- **Bleu principal** : #0049ac (Wash&Go brand)
+  - Usage : Boutons CTA, liens actifs, éléments de marque
+- **Bleu secondaire** : #3b82f6 (blue-500)
+  - Usage : Hover states, accents, icônes
+- **Blanc** : #ffffff
+  - Usage : Arrière-plans, cartes, textes sur fond sombre
+- **Gris clair** : #f8fafc (gray-50)
+  - Usage : Arrière-plans de sections, cartes secondaires
+- **Gris moyen** : #6b7280 (gray-500)
+  - Usage : Textes secondaires, descriptions
+- **Gris foncé** : #1f2937 (gray-800)
+  - Usage : Textes principaux, titres
+- **Noir** : #000000
+  - Usage : Textes sur fond clair, overlay
+
+### Usage des icônes
+- **Lucide React** : Icônes principales (ArrowRight, MapPin, Check, X, etc.)
+- **React Icons** : Icônes spécialisées (SiTiktok, réseaux sociaux)
+- **Taille standard** : w-4 h-4 (16px) à w-6 h-6 (24px)
+- **Couleur** : Hérite de la couleur du parent ou #0049ac
+- **Animation** : Transition sur hover (translate, scale)
+
+### Hiérarchie visuelle
+- **Titres** : Font-bold à font-extrabold, tailles progressives
+- **Paragraphes** : Font-normal, line-height relajado
+- **Boutons** : Font-semibold, padding généreux
+- **Labels** : Font-medium, couleur contrastée
+- **Prix** : Font-bold, couleur #0049ac
+
+### Responsive design
+- **Breakpoints Tailwind** :
+  - sm: 640px (tablet portrait)
+  - md: 768px (tablet landscape)
+  - lg: 1024px (desktop)
+  - xl: 1280px (large desktop)
+  - 2xl: 1536px (extra large)
+- **Grille** : Grid system flexible avec cols-1 à cols-4
+- **Espacement** : Gap-4 à gap-8 selon viewport
+- **Padding** : px-4 à px-8, py-2 à py-8
+
+---
+
+## 🧩 Composants transversaux
+
+### Navbar
+- **Structure** : Fixed top, z-50, transition-all
+- **Comportement scroll** : 
+  - Transparent → Blanc avec shadow
+  - Logo blanc → Logo bleu
+- **Mobile** : Menu hamburger avec overlay fullscreen
+- **Navigation** : Links avec hover states et active states
+- **Accessibilité** : Zones de clic 44px minimum
+
+### Footer
+- **Couleur de fond** : #0049ac (bleu principal)
+- **Textes** : Blanc et gris clair
+- **Structure** : Grid responsive (1 à 4 colonnes)
+- **Liens** : Hover effects, transition-colors
+- **Mentions légales** : Text-xs, gris clair
+- **Assurance** : Icône ShieldCheck, texte discret
+
+### CTA (Call to Action)
+- **Style principal** : 
+  - Gradient : from-blue-500 to-blue-700
+  - Border-radius : rounded-full
+  - Padding : px-6 py-3 (responsive)
+  - Shadow : shadow-lg
+  - Hover : scale-105, gradient plus foncé
+- **Style secondaire** :
+  - Border : border-2 border-white
+  - Background : transparent
+  - Hover : bg-white text-gray-900
+- **Animation** : Framer Motion scale et transition
+
+### Cookie banner
+- **Position** : Fixed bottom, z-50
+- **Style** : bg-white/90 backdrop-blur, border
+- **Boutons** : Style CTA principal et secondaire
+- **Animation** : Slide-up depuis le bas
+
+### Barre de progression
+- **Desktop** : Fixed left, top-1/4, z-40
+- **Mobile** : Bouton flottant bottom-left
+- **Style** : 
+  - Background : bg-white, shadow-lg
+  - Progression : bg-gradient-to-r from-[#0049ac] to-blue-400
+  - Icônes : Check dans des cercles bleus
+- **Animation** : Apparition/disparition selon scroll
+
+### Résumé (prix/temps)
+- **Desktop** : Fixed bottom-right, z-50
+- **Mobile** : Overlay centré avec backdrop
+- **Style** : 
+  - Background : bg-white/90 backdrop-blur
+  - Border : border-[#0049ac]
+  - Icônes : Euro et Clock
+  - Reset : Lien discret avec icône ↺
+
+---
+
+## 📄 Explication du design par page
+
+### Accueil
+
+#### Structure verticale des sections
+- **Hero** : Full-screen avec image de fond
+- **Features** : 4 cartes en grid responsive
+- **Social** : Publications Facebook en carousel
+- **Choix** : 3 cartes de services
+- **Contact** : Formulaire ultra-design
+- **Testimonials** : Témoignages clients
+- **Footer** : Informations complètes
+
+#### Hero section avec 2 CTA
+- **Image de fond** : BMW propre, professionnel
+- **Overlay** : bg-black/70 pour lisibilité
+- **Logo** : Centré, taille responsive
+- **Titre** : Gradient sur "Propreté"
+- **CTA principal** : Gradient bleu, icône ArrowRight
+- **CTA secondaire** : Border blanc, icône MapPin
+
+#### Zone d'arguments ("Pourquoi nous choisir ?")
+- **Titre** : Gradient bleu sur "Wash&GO"
+- **4 cartes** : 
+  - Icônes colorées (bleu, vert, jaune, violet)
+  - Background : bg-white, shadow-lg
+  - Hover : scale-102, shadow-2xl
+- **Animation** : Framer Motion avec délais
+
+#### Composants réseaux sociaux
+- **Section** : bg-gradient-to-br from-blue-50 to-indigo-50
+- **Titre** : Gradient sur "Facebook"
+- **Posts** : Grid 2x2, cartes avec images
+- **Loading** : Spinner animé
+- **Fallback** : Message d'erreur élégant
+
+#### Blocs très espacés avec sections respirantes
+- **Padding** : py-20 à py-24 selon section
+- **Gap** : gap-8 à gap-12 entre éléments
+- **Margins** : max-w-7xl mx-auto pour centrage
+- **Espacement** : space-y-6 à space-y-8
+
+### Voiture / Canapé / Textile
+
+#### Design à étapes verticales
+- **Structure** : Sections empilées verticalement
+- **Navigation** : Scroll smooth entre sections
+- **Progression** : Barre latérale (desktop) ou overlay (mobile)
+- **Validation** : Boutons désactivés si étapes manquantes
+
+#### Affichage conditionnel des composants
+- **Service Textile** : Parcours différent selon type
+- **Service Voiture** : Option coffre selon véhicule
+- **Calculs** : Prix et temps mis à jour en temps réel
+- **Résumé** : Affichage conditionnel selon sélections
+
+#### Utilisation d'icônes pour guider l'utilisateur
+- **Check** : Étapes complétées
+- **Euro** : Prix
+- **Clock** : Temps
+- **ArrowRight** : Actions
+- **MapPin** : Localisation
+
+#### Résumé sticky ou overlay selon viewport
+- **Desktop** : Fixed bottom-right, petit format
+- **Mobile** : Bouton flottant → Overlay plein écran
+- **Animation** : Fade-in et slide-up
+- **Backdrop** : bg-black/40 backdrop-blur
+
+#### Ton : rassurant, clair, lisible
+- **Textes** : Phrases courtes et directes
+- **Prix** : Toujours visibles et clairs
+- **Descriptions** : Techniques mais accessibles
+- **Validation** : Messages d'erreur constructifs
+
+### Contact / À propos / Mentions
+
+#### Mise en page plus "flat"
+- **Background** : Blanc ou gris très clair
+- **Cartes** : Minimalistes, sans ombres excessives
+- **Espacement** : Plus généreux, respiration
+- **Couleurs** : Moins de gradients, plus de simplicité
+
+#### Blocs d'infos clairs, sans fioritures
+- **Structure** : Grid simple, 1 ou 2 colonnes
+- **Typographie** : Hiérarchie claire
+- **Couleurs** : Bleu principal pour les accents
+- **Espacement** : Padding généreux
+
+#### Icônes ou titres explicites
+- **Icônes** : Lucide React, taille standard
+- **Titres** : Font-semibold, couleur bleue
+- **Séparation** : Borders subtils ou espaces
+
+#### Formulaires avec design unifié
+- **Champs** : Border-2, focus:ring-2 focus:ring-[#0049ac]
+- **Labels** : Font-medium, couleur grise
+- **Validation** : Messages d'erreur en rouge
+- **Boutons** : Style CTA principal
+- **Responsive** : Stack vertical sur mobile
+
+---
+
+## 💡 Bonnes pratiques de design utilisées
+
+### Espacement généreux pour respirabilité
+- **Padding** : Minimum 16px (p-4), souvent 24px (p-6)
+- **Margin** : Espacement entre sections (py-20)
+- **Gap** : Espacement entre éléments (gap-6 à gap-8)
+- **Line-height** : 1.5 à 1.7 pour la lisibilité
+
+### Usage systématique de Tailwind pour cohérence
+- **Classes utilitaires** : Pas de CSS custom sauf animations
+- **Responsive** : Classes sm:, md:, lg: systématiques
+- **Couleurs** : Palette définie, pas de valeurs arbitraires
+- **Espacement** : Scale Tailwind (4, 6, 8, 12, 16, 20, 24)
+
+### Composants réutilisables et stylisés
+- **VerticalProgressBar** : 3 versions identiques
+- **TotalSummary** : Desktop et mobile
+- **ContactStep** : Formulaire unifié
+- **TimeSlotSelector** : Sélecteur de créneaux
+- **Cartes de sélection** : Pattern répété
+
+### Feedback utilisateur en temps réel
+- **Sélection** : États "Sélectionné" vs "Choisir"
+- **Validation** : Messages d'erreur dynamiques
+- **Progression** : Pourcentage et barre en temps réel
+- **Prix** : Recalcul automatique
+- **Loading** : États de chargement avec spinners
+
+### Animations et transitions
+- **Framer Motion** : Animations complexes (scale, fade, slide)
+- **CSS Transitions** : Transitions simples (colors, opacity)
+- **Hover effects** : Scale, shadow, color changes
+- **Loading states** : Spinners et skeletons
+- **Page transitions** : Smooth scroll et fade effects
+
+### Accessibilité
+- **Focus visible** : Outline bleu sur focus
+- **Zones de clic** : Minimum 44px sur mobile
+- **Contraste** : Textes lisibles sur tous les fonds
+- **ARIA labels** : Labels explicites pour les boutons
+- **Navigation clavier** : Tab order logique
+
+---
+
+## 🌍 Inspirations ou utilisations possibles
+
+### Pour un autre service à domicile
+**Exemple : Pressing mobile, conciergerie, esthétique mobile**
+
+#### Adaptations possibles :
+- **Hero** : Image du service en action
+- **Parcours** : Étapes de réservation similaires
+- **Prix** : Calcul dynamique selon options
+- **Contact** : Formulaire avec validation
+- **Couleurs** : Palette adaptée au domaine
+
+#### Éléments réutilisables :
+- **Structure à étapes** : Parfait pour réservations
+- **Calcul de prix** : Système flexible
+- **Barre de progression** : Guidage utilisateur
+- **Résumé temps réel** : Transparence des coûts
+- **Responsive design** : Mobile-first
+
+### Pour un outil SaaS client-facing
+**Exemple : Calculateur de prix, simulateur, réservation**
+
+#### Adaptations possibles :
+- **Interface** : Plus épurée, focus sur la fonctionnalité
+- **Animations** : Plus subtiles, professionnelles
+- **Couleurs** : Palette corporate
+- **Formulaires** : Plus complexes, validation avancée
+- **Dashboard** : Interface administrateur
+
+#### Éléments réutilisables :
+- **Logique conditionnelle** : Parcours dynamiques
+- **Validation** : Système robuste
+- **Calculs** : Prix et temps en temps réel
+- **Responsive** : Adaptation parfaite
+- **Accessibilité** : Standards élevés
+
+### Pour un site premium local
+**Exemple : Plomberie luxe, service chauffeur, artisanat**
+
+#### Adaptations possibles :
+- **Images** : Photos professionnelles du service
+- **Témoignages** : Section dédiée
+- **Galerie** : Avant/après
+- **Certifications** : Badges et garanties
+- **Contact** : Multiples canaux
+
+#### Éléments réutilisables :
+- **Hero impactant** : Image + CTA
+- **Arguments** : Cartes de présentation
+- **Parcours client** : Étapes claires
+- **Confiance** : Garanties et assurances
+- **Local** : Zone d'intervention
+
+---
+
+## 🎯 Principes de design Wash&Go
+
+### Service haut de gamme
+- **Qualité visuelle** : Images professionnelles
+- **Transparence** : Prix clairs, pas de surprise
+- **Expertise** : Descriptions techniques accessibles
+- **Garanties** : Assurance, mentions légales
+
+### Pratique et humain
+- **Simplicité** : Parcours intuitif
+- **Proximité** : Zone d'intervention claire
+- **Contact direct** : Téléphones, emails visibles
+- **Flexibilité** : Créneaux adaptés
+
+### Digital et fluide
+- **Responsive** : Parfait sur tous les écrans
+- **Animations** : Douces et pertinentes
+- **Performance** : Chargement rapide
+- **Accessibilité** : Standards élevés
+
+### Confiance et professionnalisme
+- **Couleurs** : Bleu rassurant
+- **Typographie** : Moderne et lisible
+- **Espacement** : Respiration et clarté
+- **Cohérence** : Design system unifié
+
+---
+
+*Guide créé pour documenter les choix de design Wash&Go - Décembre 2024*
