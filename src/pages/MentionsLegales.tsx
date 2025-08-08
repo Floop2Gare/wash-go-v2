@@ -110,6 +110,42 @@ export default function MentionsLegales() {
           </div>
         </section>
 
+        {/* Assurance */}
+        <section>
+          <h2 className="text-xl sm:text-2xl font-semibold text-[#0049ac] mb-4">
+            Assurance responsabilité civile professionnelle
+          </h2>
+          <div className="bg-green-50 rounded-xl p-4 sm:p-6">
+            <div className="bg-white rounded-lg p-4 border border-green-100">
+              <p className="text-gray-700 mb-4">
+                Wash&Go est couvert par une assurance responsabilité civile professionnelle auprès de :
+              </p>
+              
+              <div className="bg-green-50 rounded-lg p-4 mb-4">
+                <h3 className="font-semibold text-gray-900 mb-3">Hiscox Assurances</h3>
+                <ul className="space-y-2 text-gray-700">
+                  <li><span className="font-medium">N° de contrat :</span> HSXIN320063418A</li>
+                  <li><span className="font-medium">Catégorie :</span> Assurances professionnelles – Autres Services</li>
+                  <li><span className="font-medium">Validité :</span> du 10 avril 2025 au 9 avril 2026</li>
+                  <li><span className="font-medium">Couverture :</span> Monde entier hors USA/Canada</li>
+                </ul>
+              </div>
+
+              <div className="bg-blue-50 rounded-lg p-4 mb-4">
+                <h4 className="font-semibold text-gray-900 mb-2">Activité garantie :</h4>
+                <ul className="space-y-1 text-gray-700">
+                  <li>• Services à la personne</li>
+                  <li>• Nettoyage de véhicules (hors station de lavage)</li>
+                </ul>
+              </div>
+
+              <p className="text-gray-600 text-sm">
+                Cette attestation est consultable sur demande par toute autorité compétente ou client en cas de besoin.
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* Hébergement et nom de domaine */}
         <section>
           <h2 className="text-xl sm:text-2xl font-semibold text-[#0049ac] mb-4">

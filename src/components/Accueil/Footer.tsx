@@ -1,4 +1,4 @@
-import { Facebook, Instagram, Phone, Mail, MapPin, Clock } from 'lucide-react';
+import { Facebook, Instagram, Phone, Mail, MapPin, Clock, ShieldCheck } from 'lucide-react';
 import { SiTiktok } from 'react-icons/si';
 import React from 'react';
 
@@ -184,6 +184,14 @@ const Footer: React.FC = () => {
             </p>
             <p className="text-xs text-gray-200 text-center sm:text-right">
               Intervention à domicile dans les Bouches-du-Rhône
+            </p>
+          </div>
+          
+          {/* Mention assurance */}
+          <div className="mt-3 flex items-center justify-center space-x-2">
+            <ShieldCheck className="h-3 w-3 text-gray-300" />
+            <p className="text-xs text-gray-300 text-center">
+              Wash&Go est couvert par une assurance responsabilité civile professionnelle chez Hiscox Assurances.
             </p>
           </div>
         </div>
