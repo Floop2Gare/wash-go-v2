@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Clock, Euro, X } from "lucide-react";
+import { useStickyFooter } from "../../../hooks/useStickyFooter";
 
 interface TotalSummaryProps {
   price: number;
@@ -25,11 +26,25 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
   setMobileOpen,
 }) => {
   const formattedTime = formatTime(time);
+  
+  // Utiliser le hook sticky footer
+  const { isVisible, shouldStop, stopPosition } = useStickyFooter({
+    offset: 16,
+    showThreshold: 20
+  });
 
   return (
     <>
       {/* Desktop : positionné à droite */}
-      <div className="hidden md:block fixed bottom-4 right-4 z-50 animate-fade-in">
+      <div 
+        className={`hidden md:block fixed right-4 z-50 transition-all duration-300 ${
+          isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+        style={{
+          bottom: shouldStop ? `${stopPosition}px` : '16px',
+          transform: shouldStop ? 'translateY(-100%)' : 'translateY(0)'
+        }}
+      >
         <div className="bg-white/90 backdrop-blur-md border border-[#0049ac] shadow-lg rounded-xl px-3 sm:px-4 py-2 sm:py-3 w-56 sm:w-60">
           <h4 className="text-[#0049ac] font-semibold text-xs sm:text-sm mb-2 sm:mb-3">Résumé</h4>
           <div className="space-y-1 sm:space-y-2 text-xs text-gray-700">

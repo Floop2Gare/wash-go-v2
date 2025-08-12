@@ -5,6 +5,7 @@ import TextileTypeStep from "../components/textile/components/TextileTypeStep";
 import TextileMaterialStep from "../components/textile/components/TextileMaterialStep";
 import TextileTapisMaterialStep from "../components/textile/components/TextileTapisMaterialStep";
 import TextileMatelasSizeStep from "../components/textile/components/TextileMatelasSizeStep";
+import TextileMatelasSideStep from "../components/textile/components/TextileMatelasSideStep";
 import TextileOptionsStep from "../components/textile/components/TextileOptionsStep";
 import TextileContactStep from "../components/textile/components/TextileContactStep";
 import TextileChairsQuantityStep from "../components/textile/components/TextileChairsQuantityStep";
@@ -46,6 +47,7 @@ export default function Textile() {
   const [textileType, setTextileType] = useState(null);
   const [textileMaterial, setTextileMaterial] = useState(null);
   const [textileMatelasSize, setTextileMatelasSize] = useState(null);
+  const [textileMatelasSide, setTextileMatelasSide] = useState(null);
   const [textileChairsQuantity, setTextileChairsQuantity] = useState(null);
   const [textileChairsMaterial, setTextileChairsMaterial] = useState(null);
   const [textileTapisSurface, setTextileTapisSurface] = useState(null);
@@ -53,6 +55,7 @@ export default function Textile() {
   const [textileOptions, setTextileOptions] = useState({ value: [], price: 0, time: 0 });
   const [showMaterialStep, setShowMaterialStep] = useState(false);
   const [showMatelasSizeStep, setShowMatelasSizeStep] = useState(false);
+  const [showMatelasSideStep, setShowMatelasSideStep] = useState(false);
   const [showChairsQuantityStep, setShowChairsQuantityStep] = useState(false);
   const [showChairsMaterialStep, setShowChairsMaterialStep] = useState(false);
   const [showTapisSurfaceStep, setShowTapisSurfaceStep] = useState(false);
@@ -72,6 +75,7 @@ export default function Textile() {
             // Réinitialiser TOUS les états de données des autres parcours
       setTextileMaterial(null);
       setTextileMatelasSize(null);
+      setTextileMatelasSide(null);
       setTextileChairsQuantity(null);
       setTextileChairsMaterial(null);
       setTextileTapisSurface(null);
@@ -81,6 +85,7 @@ export default function Textile() {
       // Réinitialiser TOUS les états d'affichage
       setShowMaterialStep(false);
       setShowMatelasSizeStep(false);
+      setShowMatelasSideStep(false);
       setShowChairsQuantityStep(false);
       setShowChairsMaterialStep(false);
       setShowTapisSurfaceStep(false);
@@ -149,7 +154,21 @@ export default function Textile() {
 
   const handleTextileMatelasSizeSelect = (data) => {
     setTextileMatelasSize(data);
-    // Passer directement aux options pour les matelas
+    // Passer à l'étape de sélection recto/verso pour les matelas
+    setShowMatelasSideStep(true);
+    
+    // Scroll automatique vers l'étape recto/verso après un délai
+    setTimeout(() => {
+      const matelasSideElement = document.getElementById('textile-matelas-side');
+      if (matelasSideElement) {
+        matelasSideElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 300);
+  };
+
+  const handleTextileMatelasSideSelect = (data) => {
+    setTextileMatelasSide(data);
+    // Passer aux options pour les matelas
     setShowOptionsStep(true);
     
     // Scroll automatique vers l'étape des options après un délai
@@ -228,6 +247,7 @@ export default function Textile() {
     setTextileType(null);
     setTextileMaterial(null);
     setTextileMatelasSize(null);
+    setTextileMatelasSide(null);
     setTextileChairsQuantity(null);
     setTextileChairsMaterial(null);
     setTextileTapisSurface(null);
@@ -235,6 +255,7 @@ export default function Textile() {
     setTextileOptions({ value: [], price: 0, time: 0 });
     setShowMaterialStep(false);
     setShowMatelasSizeStep(false);
+    setShowMatelasSideStep(false);
     setShowChairsQuantityStep(false);
     setShowChairsMaterialStep(false);
     setShowTapisSurfaceStep(false);
@@ -261,18 +282,31 @@ export default function Textile() {
   const tapisSurfaceTime = textileTapisSurface ? (textileTapisSurface.time || 0) : 0;
 
   // Calcul du prix total avec remises appliquées
-  const totalPrice = (textileType?.price || 0) + (textileMaterial?.price || 0) + (textileMatelasSize?.price || 0) + 
+  const basePrice = (textileType?.price || 0) + (textileMaterial?.price || 0) + 
     chairsQuantityPrice + chairsMaterialPrice + tapisSurfacePrice + textileOptions.price;
-  const totalTime = (textileType?.time || 0) + (textileMaterial?.time || 0) + (textileMatelasSize?.time || 0) + 
+  
+  // Pour les matelas, utiliser le prix calculé par l'étape recto/verso
+  const matelasPrice = textileMatelasSide?.price || textileMatelasSize?.price || 0;
+  const totalPrice = basePrice + matelasPrice;
+  
+  const totalTime = (textileType?.time || 0) + (textileMaterial?.time || 0) + 
+    (textileMatelasSide?.time || textileMatelasSize?.time || 0) + 
     chairsQuantityTime + chairsMaterialTime + tapisSurfaceTime + textileOptions.time;
 
   // Calcul du prix original (sans remises) et de la remise totale
   const chairsQuantityOriginalPrice = textileChairsQuantity ? (textileChairsQuantity.originalPrice || textileChairsQuantity.price || 0) : 0;
   const tapisSurfaceOriginalPrice = textileTapisSurface ? (textileTapisSurface.originalPrice || textileTapisSurface.price || 0) : 0;
   
-  const totalOriginalPrice = (textileType?.price || 0) + (textileMaterial?.price || 0) + (textileMatelasSize?.price || 0) + 
+  // Pour les matelas, calculer le prix original selon l'option recto/verso
+  let matelasOriginalPrice = textileMatelasSize?.price || 0;
+  if (textileMatelasSide?.value === "Recto + verso") {
+    matelasOriginalPrice = (textileMatelasSize?.price || 0) * 2; // Prix sans réduction
+  }
+  
+  const totalOriginalPrice = (textileType?.price || 0) + (textileMaterial?.price || 0) + matelasOriginalPrice + 
     chairsQuantityOriginalPrice + chairsMaterialPrice + tapisSurfaceOriginalPrice + textileOptions.price;
   
+  // Calculer la remise totale
   const totalDiscount = totalOriginalPrice - totalPrice;
   const discountPercentage = totalOriginalPrice > 0 ? Math.round((totalDiscount / totalOriginalPrice) * 100) : 0;
 
@@ -281,6 +315,7 @@ export default function Textile() {
     textileType ? { step: "Type de textile", value: textileType.value } : null,
     textileMaterial ? { step: "Matière", value: textileMaterial.value } : null,
     textileMatelasSize ? { step: "Taille du matelas", value: textileMatelasSize.value } : null,
+    textileMatelasSide ? { step: "Côté du matelas", value: textileMatelasSide.value } : null,
     textileChairsQuantity ? { step: "Nombre de chaises", value: `${textileChairsQuantity.quantity} chaise${textileChairsQuantity.quantity > 1 ? 's' : ''}` } : null,
     textileChairsMaterial ? { step: "Matière des chaises", value: textileChairsMaterial.value } : null,
     textileTapisSurface ? { step: "Surface du tapis", value: textileTapisSurface.value } : null,
@@ -289,7 +324,7 @@ export default function Textile() {
   ].filter(Boolean);
 
   // Déterminer le nombre total d'étapes selon le type de textile
-  const totalSteps = textileType?.value === "Matelas" ? 3 : textileType?.value === "Chaises" ? 4 : textileType?.value === "Tapis" ? 4 : 3; // Matelas: Type → Taille → Options, Chaises: Type → Quantité → Matière → Options, Tapis: Type → Surface → Matière → Options
+  const totalSteps = textileType?.value === "Matelas" ? 4 : textileType?.value === "Chaises" ? 4 : textileType?.value === "Tapis" ? 4 : 3; // Matelas: Type → Taille → Côté → Options, Chaises: Type → Quantité → Matière → Options, Tapis: Type → Surface → Matière → Options
 
   return (
     <>
@@ -489,7 +524,34 @@ export default function Textile() {
             </motion.div>
           )}
 
-          {/* Étape 2C - Sélection du nombre de chaises (pour Chaises) */}
+          {/* Étape 2C - Sélection du côté du matelas (pour Matelas) */}
+          {showMatelasSideStep && (
+            <motion.div 
+              id="textile-matelas-side"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="space-y-8"
+            >
+              <div className="text-center">
+                <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+                  Étape 3 : Côté du matelas
+                </h2>
+                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                  Choisissez quel(s) côté(s) du matelas nettoyer
+                </p>
+              </div>
+              
+              <TextileMatelasSideStep 
+                onSelect={handleTextileMatelasSideSelect}
+                selected={textileMatelasSide?.value}
+                basePrice={textileMatelasSize?.price || 0}
+                baseTime={textileMatelasSize?.time || 0}
+              />
+            </motion.div>
+          )}
+
+          {/* Étape 2D - Sélection du nombre de chaises (pour Chaises) */}
           {showChairsQuantityStep && (
             <motion.div 
               id="textile-chairs-quantity"
@@ -514,7 +576,7 @@ export default function Textile() {
             </motion.div>
           )}
 
-          {/* Étape 2D - Sélection de la matière des chaises (pour Chaises) */}
+          {/* Étape 2E - Sélection de la matière des chaises (pour Chaises) */}
           {showChairsMaterialStep && (
             <motion.div 
               id="textile-chairs-material"
@@ -552,7 +614,7 @@ export default function Textile() {
             >
               <div className="text-center">
                 <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-                  Étape {textileType?.value === "Chaises" ? "4" : textileType?.value === "Tapis" ? "4" : "3"} : Options supplémentaires
+                  Étape {textileType?.value === "Matelas" ? "4" : textileType?.value === "Chaises" ? "4" : textileType?.value === "Tapis" ? "4" : "3"} : Options supplémentaires
                 </h2>
                 <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                   Sélectionnez les options supplémentaires pour votre nettoyage
@@ -578,7 +640,7 @@ export default function Textile() {
             >
               <div className="text-center">
                 <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-                  Étape {textileType?.value === "Chaises" ? "5" : textileType?.value === "Tapis" ? "5" : "4"} : Contact
+                  Étape {textileType?.value === "Matelas" ? "5" : textileType?.value === "Chaises" ? "5" : textileType?.value === "Tapis" ? "5" : "4"} : Contact
                 </h2>
                 <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                   Remplissez vos informations pour finaliser votre demande

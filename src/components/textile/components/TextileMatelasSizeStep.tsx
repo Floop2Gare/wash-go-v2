@@ -10,7 +10,7 @@ const matelasSizes = [
     value: "Matelas 1 place",
     title: "Matelas 1 place",
     subtitle: "90 cm = 1 personne",
-    dimensions: "90 x 190 cm",
+    dimensions: "90×190/200cm",
     price: 30,
     time: 45,
     desc: "Nettoyage en profondeur de votre matelas une personne",
@@ -19,7 +19,7 @@ const matelasSizes = [
     value: "Matelas 1,5 place",
     title: "Matelas 1,5 place", 
     subtitle: "120 cm = 1 à 2 personnes",
-    dimensions: "120 x 190 cm",
+    dimensions: "120×190/200cm",
     price: 40,
     time: 60,
     desc: "Matelas intermédiaire, idéal pour une personne avec plus d'espace",
@@ -28,17 +28,26 @@ const matelasSizes = [
     value: "Matelas 2 places",
     title: "Matelas 2 places",
     subtitle: "140 cm = 2 personnes",
-    dimensions: "140 x 190 cm", 
+    dimensions: "140×190/200cm", 
     price: 50,
     time: 75,
     desc: "Matelas double standard pour un couple",
   },
   {
+    value: "Matelas Queen Size",
+    title: "Matelas Queen Size",
+    subtitle: "160 cm = 2 personnes (confort optimal)",
+    dimensions: "160×190/200cm",
+    price: 60,
+    time: 85,
+    desc: "Matelas Queen Size pour un confort optimal",
+  },
+  {
     value: "Matelas King Size",
     title: "Matelas King Size",
     subtitle: "180 cm = 2 personnes (grand confort)",
-    dimensions: "180 x 200 cm",
-    price: 60,
+    dimensions: "180×190/200cm",
+    price: 70,
     time: 90,
     desc: "Matelas extra-large pour un confort maximal",
   },
@@ -57,7 +66,42 @@ const TextileMatelasSizeStep: React.FC<TextileMatelasSizeStepProps> = ({ onSelec
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 max-w-6xl mx-auto">
+    <>
+      <style>{`
+        .line-clamp-2 {
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+        
+                 .dimensions-single-line {
+           white-space: nowrap !important;
+           overflow: hidden;
+           text-overflow: ellipsis;
+           display: inline-block;
+           font-size: 0.75rem;
+           line-height: 1rem;
+           font-weight: 400;
+           letter-spacing: -0.01em;
+           max-width: 100%;
+         }
+        
+                 @media (max-width: 640px) {
+           .dimensions-single-line {
+             font-size: 0.7rem;
+             line-height: 0.9rem;
+           }
+         }
+         
+         @media (max-width: 480px) {
+           .dimensions-single-line {
+             font-size: 0.65rem;
+             line-height: 0.85rem;
+           }
+         }
+      `}</style>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 max-w-6xl mx-auto">
       {matelasSizes.map((size) => {
         const isActive = selected === size.value;
 
@@ -72,12 +116,14 @@ const TextileMatelasSizeStep: React.FC<TextileMatelasSizeStepProps> = ({ onSelec
             <div className="p-3 sm:p-4">
               <div className="mb-2 sm:mb-3">
                 <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 mb-1">{size.title}</h3>
-                <div className="text-xs sm:text-sm font-medium text-[#0049ac] mb-1 sm:mb-2">
-                  {size.subtitle}
-                </div>
-                <div className="text-xs text-gray-500 mb-1 sm:mb-2">
-                  Dimensions : {size.dimensions}
-                </div>
+                                 <div className="text-xs sm:text-sm font-medium text-[#0049ac] mb-0.5">
+                   {size.subtitle}
+                 </div>
+                 <div className="text-gray-600 mb-1 leading-none text-xs">
+                   <span className="dimensions-single-line">
+                     {size.dimensions}
+                   </span>
+                 </div>
                 
                 {/* Affichage du prix en bleu standard */}
                 <div className="mb-2">
@@ -87,7 +133,7 @@ const TextileMatelasSizeStep: React.FC<TextileMatelasSizeStepProps> = ({ onSelec
                 </div>
               </div>
 
-              <p className="text-xs sm:text-sm text-gray-600 mb-2 sm:mb-3">{size.desc}</p>
+              <p className="text-xs sm:text-sm text-gray-600 mb-2 leading-tight line-clamp-2">{size.desc}</p>
               
               <p className="text-xs text-gray-400 mb-2 sm:mb-3">Durée estimée : {size.time} min</p>
 
@@ -106,7 +152,8 @@ const TextileMatelasSizeStep: React.FC<TextileMatelasSizeStepProps> = ({ onSelec
           </div>
         );
       })}
-    </div>
+      </div>
+    </>
   );
 };
 

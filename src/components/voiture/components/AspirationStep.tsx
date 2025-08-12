@@ -9,15 +9,15 @@ const options = [
   {
     value: "Partielle (hors coffre)",
     title: "Aspiration partielle",
-    desc: "Nettoyage rapide de l'habitacle (hors coffre)",
+    desc: "Nettoyage de l'habitacle hors coffre avec dépoussiérage des plastiques",
     price: 20,
-    time: 30,
+    time: 50,
     img: "/voiture/aspiration/sanscoffre.svg",
   },
   {
     value: "Complète (avec coffre)",
     title: "Aspiration complète",
-    desc: "Habitacle + coffre, pour un résultat optimal",
+    desc: "Nettoyage complet de l'habitacle + coffre avec dépoussiérage des plastiques",
     price: 30,
     time: 75,
     img: "/voiture/aspiration/aveccoffre.svg",

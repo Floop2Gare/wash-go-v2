@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Check, X } from "lucide-react";
+import { useStickyFooter } from "../../../../hooks/useStickyFooter";
 
 interface Selection {
   step: string;
@@ -13,17 +14,14 @@ interface VerticalProgressBarProps {
 
 const VerticalProgressBar: React.FC<VerticalProgressBarProps> = ({ selections, totalSteps }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [showBar, setShowBar] = useState(false);
   const percent = Math.round((selections.length / totalSteps) * 100);
   const barRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowBar(window.scrollY > 20); // Apparition plus tôt
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  
+  // Utiliser le hook sticky footer
+  const { isVisible, shouldStop, stopPosition } = useStickyFooter({
+    offset: 16,
+    showThreshold: 20
+  });
 
   const Panel = () => (
     <div className="w-full max-w-xs px-3 sm:px-4 py-3 sm:py-4">
@@ -58,7 +56,15 @@ const VerticalProgressBar: React.FC<VerticalProgressBarProps> = ({ selections, t
   return (
     <>
       {/* Desktop */}
-      <aside className={`hidden md:flex fixed top-1/4 left-3 z-40 transition-opacity duration-500 ${showBar ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
+      <aside 
+        className={`hidden md:flex fixed left-3 z-40 transition-all duration-300 ${
+          isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+        style={{
+          top: shouldStop ? `${stopPosition}px` : '25%',
+          transform: shouldStop ? 'translateY(-100%)' : 'translateY(0)'
+        }}
+      >
         <Panel />
       </aside>
 
