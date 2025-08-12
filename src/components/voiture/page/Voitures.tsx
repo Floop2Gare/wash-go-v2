@@ -296,7 +296,8 @@ export default function Voitures() {
                       }, 200);
                     }
                   },
-                  selected: extras.value
+                  selected: extras.value,
+                  aspirationType: aspiration?.value
                 }
               : { 
                   selections, 
