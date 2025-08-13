@@ -40,8 +40,8 @@ const Apropos: React.FC = () => {
       <main className="min-h-screen bg-white">
         {/* Hero Section - Style immersif comme les autres pages */}
         <section className="relative h-screen w-full bg-cover bg-center bg-no-repeat flex items-center justify-center px-4 sm:px-6 text-white text-center" 
-                 style={{ backgroundImage: "url('/about/nous.png')" }}>
-          <div className="absolute inset-0 bg-black/70 z-0" />
+                 style={{ backgroundImage: "url('/about/nous.svg')" }}>
+          <div className="absolute inset-0 bg-black/20 z-0" />
           <div className="relative z-10 flex flex-col items-center justify-center h-full w-full space-y-4 sm:space-y-6 md:space-y-8 px-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
