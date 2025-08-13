@@ -19,7 +19,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onCTAClick, onContactClick })
       {/* Contenu principal */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full w-full space-y-6 sm:space-y-8 px-4">
         <img
-          src="/logo/logophrase.svg"
+          src="/logo/logoblanc.svg"
           alt="Logo Wash&GO"
           className="w-48 sm:w-64 md:w-72 lg:w-80 xl:w-96"
         />
