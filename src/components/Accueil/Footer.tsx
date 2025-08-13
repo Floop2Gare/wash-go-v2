@@ -93,11 +93,11 @@ const Footer: React.FC = () => {
                 <div className="space-y-2 text-sm text-gray-200">
                   <div>
                     <p className="font-medium">Lundi - Vendredi</p>
-                    <p>8h00 - 19h00</p>
+                    <p>17h30 - 20h00</p>
                   </div>
                   <div>
                     <p className="font-medium">Samedi</p>
-                    <p>9h00 - 17h00</p>
+                    <p>7h30 - 19h00</p>
                   </div>
                   <div>
                     <p className="font-medium">Dimanche</p>
