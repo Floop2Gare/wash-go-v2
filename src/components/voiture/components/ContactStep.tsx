@@ -9,6 +9,7 @@ interface ContactStepProps {
   totalPrice: number;
   totalTime: number;
   onReset?: () => void;
+  aspiration?: any;
 }
 
 const initialForm = {
@@ -47,7 +48,7 @@ function isValidAdresse(adresse: string) {
   return /\d+\s+.+,?\s*\d{5}\s+.+/i.test(adresse);
 }
 
-const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, totalTime, onReset }) => {
+const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, totalTime, onReset, aspiration }) => {
   const [form, setForm] = useState(initialForm);
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
@@ -167,6 +168,12 @@ const ContactStep: React.FC<ContactStepProps> = ({ selections, totalPrice, total
     
     // Marquer le formulaire comme soumis
     setIsSubmitted(true);
+    
+    // Validation de l'aspiration obligatoire
+    if (!aspiration) {
+      setError("Sélectionnez au moins une option d'aspiration pour continuer");
+      return;
+    }
     
     // Valider tous les champs
     const newFieldErrors: Record<string, string> = {};

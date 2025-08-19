@@ -51,8 +51,9 @@ export default function Voitures() {
   const [options, setOptions] = useState({ value: [], price: 0, time: 0 });
   const [extras, setExtras] = useState({ value: [], price: 0, time: 0 });
   const [activeStep, setActiveStep] = useState(0);
-  const [formError, setFormError] = useState(null);
+  const [formError, setFormError] = useState<string | null>(null);
   const [showErrorModal, setShowErrorModal] = useState(false);
+  const [aspirationError, setAspirationError] = useState(false);
   const sectionRefs = useRef([]);
   const heroRef = useRef(null);
   const aspirationRef = useRef(null);
@@ -85,15 +86,19 @@ export default function Voitures() {
     extras.value.length ? { step: "Extras", value: extras.value.join(", ") } : null,
   ].filter(Boolean);
 
-  const handleNext = (stepIdx) => {
-    if (stepIdx === 1 && !aspiration) return error("Veuillez compléter l'aspiration.");
+  const handleNext = (stepIdx: number) => {
+    if (stepIdx === 1 && !aspiration) {
+      setAspirationError(true);
+      return error("Veuillez compléter l'aspiration.");
+    }
     if (stepIdx === 2 && (!aspiration || !vehicule)) return error("Complétez l'aspiration et le type de véhicule.");
     if (stepIdx === 3 && pressing.value.length === 0) return error("Sélectionnez au moins un pressing.");
+    setAspirationError(false);
     setActiveStep(stepIdx);
     sectionRefs.current[stepIdx]?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const error = (msg) => {
+  const error = (msg: string) => {
     setFormError(msg);
     setShowErrorModal(true);
   };
@@ -238,8 +243,9 @@ export default function Voitures() {
             }
 
             const props = i === 0 ? { 
-                onSelect: (data) => {
+                onSelect: (data: any) => {
                   setAspiration(data);
+                  setAspirationError(false);
                   if (i < steps.length - 1) {
                     setTimeout(() => {
                       setActiveStep(i + 1);
@@ -247,7 +253,9 @@ export default function Voitures() {
                     }, 200);
                   }
                 }, 
-                selected: aspiration?.value
+                selected: aspiration?.value,
+                showError: aspirationError,
+                onErrorChange: (hasError: boolean) => setAspirationError(hasError)
               }
               : i === 1 ? { 
                   onSelect: (data) => {
@@ -303,7 +311,8 @@ export default function Voitures() {
                   selections, 
                   totalPrice, 
                   totalTime, 
-                  onReset: handleReset
+                  onReset: handleReset,
+                  aspiration
                 };
 
             return (
