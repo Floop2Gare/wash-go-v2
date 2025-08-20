@@ -1,8 +1,11 @@
 import React, { useEffect } from "react";
+import { AlertCircle } from "lucide-react";
 
 interface CarcleanStepProps {
   selected: string | undefined;
   onSelect: (data: { step: string; value: string; price: number | string; time: number | null }) => void;
+  showError?: boolean;
+  onErrorChange?: (hasError: boolean) => void;
 }
 
 const categories = [
@@ -57,7 +60,14 @@ const horsGabarit = {
   img: "/voiture/type/horsgabarit.jpg"
 };
 
-const CarcleanStep: React.FC<CarcleanStepProps> = ({ selected, onSelect }) => {
+const CarcleanStep: React.FC<CarcleanStepProps> = ({ selected, onSelect, showError = false, onErrorChange }) => {
+  // ✅ Notifier le parent du statut d'erreur
+  useEffect(() => {
+    if (onErrorChange) {
+      onErrorChange(!selected);
+    }
+  }, [selected, onErrorChange]);
+
   // Scroll vers la section contact
   const handleHorsGabaritClick = () => {
     onSelect({
@@ -69,113 +79,130 @@ const CarcleanStep: React.FC<CarcleanStepProps> = ({ selected, onSelect }) => {
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 font-[Outfit]">
-      {categories.map((veh) => {
-        const isActive = selected === veh.label;
-        return (
-          <div
-            key={veh.id}
-            onClick={() => onSelect({
-              step: "Type de véhicule",
-              value: veh.label,
-              price: veh.price,
-              time: veh.time,
-            })}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => e.key === "Enter" && onSelect({
-              step: "Type de véhicule",
-              value: veh.label,
-              price: veh.price,
-              time: veh.time,
-            })}
-            aria-pressed={isActive}
-            className={`cursor-pointer rounded-2xl shadow-md overflow-hidden transition-transform duration-300 border-2 hover:scale-[1.015]
-              ${isActive ? "border-[#0049ac]" : "border-gray-200 hover:border-[#0049ac]/30"}`}
-          >
-            <img
-              src={veh.img}
-              alt={veh.label}
-              className="w-full h-32 sm:h-40 md:h-48 object-cover"
-            />
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 font-[Outfit]">
+        {categories.map((veh) => {
+          const isActive = selected === veh.label;
+          return (
+            <div
+              key={veh.id}
+              onClick={() => onSelect({
+                step: "Type de véhicule",
+                value: veh.label,
+                price: veh.price,
+                time: veh.time,
+              })}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === "Enter" && onSelect({
+                step: "Type de véhicule",
+                value: veh.label,
+                price: veh.price,
+                time: veh.time,
+              })}
+              aria-pressed={isActive}
+              className={`cursor-pointer rounded-2xl shadow-md overflow-hidden transition-transform duration-300 border-2 hover:scale-[1.015]
+                ${isActive ? "border-[#0049ac]" : "border-gray-200 hover:border-[#0049ac]/30"}`}
+            >
+              <img
+                src={veh.img}
+                alt={veh.label}
+                className="w-full h-32 sm:h-40 md:h-48 object-cover"
+              />
 
-            <div className="p-3 sm:p-4 md:p-5">
-              <div className="mb-3">
-                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">{veh.label}</h3>
+              <div className="p-3 sm:p-4 md:p-5">
+                <div className="mb-3">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">{veh.label}</h3>
+                  
+                  {/* Affichage harmonisé des mentions tarifaires - TOUS EN BLEU */}
+                  <div className="mb-2">
+                    {veh.price > 0 ? (
+                      <span className="text-xl font-bold text-[#0049ac]">
+                        +{veh.price} €
+                      </span>
+                    ) : (
+                      <span className="text-xl font-bold text-[#0049ac]">
+                        Inclus
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <p className="text-xs sm:text-sm text-gray-600 mb-3">{veh.desc}</p>
                 
-                {/* Affichage harmonisé des mentions tarifaires - TOUS EN BLEU */}
-                <div className="mb-2">
-                  {veh.price > 0 ? (
-                    <span className="text-xl font-bold text-[#0049ac]">
-                      +{veh.price} €
-                    </span>
-                  ) : (
-                    <span className="text-xl font-bold text-[#0049ac]">
-                      Inclus
-                    </span>
-                  )}
+                <p className="text-xs text-gray-400 mb-3">Durée estimée : {veh.time} min</p>
+
+                <div className="mt-3 sm:mt-4">
+                  <span
+                    className={`inline-block px-3 sm:px-4 py-2 rounded-lg font-medium text-xs sm:text-sm transition-colors duration-300
+                      ${isActive
+                        ? "bg-[#0049ac] text-white"
+                        : "bg-gray-100 text-[#0049ac] hover:bg-[#0049ac] hover:text-white"}`}
+                  >
+                    {isActive ? "Sélectionné" : "Choisir"}
+                  </span>
                 </div>
               </div>
-
-              <p className="text-xs sm:text-sm text-gray-600 mb-3">{veh.desc}</p>
+            </div>
+          );
+        })}
+        {/* Carte spéciale Hors de ces gabarits */}
+        <div
+          key={horsGabarit.id}
+          onClick={handleHorsGabaritClick}
+          role="button"
+          tabIndex={0}
+          aria-pressed={selected === horsGabarit.label}
+          className={`cursor-pointer rounded-2xl shadow-md overflow-hidden transition-transform duration-300 border-2 hover:scale-[1.015]
+            ${selected === horsGabarit.label ? "border-[#0049ac]" : "border-gray-200 hover:border-[#0049ac]/30"}`}
+        >
+          <img
+            src={horsGabarit.img}
+            alt={horsGabarit.label}
+            className="w-full h-32 sm:h-40 md:h-48 object-cover"
+          />
+          <div className="p-3 sm:p-4 md:p-5">
+            <div className="mb-3">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">{horsGabarit.label}</h3>
               
-              <p className="text-xs text-gray-400 mb-3">Durée estimée : {veh.time} min</p>
-
-              <div className="mt-3 sm:mt-4">
-                <span
-                  className={`inline-block px-3 sm:px-4 py-2 rounded-lg font-medium text-xs sm:text-sm transition-colors duration-300
-                    ${isActive
-                      ? "bg-[#0049ac] text-white"
-                      : "bg-gray-100 text-[#0049ac] hover:bg-[#0049ac] hover:text-white"}`}
-                >
-                  {isActive ? "Sélectionné" : "Choisir"}
+              {/* Affichage harmonisé des mentions tarifaires - EN BLEU */}
+              <div className="mb-2">
+                <span className="text-xl font-bold text-[#0049ac]">
+                  Sur devis
                 </span>
               </div>
             </div>
-          </div>
-        );
-      })}
-      {/* Carte spéciale Hors de ces gabarits */}
-      <div
-        key={horsGabarit.id}
-        onClick={handleHorsGabaritClick}
-        role="button"
-        tabIndex={0}
-        aria-pressed={selected === horsGabarit.label}
-        className={`cursor-pointer rounded-2xl shadow-md overflow-hidden transition-transform duration-300 border-2 hover:scale-[1.015]
-          ${selected === horsGabarit.label ? "border-[#0049ac]" : "border-gray-200 hover:border-[#0049ac]/30"}`}
-      >
-        <img
-          src={horsGabarit.img}
-          alt={horsGabarit.label}
-          className="w-full h-32 sm:h-40 md:h-48 object-cover"
-        />
-        <div className="p-3 sm:p-4 md:p-5">
-          <div className="mb-3">
-            <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">{horsGabarit.label}</h3>
             
-            {/* Affichage harmonisé des mentions tarifaires - EN BLEU */}
-            <div className="mb-2">
-              <span className="text-xl font-bold text-[#0049ac]">
-                Sur devis
+            <p className="text-xs sm:text-sm text-gray-600 mb-3">{horsGabarit.desc}</p>
+            
+            <div className="mt-3 sm:mt-4">
+              <span
+                className={`inline-block px-3 sm:px-4 py-2 rounded-lg font-medium text-xs sm:text-sm transition-colors duration-300
+                  ${selected === horsGabarit.label
+                    ? "bg-[#0049ac] text-white"
+                    : "bg-gray-100 text-[#0049ac] hover:bg-[#0049ac] hover:text-white"}`}
+              >
+                {selected === horsGabarit.label ? "Sélectionné" : "Choisir"}
               </span>
             </div>
           </div>
-          
-          <p className="text-xs sm:text-sm text-gray-600 mb-3">{horsGabarit.desc}</p>
-          
-          <div className="mt-3 sm:mt-4">
-            <span
-              className={`inline-block px-3 sm:px-4 py-2 rounded-lg font-medium text-xs sm:text-sm transition-colors duration-300
-                ${selected === horsGabarit.label
-                  ? "bg-[#0049ac] text-white"
-                  : "bg-gray-100 text-[#0049ac] hover:bg-[#0049ac] hover:text-white"}`}
-            >
-              {selected === horsGabarit.label ? "Sélectionné" : "Choisir"}
-            </span>
-          </div>
         </div>
       </div>
+
+      {/* Message d'erreur */}
+      {showError && !selected && (
+        <div className="flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-xl">
+          <AlertCircle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
+          <div>
+            <p className="text-red-700 font-medium text-sm">
+              Veuillez sélectionner un type de véhicule pour continuer
+            </p>
+            <p className="text-red-600 text-xs mt-1">
+              Le type de véhicule est obligatoire pour adapter notre service à votre véhicule.
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

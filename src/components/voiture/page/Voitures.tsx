@@ -54,9 +54,10 @@ export default function Voitures() {
   const [formError, setFormError] = useState<string | null>(null);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [aspirationError, setAspirationError] = useState(false);
-  const sectionRefs = useRef([]);
-  const heroRef = useRef(null);
-  const aspirationRef = useRef(null);
+  const [vehicleTypeError, setVehicleTypeError] = useState(false);
+  const sectionRefs = useRef<(HTMLElement | null)[]>([]);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const aspirationRef = useRef<HTMLElement>(null);
   const [stickyBarVisible, setStickyBarVisible] = useState(false);
 
   useEffect(() => {
@@ -84,16 +85,26 @@ export default function Voitures() {
     pressing.value.length ? { step: "Pressing sièges", value: pressing.value.join(", ") } : null,
     options.value.length ? { step: "Options spéciales", value: options.value.join(", ") } : null,
     extras.value.length ? { step: "Extras", value: extras.value.join(", ") } : null,
-  ].filter(Boolean);
+  ].filter(Boolean) as { step: string; value: string }[];
 
   const handleNext = (stepIdx: number) => {
     if (stepIdx === 1 && !aspiration) {
       setAspirationError(true);
       return error("Veuillez compléter l'aspiration.");
     }
-    if (stepIdx === 2 && (!aspiration || !vehicule)) return error("Complétez l'aspiration et le type de véhicule.");
+    if (stepIdx === 2 && (!aspiration || !vehicule)) {
+      if (!aspiration) {
+        setAspirationError(true);
+        return error("Veuillez compléter l'aspiration.");
+      }
+      if (!vehicule) {
+        setVehicleTypeError(true);
+        return error("Veuillez sélectionner un type de véhicule.");
+      }
+    }
     if (stepIdx === 3 && pressing.value.length === 0) return error("Sélectionnez au moins un pressing.");
     setAspirationError(false);
+    setVehicleTypeError(false);
     setActiveStep(stepIdx);
     sectionRefs.current[stepIdx]?.scrollIntoView({ behavior: "smooth" });
   };
@@ -110,10 +121,32 @@ export default function Voitures() {
     setOptions({ value: [], price: 0, time: 0 });
     setExtras({ value: [], price: 0, time: 0 });
     setActiveStep(0);
+    setAspirationError(false);
+    setVehicleTypeError(false);
     
     if (heroRef.current) {
       heroRef.current.scrollIntoView({ behavior: 'smooth' });
     }
+  };
+
+  // Fonction pour vérifier si le formulaire peut être envoyé
+  const canSubmitForm = () => {
+    return aspiration && vehicule;
+  };
+
+  // Fonction pour gérer la soumission du formulaire avec validation
+  const handleFormSubmit = () => {
+    if (!aspiration) {
+      setAspirationError(true);
+      aspirationRef.current?.scrollIntoView({ behavior: "smooth" });
+      return false;
+    }
+    if (!vehicule) {
+      setVehicleTypeError(true);
+      sectionRefs.current[1]?.scrollIntoView({ behavior: "smooth" });
+      return false;
+    }
+    return true;
   };
 
   return (
@@ -258,8 +291,9 @@ export default function Voitures() {
                 onErrorChange: (hasError: boolean) => setAspirationError(hasError)
               }
               : i === 1 ? { 
-                  onSelect: (data) => {
+                  onSelect: (data: any) => {
                     setVehicule(data);
+                    setVehicleTypeError(false);
                     if (i < steps.length - 1) {
                       setTimeout(() => {
                         setActiveStep(i + 1);
@@ -267,10 +301,12 @@ export default function Voitures() {
                       }, 200);
                     }
                   }, 
-                  selected: vehicule?.value
+                  selected: vehicule?.value,
+                  showError: vehicleTypeError,
+                  onErrorChange: (hasError: boolean) => setVehicleTypeError(hasError)
                 }
               : i === 2 ? { 
-                  onSelect: (data) => {
+                  onSelect: (data: any) => {
                     setPressing(data);
                     if (i < steps.length - 1) {
                       setTimeout(() => {
@@ -283,7 +319,7 @@ export default function Voitures() {
                   selected: pressing.value
                 }
               : i === 3 ? { 
-                  onSelect: (data) => {
+                  onSelect: (data: any) => {
                     setOptions(data);
                     if (i < steps.length - 1) {
                       setTimeout(() => {
@@ -295,7 +331,7 @@ export default function Voitures() {
                   selected: options.value
                 }
               : i === 4 ? { 
-                  onSelect: (data) => {
+                  onSelect: (data: any) => {
                     setExtras(data);
                     if (i < steps.length - 1) {
                       setTimeout(() => {
@@ -312,8 +348,10 @@ export default function Voitures() {
                   totalPrice, 
                   totalTime, 
                   onReset: handleReset,
-                  aspiration
-                };
+                  aspiration,
+                  canSubmit: canSubmitForm(),
+                  onValidationError: handleFormSubmit
+                } as any;
 
             return (
               <motion.section 
